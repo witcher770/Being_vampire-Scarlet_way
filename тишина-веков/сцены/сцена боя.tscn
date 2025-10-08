@@ -1,0 +1,65 @@
+[gd_scene load_steps=7 format=3 uid="uid://eej73pu8l12j"]
+
+[ext_resource type="Script" uid="uid://dq3qoy67q5l0r" path="res://сцены/игрок/игрок.gd" id="1_sitao"]
+[ext_resource type="Texture2D" uid="uid://xtmy6uupsswm" path="res://ассеты/спрайты/зеленый квадрат.png" id="2_kp8rm"]
+[ext_resource type="Script" uid="uid://de5v68eunnra3" path="res://сцены/camera_2d.gd" id="3_kp8rm"]
+[ext_resource type="PackedScene" uid="uid://bpa3vo4mkck5r" path="res://сцены/враги/враг.tscn" id="3_y428e"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d51up"]
+size = Vector2(42, 42)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_acsuq"]
+size = Vector2(21, 21)
+
+[node name="сцена боя" type="Node2D"]
+
+[node name="игрок" type="CharacterBody2D" parent="."]
+position = Vector2(347, 79)
+script = ExtResource("1_sitao")
+speed = 200.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="игрок"]
+shape = SubResource("RectangleShape2D_d51up")
+
+[node name="Sprite2D" type="Sprite2D" parent="игрок"]
+texture_filter = 3
+texture = ExtResource("2_kp8rm")
+
+[node name="область атаки" type="Area2D" parent="игрок"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="игрок/область атаки"]
+shape = SubResource("RectangleShape2D_acsuq")
+
+[node name="Sprite2D" type="Sprite2D" parent="игрок/область атаки"]
+scale = Vector2(0.42, 0.42)
+texture = ExtResource("2_kp8rm")
+
+[node name="Camera2D" type="Camera2D" parent="игрок"]
+script = ExtResource("3_kp8rm")
+
+[node name="враг" parent="." groups=["враги"] instance=ExtResource("3_y428e")]
+position = Vector2(176, 53)
+health = 20
+max_health = 20
+
+[node name="враг2" parent="." groups=["враги"] instance=ExtResource("3_y428e")]
+position = Vector2(18, 22)
+health = 20
+max_health = 20
+
+[node name="враг3" parent="." groups=["враги"] instance=ExtResource("3_y428e")]
+position = Vector2(99, 185)
+health = 20
+max_health = 20
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 0
+follow_viewport_enabled = true
+
+[node name="DamageNumbers" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 50.0
+offset_bottom = 50.0
