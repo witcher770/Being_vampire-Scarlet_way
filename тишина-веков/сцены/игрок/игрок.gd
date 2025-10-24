@@ -3,6 +3,8 @@ extends CharacterBody2D
 # скрипт передвижения
 @export var speed := 100.0  # можно менять из редактора
 var facing_direction := Vector2.RIGHT  # по умолчанию вправо (направление области атаки)
+@onready var animPlayer = $AnimationPlayer
+@onready var sprite = $Sprite2D
 
 
 func _ready():
@@ -17,10 +19,33 @@ func _physics_process(delta):
 		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 	).normalized()
 	
+	#if input_vector != Vector2.ZERO:
+		#facing_direction = input_vector
+		#animPlayer.play("бег_перед")
+		#$"область атаки".position = facing_direction * 30  # смещаем вперёд (подбери значение по спрайту)
+
+
 	if input_vector != Vector2.ZERO:
 		facing_direction = input_vector
-		$"область атаки".position = facing_direction * 30  # смещаем вперёд (подбери значение по спрайту)
+		
+		# Простое определение по осям
+		if input_vector.x != 0:
+			# Горизонтальное движение
+			animPlayer.play("бег_с_боку")
+			if sign(sprite.scale.x) != sign(input_vector.x):
+				sprite.scale.x *= -1
 
+		elif input_vector.y > 0:
+			# Движение вниз
+			animPlayer.play("бег_перед")
+		elif input_vector.y < 0:
+			# Движение вверх
+			animPlayer.play("бег_спина")
+		
+		$"область атаки".position = facing_direction * 30  # смещаем вперёд (подбери значение по спрайту)
+	
+	else:
+		animPlayer.play('покой')
 
 	velocity = input_vector * speed
 	move_and_slide()
