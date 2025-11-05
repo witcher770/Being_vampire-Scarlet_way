@@ -42,7 +42,7 @@ func _physics_process(delta):
 			# Движение вверх
 			animPlayer.play("бег_спина")
 		
-		$"область атаки".position = facing_direction * 30  # смещаем вперёд (подбери значение по спрайту)
+		$"область атаки".position = facing_direction * 15  # смещаем вперёд (подбери значение по спрайту)
 	
 	else:
 		animPlayer.play('покой')

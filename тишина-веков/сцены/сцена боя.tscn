@@ -193,9 +193,6 @@ position = Vector2(140, 138)
 health = 20
 max_health = 20
 
-[node name="враг4" parent="." instance=ExtResource("3_y428e")]
-position = Vector2(86, 117)
-
 [node name="игрок" type="CharacterBody2D" parent="."]
 position = Vector2(252, 79)
 script = ExtResource("1_sitao")
@@ -212,15 +209,13 @@ hframes = 8
 frame = 1
 
 [node name="область атаки" type="Area2D" parent="игрок"]
-position = Vector2(-18, 0)
+position = Vector2(-18, 6)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="игрок/область атаки"]
-position = Vector2(4.5, -4.5)
 shape = SubResource("RectangleShape2D_acsuq")
 
 [node name="Sprite2D" type="Sprite2D" parent="игрок/область атаки"]
 texture_filter = 3
-position = Vector2(4.2500005, -4.249997)
 scale = Vector2(0.24999997, 0.2500001)
 texture = ExtResource("2_kp8rm")
 
@@ -239,7 +234,6 @@ follow_viewport_enabled = true
 [node name="DamageNumbers" type="Control" parent="HUD"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 46.0
-offset_top = -33.0
-offset_right = 86.0
-offset_bottom = 7.0
+offset_left = 15.0
+offset_right = 55.0
+offset_bottom = 40.0
