@@ -31,7 +31,7 @@ func show_damage_number(amount, is_crit = false):
 	#print("значение крита в show_damage_number: ", is_crit)
 	var dmg_number = preload("res://сцены/интерфейс/Колличество повреждений.tscn").instantiate()	
 
-	var offset_y = sprite.texture.get_height() * sprite.scale.y * 0.5 + 40
+	var offset_y = sprite.texture.get_height() * sprite.scale.y * 0.5 + 20
 	dmg_number.position = global_position - Vector2(20, offset_y) # поправить координату Х потом
 	
 	var damage_numbers_node = get_node("/root/сцена боя/HUD/DamageNumbers")

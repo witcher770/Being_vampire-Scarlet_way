@@ -13,7 +13,6 @@ script = ExtResource("1_romfk")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-2.3841858e-07, 2.0861626e-07)
-scale = Vector2(1.0476191, 0.91666657)
 texture = ExtResource("2_g7vg6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
