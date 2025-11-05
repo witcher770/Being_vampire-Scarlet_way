@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://b5y3sb02op43a" path="res://сцены/враги/враг.gd" id="1_romfk"]
 [ext_resource type="Texture2D" uid="uid://di6vwv202s2br" path="res://ассеты/спрайты/Slime1_Idle_front.png" id="2_g7vg6"]
-[ext_resource type="Texture2D" uid="uid://cjnvd3o2k7b4y" path="res://ассеты/спрайты/пустой квадрат.png" id="4_g7vg6"]
+[ext_resource type="Texture2D" uid="uid://cjnvd3o2k7b4y" path="res://ассеты/спрайты/объем_здоровья.png" id="4_g7vg6"]
 [ext_resource type="Texture2D" uid="uid://6kg2d42qvpbc" path="res://ассеты/спрайты/полоска здоровья.png" id="4_skqff"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0h15d"]
-size = Vector2(21, 21)
+size = Vector2(21, 23.5)
 
 [node name="враг" type="CharacterBody2D"]
 script = ExtResource("1_romfk")
@@ -16,6 +16,7 @@ position = Vector2(-2.3841858e-07, 2.0861626e-07)
 texture = ExtResource("2_g7vg6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1.25)
 shape = SubResource("RectangleShape2D_0h15d")
 
 [node name="HealthBar" type="TextureProgressBar" parent="."]
