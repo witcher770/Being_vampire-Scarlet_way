@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=4 uid="uid://eej73pu8l12j"]
+[gd_scene load_steps=23 format=4 uid="uid://eej73pu8l12j"]
 
 [ext_resource type="Script" uid="uid://dq3qoy67q5l0r" path="res://сцены/игрок/игрок.gd" id="1_sitao"]
 [ext_resource type="Texture2D" uid="uid://xtmy6uupsswm" path="res://ассеты/спрайты/зеленый квадрат.png" id="2_kp8rm"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://6kg2d42qvpbc" path="res://ассеты/спрайты/полоска здоровья.png" id="9_kxcxj"]
 [ext_resource type="Texture2D" uid="uid://cjnvd3o2k7b4y" path="res://ассеты/спрайты/пустой квадрат.png" id="10_c2kwh"]
 [ext_resource type="Script" uid="uid://bfmhvsv100tms" path="res://сцены/HealthBarPlayer.gd" id="11_sr1rt"]
+[ext_resource type="Texture2D" uid="uid://c2u0w1wn6lcas" path="res://ассеты/спрайты/ресурсы карты/набор 1/dungeons_demo.png" id="12_yd2m6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d51up"]
 size = Vector2(14, 7)
@@ -171,6 +172,106 @@ _data = {
 &"покой": SubResource("Animation_c2kwh")
 }
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fdy2w"]
+texture = ExtResource("12_yd2m6")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
+13:0/0 = 0
+14:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+9:1/0 = 0
+10:1/0 = 0
+11:1/0 = 0
+12:1/0 = 0
+13:1/0 = 0
+14:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+9:2/0 = 0
+10:2/0 = 0
+11:2/0 = 0
+12:2/0 = 0
+13:2/0 = 0
+14:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+9:3/0 = 0
+10:3/0 = 0
+11:3/0 = 0
+12:3/0 = 0
+13:3/0 = 0
+14:3/0 = 0
+0:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+9:4/0 = 0
+10:4/0 = 0
+11:4/0 = 0
+12:4/0 = 0
+13:4/0 = 0
+14:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+7:5/0 = 0
+8:5/0 = 0
+9:5/0 = 0
+10:5/0 = 0
+11:5/0 = 0
+12:5/0 = 0
+13:5/0 = 0
+14:5/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+6:6/0 = 0
+7:6/0 = 0
+8:6/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_hd1ar"]
+sources/0 = SubResource("TileSetAtlasSource_fdy2w")
+
 [node name="сцена боя" type="Node2D"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
@@ -199,7 +300,6 @@ max_health = 20
 [node name="игрок" type="CharacterBody2D" parent="."]
 position = Vector2(252, 79)
 script = ExtResource("1_sitao")
-combat_crit_chance = 2.0
 speed = 200.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="игрок"]
@@ -251,3 +351,6 @@ anchors_preset = 0
 offset_left = 15.0
 offset_right = 55.0
 offset_bottom = 40.0
+
+[node name="TileMapLayer3" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_hd1ar")
