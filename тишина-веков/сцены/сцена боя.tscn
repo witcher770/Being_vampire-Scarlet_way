@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://eej73pu8l12j"]
+[gd_scene load_steps=17 format=4 uid="uid://eej73pu8l12j"]
 
 [ext_resource type="Script" uid="uid://dq3qoy67q5l0r" path="res://сцены/игрок/игрок.gd" id="1_sitao"]
 [ext_resource type="Texture2D" uid="uid://xtmy6uupsswm" path="res://ассеты/спрайты/зеленый квадрат.png" id="2_kp8rm"]
@@ -7,12 +7,40 @@
 [ext_resource type="PackedScene" uid="uid://bpa3vo4mkck5r" path="res://сцены/враги/враг.tscn" id="3_y428e"]
 [ext_resource type="Texture2D" uid="uid://crx6e8gtodvdo" path="res://ассеты/спрайты/гг/Спрайт_вампир_гг_бег_спина.png" id="5_n28v2"]
 [ext_resource type="Texture2D" uid="uid://t2cfy0fk0foy" path="res://ассеты/спрайты/гг/вампир_ходьба-sheet.png" id="6_wbs5n"]
+[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="8_4f5mk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d51up"]
-size = Vector2(42, 42)
+size = Vector2(14, 7)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_acsuq"]
-size = Vector2(21, 21)
+size = Vector2(11, 11)
+
+[sub_resource type="Animation" id="Animation_wbs5n"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_y428e")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
 
 [sub_resource type="Animation" id="Animation_n28v2"]
 resource_name = "бег_перед"
@@ -43,8 +71,10 @@ tracks/1/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7]
 }
 
-[sub_resource type="Animation" id="Animation_wbs5n"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_kxcxj"]
+resource_name = "бег_с_боку"
+length = 0.8
+step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -55,7 +85,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_y428e")]
+"values": [ExtResource("6_wbs5n")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -64,10 +94,10 @@ tracks/1/path = NodePath("Sprite2D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [1]
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
 }
 
 [sub_resource type="Animation" id="Animation_4f5mk"]
@@ -85,35 +115,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [ExtResource("5_n28v2")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3, 4, 5, 6, 7]
-}
-
-[sub_resource type="Animation" id="Animation_kxcxj"]
-resource_name = "бег_с_боку"
-length = 0.8
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("6_wbs5n")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -169,28 +170,58 @@ _data = {
 
 [node name="сцена боя" type="Node2D"]
 
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAAAAP7/AAABAAAAAAAAAP//AAABAAEAAAAAAAAAAAABAAIAAAABAP7/AAABAAAAAAABAP//AAABAAEAAAABAAAAAAABAAIAAAACAP7/AAABAAAAAAACAP//AAABAAEAAAACAAAAAAAEAAIAAAADAP7/AAABAAAAAAADAP//AAABAAEAAAADAAAAAAADAAIAAAAEAP7/AAABAAAAAAAEAP//AAABAAEAAAAEAAAAAAABAAIAAAAFAP7/AAABAAAAAAAFAP//AAABAAEAAAAFAAAAAAABAAIAAAAGAP7/AAABAAAAAAAGAP//AAABAAEAAAAGAAAAAAAEAAIAAAAHAP7/AAABAAAAAAAHAP//AAABAAEAAAAHAAAAAAABAAIAAAAIAP7/AAABAAAAAAAIAP//AAABAAEAAAAIAAAAAAABAAIAAAAJAP7/AAABAAAAAAAJAP//AAABAAEAAAAJAAAAAAAEAAIAAAAKAP7/AAABAAAAAAAKAP//AAABAAEAAAAKAAAAAAABAAIAAAALAP7/AAABAAAAAAALAP//AAABAAEAAAALAAAAAAABAAIAAAAMAP7/AAABAAAAAAAMAP//AAABAAEAAAAMAAAAAAABAAIAAAANAP7/AAABAAAAAAANAP//AAABAAEAAAANAAAAAAABAAIAAAAOAP7/AAABAAAAAAAOAP//AAABAAEAAAAOAAAAAAABAAIAAAAPAP7/AAABAAAAAAAPAP//AAABAAEAAAAPAAAAAAABAAIAAAAQAP7/AAABAAAAAAAQAP//AAABAAEAAAAQAAAAAAAEAAIAAAARAP7/AAABAAAAAAARAP//AAABAAEAAAARAAAAAAADAAIAAAAAAP3/AAABAAMAAAABAP3/AAABAAMAAAACAP3/AAABAAMAAAADAP3/AAABAAMAAAAEAP3/AAABAAMAAAAFAP3/AAABAAMAAAAGAP3/AAABAAMAAAAHAP3/AAABAAMAAAAIAP3/AAABAAMAAAAJAP3/AAABAAMAAAAKAP3/AAABAAMAAAALAP3/AAABAAMAAAAMAP3/AAABAAMAAAANAP3/AAABAAMAAAAOAP3/AAABAAMAAAAPAP3/AAABAAMAAAAQAP3/AAABAAMAAAARAP3/AAABAAMAAAD///3/AAAAAAMAAAASAP3/AAACAAMAAAD///7/AAAAAAQAAAD/////AAAAAAQAAAD//wAAAAAAAAQAAAD//wEAAAAAAAQAAAD//wIAAAAAAAQAAAD//wMAAAAAAAQAAAD//wQAAAAAAAQAAAD//wUAAAAAAAQAAAD//wYAAAAAAAQAAAD//wcAAAAAAAQAAAD//wgAAAAAAAQAAAD//wkAAAAAAAQAAAD//woAAAAAAAQAAAASAP7/AAACAAQAAAASAP//AAACAAQAAAASAAAAAAACAAQAAAASAAEAAAACAAQAAAASAAIAAAACAAQAAAASAAMAAAACAAQAAAASAAQAAAACAAQAAAASAAUAAAACAAQAAAASAAYAAAACAAQAAAASAAcAAAACAAQAAAASAAgAAAACAAQAAAASAAkAAAACAAQAAAASAAoAAAACAAQAAAAAAAEAAAADAAAAAAAAAAIAAAADAAAAAAAAAAMAAAADAAAAAAAAAAQAAAADAAEAAAAAAAUAAAADAAAAAAAAAAYAAAADAAAAAAAAAAcAAAADAAAAAAAAAAgAAAADAAAAAAAAAAkAAAADAAAAAAAAAAoAAAADAAAAAAABAAEAAAADAAAAAAABAAIAAAADAAAAAAABAAMAAAADAAAAAAABAAQAAAADAAEAAAABAAUAAAADAAEAAAABAAYAAAADAAAAAAABAAcAAAADAAAAAAABAAgAAAADAAAAAAABAAkAAAADAAAAAAABAAoAAAADAAAAAAACAAEAAAADAAAAAAACAAIAAAADAAAAAAACAAMAAAADAAEAAAACAAQAAAADAAAAAAACAAUAAAADAAAAAAACAAYAAAADAAAAAAACAAcAAAADAAAAAAACAAgAAAADAAAAAAACAAkAAAADAAAAAAACAAoAAAADAAAAAAADAAEAAAADAAAAAAADAAIAAAADAAAAAAADAAMAAAADAAAAAAADAAQAAAADAAAAAAADAAUAAAADAAAAAAADAAYAAAADAAAAAAADAAcAAAADAAAAAAADAAgAAAADAAEAAAADAAkAAAADAAAAAAADAAoAAAAEAAEAAAAEAAEAAAADAAEAAAAEAAIAAAADAAAAAAAEAAMAAAAEAAEAAAAEAAQAAAADAAAAAAAEAAUAAAAEAAEAAAAEAAYAAAAEAAEAAAAEAAcAAAADAAAAAAAEAAgAAAADAAAAAAAEAAkAAAADAAAAAAAEAAoAAAAEAAEAAAAFAAEAAAADAAAAAAAFAAIAAAADAAAAAAAFAAMAAAADAAAAAAAFAAQAAAAEAAAAAAAFAAUAAAADAAAAAAAFAAYAAAADAAAAAAAFAAcAAAADAAAAAAAFAAgAAAADAAEAAAAFAAkAAAAEAAEAAAAFAAoAAAADAAEAAAAGAAEAAAADAAAAAAAGAAIAAAADAAEAAAAGAAMAAAADAAAAAAAGAAQAAAADAAEAAAAGAAUAAAADAAAAAAAGAAYAAAADAAAAAAAGAAcAAAAEAAEAAAAGAAgAAAADAAAAAAAGAAkAAAAEAAAAAAAGAAoAAAADAAAAAAAHAAEAAAADAAAAAAAHAAIAAAADAAAAAAAHAAMAAAADAAAAAAAHAAQAAAADAAAAAAAHAAUAAAADAAAAAAAHAAYAAAADAAAAAAAHAAcAAAADAAAAAAAHAAgAAAADAAAAAAAHAAkAAAADAAAAAAAHAAoAAAADAAAAAAAIAAEAAAADAAEAAAAIAAIAAAADAAAAAAAIAAMAAAADAAAAAAAIAAQAAAADAAAAAAAIAAUAAAADAAAAAAAIAAYAAAADAAAAAAAIAAcAAAADAAAAAAAIAAgAAAADAAAAAAAIAAkAAAADAAAAAAAIAAoAAAADAAAAAAAJAAEAAAADAAAAAAAJAAIAAAADAAAAAAAJAAMAAAADAAAAAAAJAAQAAAADAAEAAAAJAAUAAAADAAAAAAAJAAYAAAADAAAAAAAJAAcAAAADAAAAAAAJAAgAAAADAAAAAAAJAAkAAAADAAAAAAAJAAoAAAADAAAAAAAKAAEAAAADAAAAAAAKAAIAAAADAAAAAAAKAAMAAAADAAAAAAAKAAQAAAADAAAAAAAKAAUAAAAEAAAAAAAKAAYAAAADAAAAAAAKAAcAAAADAAAAAAAKAAgAAAADAAAAAAAKAAkAAAADAAAAAAAKAAoAAAADAAEAAAALAAEAAAAEAAEAAAALAAIAAAADAAAAAAALAAMAAAADAAAAAAALAAQAAAADAAAAAAALAAUAAAADAAAAAAALAAYAAAADAAEAAAALAAcAAAADAAAAAAALAAgAAAADAAAAAAALAAkAAAADAAAAAAALAAoAAAADAAAAAAAMAAEAAAADAAAAAAAMAAIAAAADAAEAAAAMAAMAAAADAAEAAAAMAAQAAAADAAAAAAAMAAUAAAAEAAEAAAAMAAYAAAADAAAAAAAMAAcAAAADAAAAAAAMAAgAAAADAAAAAAAMAAkAAAADAAAAAAAMAAoAAAADAAAAAAANAAEAAAADAAEAAAANAAIAAAADAAAAAAANAAMAAAADAAEAAAANAAQAAAADAAAAAAANAAUAAAADAAAAAAANAAYAAAADAAAAAAANAAcAAAADAAAAAAANAAgAAAADAAAAAAANAAkAAAADAAAAAAANAAoAAAADAAAAAAAOAAEAAAADAAAAAAAOAAIAAAADAAAAAAAOAAMAAAAEAAAAAAAOAAQAAAADAAAAAAAOAAUAAAADAAEAAAAOAAYAAAADAAAAAAAOAAcAAAAEAAEAAAAOAAgAAAADAAEAAAAOAAkAAAAEAAAAAAAOAAoAAAAEAAAAAAAPAAEAAAAEAAEAAAAPAAIAAAADAAAAAAAPAAMAAAADAAAAAAAPAAQAAAADAAAAAAAPAAUAAAADAAAAAAAPAAYAAAADAAEAAAAPAAcAAAAEAAEAAAAPAAgAAAAEAAEAAAAPAAkAAAADAAAAAAAPAAoAAAADAAAAAAAQAAEAAAADAAAAAAAQAAIAAAADAAAAAAAQAAMAAAADAAAAAAAQAAQAAAADAAAAAAAQAAUAAAADAAAAAAAQAAYAAAADAAAAAAAQAAcAAAADAAAAAAAQAAgAAAADAAAAAAAQAAkAAAADAAAAAAAQAAoAAAADAAAAAAARAAEAAAAEAAAAAAARAAIAAAADAAAAAAARAAMAAAADAAEAAAARAAQAAAADAAAAAAARAAUAAAADAAAAAAARAAYAAAADAAAAAAARAAcAAAADAAEAAAARAAgAAAADAAAAAAARAAkAAAADAAAAAAARAAoAAAAEAAAAAAAAAAsAAAABAAMAACABAAsAAAABAAMAACACAAsAAAABAAMAACADAAsAAAABAAMAACAEAAsAAAABAAMAACAFAAsAAAABAAMAACAGAAsAAAABAAMAACAHAAsAAAABAAMAACAIAAsAAAABAAMAACAJAAsAAAABAAMAACAKAAsAAAABAAMAACALAAsAAAABAAMAACAMAAsAAAABAAMAACANAAsAAAABAAMAACAOAAsAAAABAAMAACAPAAsAAAABAAMAACAQAAsAAAABAAMAACARAAsAAAABAAMAACASAAsAAAACAAMAACD//wsAAAAAAAMAACA=")
+tile_set = ExtResource("8_4f5mk")
+
+[node name="TileMapLayer2" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAAPAP7/AAAIAAMAAAAPAP//AAAIAAQAAAAPAAAAAAAIAAUAAAACAP7/AAAIAAMAAAACAP//AAAIAAQAAAACAAAAAAAIAAUAAAAEAP//AAAMAAMAAAAFAP//AAANAAMAAAAGAP//AAAOAAMAAAAJAP//AAAMAAMAAAAKAP//AAANAAMAAAALAP//AAAOAAMAAAA=")
+tile_set = ExtResource("8_4f5mk")
+
+[node name="враг" parent="." groups=["враги"] instance=ExtResource("3_y428e")]
+position = Vector2(176, 53)
+health = 20
+max_health = 20
+
+[node name="враг2" parent="." groups=["враги"] instance=ExtResource("3_y428e")]
+position = Vector2(54, 32)
+health = 20
+max_health = 20
+
+[node name="враг3" parent="." groups=["враги"] instance=ExtResource("3_y428e")]
+position = Vector2(140, 138)
+health = 20
+max_health = 20
+
+[node name="враг4" parent="." instance=ExtResource("3_y428e")]
+position = Vector2(86, 117)
+
 [node name="игрок" type="CharacterBody2D" parent="."]
-position = Vector2(347, 79)
+position = Vector2(252, 79)
 script = ExtResource("1_sitao")
 speed = 200.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="игрок"]
+position = Vector2(0, 12.5)
 shape = SubResource("RectangleShape2D_d51up")
 
 [node name="Sprite2D" type="Sprite2D" parent="игрок"]
 texture_filter = 3
-scale = Vector2(2.75, 2.6666667)
 texture = ExtResource("2_y428e")
 hframes = 8
 frame = 1
 
 [node name="область атаки" type="Area2D" parent="игрок"]
+position = Vector2(-18, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="игрок/область атаки"]
+position = Vector2(4.5, -4.5)
 shape = SubResource("RectangleShape2D_acsuq")
 
 [node name="Sprite2D" type="Sprite2D" parent="игрок/область атаки"]
-scale = Vector2(0.42, 0.42)
+texture_filter = 3
+position = Vector2(4.2500005, -4.249997)
+scale = Vector2(0.24999997, 0.2500001)
 texture = ExtResource("2_kp8rm")
 
 [node name="Camera2D" type="Camera2D" parent="игрок"]
@@ -201,21 +232,6 @@ libraries = {
 &"": SubResource("AnimationLibrary_4f5mk")
 }
 
-[node name="враг" parent="." groups=["враги"] instance=ExtResource("3_y428e")]
-position = Vector2(176, 53)
-health = 20
-max_health = 20
-
-[node name="враг2" parent="." groups=["враги"] instance=ExtResource("3_y428e")]
-position = Vector2(18, 22)
-health = 20
-max_health = 20
-
-[node name="враг3" parent="." groups=["враги"] instance=ExtResource("3_y428e")]
-position = Vector2(99, 185)
-health = 20
-max_health = 20
-
 [node name="HUD" type="CanvasLayer" parent="."]
 layer = 0
 follow_viewport_enabled = true
@@ -223,7 +239,7 @@ follow_viewport_enabled = true
 [node name="DamageNumbers" type="Control" parent="HUD"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 50.0
-offset_bottom = 50.0
+offset_left = 46.0
+offset_top = -33.0
+offset_right = 86.0
+offset_bottom = 7.0

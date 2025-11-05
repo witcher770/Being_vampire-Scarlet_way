@@ -6,12 +6,13 @@
 [ext_resource type="Texture2D" uid="uid://cjnvd3o2k7b4y" path="res://ассеты/спрайты/пустой квадрат.png" id="4_g7vg6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0h15d"]
-size = Vector2(42, 42)
+size = Vector2(21, 21)
 
 [node name="враг" type="CharacterBody2D"]
 script = ExtResource("1_romfk")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_7cumj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -19,9 +20,9 @@ shape = SubResource("RectangleShape2D_0h15d")
 
 [node name="HealthBar" type="TextureProgressBar" parent="."]
 offset_left = -15.0
-offset_top = -30.0
+offset_top = -18.0
 offset_right = 15.0
-offset_bottom = -25.0
+offset_bottom = -13.0
 max_value = 5.0
 texture_under = ExtResource("4_g7vg6")
 texture_over = ExtResource("4_g7vg6")
