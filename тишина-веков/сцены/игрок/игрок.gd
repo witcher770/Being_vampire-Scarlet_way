@@ -1,4 +1,5 @@
 extends CharacterBody2D
+# Добавляем в самое начало
 
 # другие полезные декораторы
 #@export_category("Player Stats")  # Более крупная категория (жирный шрифт)
@@ -9,16 +10,18 @@ extends CharacterBody2D
 @onready var animPlayer = $AnimationPlayer  # Ссылка на нод анимаций
 @onready var sprite = $Sprite2D  # Ссылка на спрайт персонажа
 @onready var health_bar = $HealthBar  # Ссылка на полоску здоровья
-
+signal took_damage(position, amount, is_crit)
 
 
 # === НАСТРОЙКИ ПЕРСОНАЖА ===
 var facing_direction := Vector2.RIGHT  # Текущее направление взгляда (для атаки и анимации)
+var is_invincible := false
 
 @export_group("Combat Settings", "combat_")
 @export var combat_attack_damage_min := 1
 @export var combat_attack_damage_max := 3  
 @export var combat_crit_chance := 0.1
+@export var combat_invincibility_time := 1.0
 
 @export_group("Movement Settings") 
 @export var speed := 100.0 # Скорость перемещения персонажа (пикселей в секунду)
@@ -31,26 +34,77 @@ func _ready():
 	randomize()  # Инициализация генератора случайных чисел для критических ударов
 	
 	# Настройка области атаки
-	$"область атаки".monitoring = false  # Отключаем коллизии атаки до момента удара
-	$"область атаки".body_entered.connect(_on_attack_hit)  # Подключаем сигнал попадания
+	$ОбластьАтаки.monitoring = false  # Отключаем коллизии атаки до момента удара
+	$ОбластьАтаки.body_entered.connect(_on_attack_hit)  # Подключаем сигнал попадания
+	$ОбластьУронаКасанием.body_entered.connect(_on_damage_area_touch_body_entered) # Подключаем сигнал урона от касания
 	
 	# Инициализация системы здоровья
 	health_bar.health = player_health
 	health_bar.max_health = player_max_health
+	
+	took_damage.connect(DamageNumbersManager.show_damage)
 
-# === СИСТЕМА ЗДОРОВЬЯ ===
+
+# === СИСТЕМА ЗДОРОВЬЯ И УРОНА ===
 func take_damage(amount: int):
 	"""
 	Вызывается когда игрок получает урон
 	amount - количество получаемого урона
 	"""
 	health_bar.take_damage(amount)
+	took_damage.emit(calculate_damage_position(), amount, false, true)
+	# Проверяем смерть
+	if health_bar.health <= 0:
+		die()
+	else:
+		# Эффекты только если игрок выжил
+		# screen_shake()  # Тряска экрана
+		# spawn_blood_particles()  # Частицы крови
+		pass
 	
 	# МЕСТО ДЛЯ ДОБАВЛЕНИЯ ЭФФЕКТОВ:
 	# - Мигание спрайта (modulate)
 	# - Тряска камеры
 	# - Звук получения урона
 	# - Эффект крови/частиц
+# Запускаем неуязвимость если выжил
+	start_invincibility()
+
+
+func _on_damage_area_touch_body_entered(body):
+	# Проверяем: это враг И игрок не неуязвим
+	if body.is_in_group("враги") and not is_invincible:
+		take_damage(1)  # Пока фиксированный урон 1
+
+
+func calculate_damage_position() -> Vector2:
+	# Надежное вычисление позиции
+	if sprite:
+		# половина размера спрайта и на 20 повыше
+		print("получил спрайт")
+		return global_position - Vector2(0, sprite.texture.get_height() * sprite.scale.y * 0.5 + 20) 
+	else:
+		return global_position - Vector2(0, 50)  # fallback
+		
+
+func start_invincibility():
+	is_invincible = true
+	print("Неуязвимость активирована")
+	
+	# Простой эффект мигания (позже заменишь на анимацию)
+	var tween = create_tween()
+	tween.tween_property(sprite, "modulate", Color(1, 0.5, 0.5, 0.7), 0.1)
+	tween.tween_property(sprite, "modulate", Color.WHITE, 0.1)
+	tween.set_loops(5)  # 5 миганий
+	
+	# Таймер окончания неуязвимости
+	await get_tree().create_timer(combat_invincibility_time).timeout
+	is_invincible = false
+
+
+func die():
+	print("Игрок умер!")
+	get_tree().reload_current_scene()  # Перезагрузка уровня
 
 # === СИСТЕМА ПЕРЕМЕЩЕНИЯ ===
 func _physics_process(delta):
@@ -81,7 +135,7 @@ func _physics_process(delta):
 			animPlayer.play("бег_спина")
 		
 		# Смещаем область атаки в направлении движения
-		$"область атаки".position = facing_direction * 15
+		$ОбластьАтаки.position = facing_direction * 15
 	
 	else:
 		# Нет движения - проигрываем анимацию покоя
@@ -92,7 +146,7 @@ func _physics_process(delta):
 	move_and_slide()  # Встроенная функция Godot для перемещения с коллизиями
 
 # === СИСТЕМА АТАКИ ===
-@onready var attack_area = $"область атаки"  # Ссылка на Area2D для атаки
+@onready var attack_area = $ОбластьАтаки  # Ссылка на Area2D для атаки
 
 func _input(event):
 	"""

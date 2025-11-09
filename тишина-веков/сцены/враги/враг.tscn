@@ -10,6 +10,7 @@ size = Vector2(21, 23.5)
 
 [node name="враг" type="CharacterBody2D"]
 script = ExtResource("1_romfk")
+metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-2.3841858e-07, 2.0861626e-07)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://ccr41fybs0lv3"]
 
-[ext_resource type="Script" uid="uid://bfgwtq23m0ta0" path="res://сцены/интерфейс/узел_урона.gd" id="1_14ka5"]
+[ext_resource type="Script" uid="uid://bfgwtq23m0ta0" path="res://сцены/интерфейс/узел_урона.gd" id="1_my7a3"]
 
 [sub_resource type="Animation" id="Animation_14ka5"]
 length = 0.5
@@ -83,7 +83,7 @@ tracks/1/keys = {
 }
 tracks/2/type = "method"
 tracks/2/imported = false
-tracks/2/enabled = true
+tracks/2/enabled = false
 tracks/2/path = NodePath("Label")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
@@ -152,6 +152,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 15.0
 offset_bottom = 23.0
+metadata/_edit_group_ = true
 
 [node name="Label" type="Label" parent="."]
 texture_filter = 1
@@ -161,9 +162,9 @@ offset_right = 15.0
 offset_bottom = 3.0
 scale = Vector2(0.5, 0.5)
 text = "-1"
-script = ExtResource("1_14ka5")
+script = ExtResource("1_my7a3")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Label"]
+[node name="AnimationNumber" type="AnimationPlayer" parent="Label"]
 root_node = NodePath("../..")
 libraries = {
 &"": SubResource("AnimationLibrary_vf3xv")

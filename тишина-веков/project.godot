@@ -15,8 +15,13 @@ run/main_scene="uid://eej73pu8l12j"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+DamageNumbersManager="*res://сцены/интерфейс/DamageNumbersManager.gd"
+
 [display]
 
+window/stretch/mode="canvas_items"
 window/stretch/scale=3.0
 
 [input]

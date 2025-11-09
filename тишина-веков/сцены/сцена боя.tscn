@@ -1,183 +1,9 @@
-[gd_scene load_steps=23 format=4 uid="uid://eej73pu8l12j"]
+[gd_scene load_steps=7 format=4 uid="uid://eej73pu8l12j"]
 
-[ext_resource type="Script" uid="uid://dq3qoy67q5l0r" path="res://сцены/игрок/игрок.gd" id="1_sitao"]
-[ext_resource type="Texture2D" uid="uid://xtmy6uupsswm" path="res://ассеты/спрайты/зеленый квадрат.png" id="2_kp8rm"]
-[ext_resource type="Texture2D" uid="uid://cacv7issnjfj7" path="res://ассеты/спрайты/гг/Спрайт_вампир_гг_бег_перед.png" id="2_y428e"]
+[ext_resource type="PackedScene" uid="uid://d1rb3vewl6egs" path="res://сцены/игрок/игрок.tscn" id="3_kp8rm"]
 [ext_resource type="PackedScene" uid="uid://bpa3vo4mkck5r" path="res://сцены/враги/враг.tscn" id="3_y428e"]
-[ext_resource type="Texture2D" uid="uid://crx6e8gtodvdo" path="res://ассеты/спрайты/гг/Спрайт_вампир_гг_бег_спина.png" id="5_n28v2"]
-[ext_resource type="Texture2D" uid="uid://t2cfy0fk0foy" path="res://ассеты/спрайты/гг/вампир_ходьба-sheet.png" id="6_wbs5n"]
 [ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="8_4f5mk"]
-[ext_resource type="Texture2D" uid="uid://6kg2d42qvpbc" path="res://ассеты/спрайты/полоска здоровья.png" id="9_kxcxj"]
-[ext_resource type="Texture2D" uid="uid://cjnvd3o2k7b4y" path="res://ассеты/спрайты/объем_здоровья.png" id="10_c2kwh"]
-[ext_resource type="Script" uid="uid://bfmhvsv100tms" path="res://сцены/HealthBarPlayer.gd" id="11_sr1rt"]
 [ext_resource type="Texture2D" uid="uid://c2u0w1wn6lcas" path="res://ассеты/спрайты/ресурсы карты/набор 1/dungeons_demo.png" id="12_yd2m6"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_d51up"]
-size = Vector2(14, 7)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_acsuq"]
-size = Vector2(11, 11)
-
-[sub_resource type="GDScript" id="GDScript_c2kwh"]
-script/source = "extends Camera2D
-
-func _ready():
-	#print(\"Камера активна:\", self.is_current())
-	pass
-"
-
-[sub_resource type="Animation" id="Animation_wbs5n"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(-0.033333335),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("2_y428e")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [1]
-}
-
-[sub_resource type="Animation" id="Animation_n28v2"]
-resource_name = "бег_перед"
-length = 0.8
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("2_y428e")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3, 4, 5, 6, 7]
-}
-
-[sub_resource type="Animation" id="Animation_kxcxj"]
-resource_name = "бег_с_боку"
-length = 0.8
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("6_wbs5n")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3, 4, 5, 6, 7]
-}
-
-[sub_resource type="Animation" id="Animation_4f5mk"]
-resource_name = "бег_спина"
-length = 0.8
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("5_n28v2")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3, 4, 5, 6, 7]
-}
-
-[sub_resource type="Animation" id="Animation_c2kwh"]
-resource_name = "покой"
-length = 0.1
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("2_y428e")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_4f5mk"]
-_data = {
-&"RESET": SubResource("Animation_wbs5n"),
-&"бег_перед": SubResource("Animation_n28v2"),
-&"бег_с_боку": SubResource("Animation_kxcxj"),
-&"бег_спина": SubResource("Animation_4f5mk"),
-&"покой": SubResource("Animation_c2kwh")
-}
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fdy2w"]
 texture = ExtResource("12_yd2m6")
@@ -290,11 +116,10 @@ tile_map_data = PackedByteArray("AAAPAP7/AAAIAAMAAAAPAP//AAAIAAQAAAAPAAAAAAAIAAU
 tile_set = ExtResource("8_4f5mk")
 
 [node name="TileMapLayer3" type="TileMapLayer" parent="."]
-tile_map_data = PackedByteArray("AAAKAP//AAAMAAIAAAALAP//AAAJAAUAAAALAP7/AAAJAAQAAAAJAP7/AAAJAAQAAAAJAP//AAAJAAUAAAA=")
 tile_set = ExtResource("8_4f5mk")
 
 [node name="враг" parent="." groups=["враги"] instance=ExtResource("3_y428e")]
-position = Vector2(176, 53)
+position = Vector2(173, 55)
 health = 20
 max_health = 20
 
@@ -308,49 +133,8 @@ position = Vector2(140, 138)
 health = 20
 max_health = 20
 
-[node name="игрок" type="CharacterBody2D" parent="."]
+[node name="игрок" parent="." instance=ExtResource("3_kp8rm")]
 position = Vector2(252, 79)
-script = ExtResource("1_sitao")
-speed = 200.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="игрок"]
-position = Vector2(0, 12.5)
-shape = SubResource("RectangleShape2D_d51up")
-
-[node name="Sprite2D" type="Sprite2D" parent="игрок"]
-texture_filter = 3
-texture = ExtResource("2_y428e")
-hframes = 8
-frame = 1
-
-[node name="область атаки" type="Area2D" parent="игрок"]
-position = Vector2(-18, 6)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="игрок/область атаки"]
-shape = SubResource("RectangleShape2D_acsuq")
-
-[node name="Sprite2D" type="Sprite2D" parent="игрок/область атаки"]
-texture_filter = 3
-scale = Vector2(0.24999997, 0.2500001)
-texture = ExtResource("2_kp8rm")
-
-[node name="Camera2D" type="Camera2D" parent="игрок"]
-script = SubResource("GDScript_c2kwh")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="игрок"]
-libraries = {
-&"": SubResource("AnimationLibrary_4f5mk")
-}
-
-[node name="HealthBar" type="TextureProgressBar" parent="игрок"]
-offset_left = -8.0
-offset_top = -23.0
-offset_right = 8.0
-offset_bottom = -18.0
-texture_under = ExtResource("10_c2kwh")
-texture_over = ExtResource("10_c2kwh")
-texture_progress = ExtResource("9_kxcxj")
-script = ExtResource("11_sr1rt")
 
 [node name="HUD" type="CanvasLayer" parent="."]
 layer = 0
@@ -363,5 +147,5 @@ offset_left = 15.0
 offset_right = 55.0
 offset_bottom = 40.0
 
-[node name="TileMapLayer3" type="TileMapLayer" parent="."]
+[node name="TileMapLayer4" type="TileMapLayer" parent="."]
 tile_set = SubResource("TileSet_hd1ar")
