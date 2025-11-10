@@ -5,6 +5,8 @@ extends CharacterBody2D
 
 @export var health := 3  # можно задавать в редакторе
 @export var max_health := 3
+@export var move_speed := 50.0
+
 
 @export_group("Enemy Damage")
 @export var contact_damage := 1  # Урон от прикосновения
@@ -22,6 +24,13 @@ func _ready():
 	# Подключаем сигнал к менеджеру	
 	took_damage.connect(DamageNumbersManager.show_damage)
 
+
+func _physics_process(delta):
+	var player = get_tree().get_first_node_in_group("игрок")
+	if player:
+		var direction = (player.global_position - global_position).normalized()
+		velocity = direction * move_speed
+		move_and_slide()
 
 func take_damage(amount := 1, is_crit = false):
 	health -= amount

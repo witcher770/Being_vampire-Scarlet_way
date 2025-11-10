@@ -179,7 +179,7 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5firq"]
 size = Vector2(14, 7)
 
-[node name="Игрок" type="CharacterBody2D"]
+[node name="Игрок" type="CharacterBody2D" groups=["игрок"]]
 script = ExtResource("1_5firq")
 speed = 200.0
 knockback_force = 100.0

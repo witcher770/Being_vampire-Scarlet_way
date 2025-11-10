@@ -24,6 +24,10 @@ DamageNumbersManager="*res://сцены/интерфейс/DamageNumbersManager.
 window/stretch/mode="canvas_items"
 window/stretch/scale=3.0
 
+[global_group]
+
+"игрок"=""
+
 [input]
 
 "атака"={

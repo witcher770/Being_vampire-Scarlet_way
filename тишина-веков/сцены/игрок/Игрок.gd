@@ -1,5 +1,4 @@
 extends CharacterBody2D
-# Добавляем в самое начало
 
 # другие полезные декораторы
 #@export_category("Player Stats")  # Более крупная категория (жирный шрифт)
@@ -44,7 +43,8 @@ var knockback_velocity := Vector2.ZERO
 
 func _ready():
 	randomize()  # Инициализация генератора случайных чисел для критических ударов
-	
+	add_to_group("игрок") # я так то добавил группу в инспекторе но пусть и тут будет
+
 	# Настройка области атаки
 	attack_area.monitoring = false  # Отключаем коллизии атаки до момента удара
 	attack_area.body_entered.connect(_on_attack_hit)  # Подключаем сигнал попадания
