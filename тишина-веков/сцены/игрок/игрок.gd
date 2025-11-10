@@ -81,7 +81,8 @@ func _on_damage_area_touch_body_entered(body):
 	# Проверяем: это враг И игрок не неуязвим
 	if body.is_in_group("враги") and not is_invincible:
 		var enemy_pos = body.global_position
-		take_damage(1) # Пока фиксированный урон 1
+		var damage = body.deal_contact_damage()
+		take_damage(damage) # Пока фиксированный урон 1
 		apply_knockback(enemy_pos)
 
 
@@ -117,6 +118,12 @@ func die():
 
 # === СИСТЕМА ПЕРЕМЕЩЕНИЯ ===
 func _physics_process(delta):
+	if is_knockback:
+		animPlayer.play('покой') # тут надо переключать на статичные позы чтобы не было добегивания
+		move_and_slide()
+		return
+
+	
 	# Получаем вектор ввода от игрока (нормализованный - длина всегда 1)
 	var input_vector = Vector2(
 		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),  # Горизонталь: -1..1

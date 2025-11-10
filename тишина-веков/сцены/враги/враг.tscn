@@ -10,6 +10,7 @@ size = Vector2(21, 23.5)
 
 [node name="враг" type="CharacterBody2D"]
 script = ExtResource("1_romfk")
+contact_damage = 5
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

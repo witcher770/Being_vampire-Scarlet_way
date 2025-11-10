@@ -2,8 +2,13 @@ extends CharacterBody2D
 
 @onready var health_bar = $HealthBar
 @onready var sprite = $Sprite2D  # если он есть
+
 @export var health := 3  # можно задавать в редакторе
 @export var max_health := 3
+
+@export_group("Enemy Damage")
+@export var contact_damage := 1  # Урон от прикосновения
+@export var attack_damage := 2   # Урон от будущих атак
 
 # Сигнал для урона вместо жесткой привязки
 signal took_damage(position, amount, is_crit)
@@ -39,5 +44,8 @@ func calculate_damage_position() -> Vector2:
 
 func die():
 	queue_free()
-	
-	
+
+
+# Враг наносит урон игроку
+func deal_contact_damage():
+	return contact_damage
