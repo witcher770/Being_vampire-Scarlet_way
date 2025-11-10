@@ -21,7 +21,7 @@ func show_damage(amount, is_crit = false, is_player = false):
 		scale = Vector2(0.8, 0.8)
 	
 	if is_player:
-		add_theme_color_override("font_color", Color.GREEN)
+		add_theme_color_override("font_color", Color.DARK_BLUE)
 		scale = Vector2(1, 1)
 	
 	# Безопасное воспроизведение анимации

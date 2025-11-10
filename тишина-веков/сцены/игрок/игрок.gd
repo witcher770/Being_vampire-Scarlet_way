@@ -16,6 +16,8 @@ signal took_damage(position, amount, is_crit)
 # === НАСТРОЙКИ ПЕРСОНАЖА ===
 var facing_direction := Vector2.RIGHT  # Текущее направление взгляда (для атаки и анимации)
 var is_invincible := false
+var is_knockback := false
+var knockback_velocity := Vector2.ZERO
 
 @export_group("Combat Settings", "combat_")
 @export var combat_attack_damage_min := 1
@@ -29,6 +31,10 @@ var is_invincible := false
 @export_group("Health Settings")
 @export var player_health := 100  # Текущее здоровье игрока (настраивается в редакторе)
 @export var player_max_health := 100  # Максимальное здоровье игрока
+
+@export_group("Knockback Settings")
+@export var knockback_force := 300.0  # Сила отталкивания
+@export var knockback_duration := 0.2  # Длительность отталкивания
 
 func _ready():
 	randomize()  # Инициализация генератора случайных чисел для критических ударов
@@ -74,7 +80,10 @@ func take_damage(amount: int):
 func _on_damage_area_touch_body_entered(body):
 	# Проверяем: это враг И игрок не неуязвим
 	if body.is_in_group("враги") and not is_invincible:
-		take_damage(1)  # Пока фиксированный урон 1
+		var enemy_pos = body.global_position
+		take_damage(1) # Пока фиксированный урон 1
+		apply_knockback(enemy_pos)
+
 
 
 func calculate_damage_position() -> Vector2:
@@ -85,7 +94,7 @@ func calculate_damage_position() -> Vector2:
 		return global_position - Vector2(0, sprite.texture.get_height() * sprite.scale.y * 0.5 + 20) 
 	else:
 		return global_position - Vector2(0, 50)  # fallback
-		
+
 
 func start_invincibility():
 	is_invincible = true
@@ -104,7 +113,7 @@ func start_invincibility():
 
 func die():
 	print("Игрок умер!")
-	get_tree().reload_current_scene()  # Перезагрузка уровня
+	get_tree().reload_current_scene()  # Перезагрузка уровня. Тут ошибка!!!!!
 
 # === СИСТЕМА ПЕРЕМЕЩЕНИЯ ===
 func _physics_process(delta):
@@ -144,6 +153,28 @@ func _physics_process(delta):
 	# Применяем движение
 	velocity = input_vector * speed
 	move_and_slide()  # Встроенная функция Godot для перемещения с коллизиями
+
+
+func apply_knockback(from_position: Vector2):
+	if is_knockback:
+		return
+	print("Отталкивание от:", from_position)
+
+	is_knockback = true
+	
+	var direction = (global_position - from_position).normalized()
+	var knockback = direction * knockback_force
+	
+	# применяем начальный импульс
+	velocity = knockback
+	
+	# создаём плавное затухание (через tween)
+	var tween = create_tween()
+	tween.tween_property(self, "velocity", Vector2.ZERO, knockback_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	await tween.finished
+	is_knockback = false
+
 
 # === СИСТЕМА АТАКИ ===
 @onready var attack_area = $ОбластьАтаки  # Ссылка на Area2D для атаки
