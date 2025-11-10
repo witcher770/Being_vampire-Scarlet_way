@@ -31,15 +31,15 @@ var knockback_velocity := Vector2.ZERO
 @export var combat_invincibility_time := 1.0
 
 @export_group("Movement Settings") 
-@export var speed := 100.0 # Скорость перемещения персонажа (пикселей в секунду)
+@export var speed := 200.0 # Скорость перемещения персонажа (пикселей в секунду)
 
 @export_group("Health Settings")
 @export var player_health := 100  # Текущее здоровье игрока (настраивается в редакторе)
 @export var player_max_health := 100  # Максимальное здоровье игрока
 
 @export_group("Knockback Settings")
-@export var knockback_force := 300.0  # Сила отталкивания
-@export var knockback_duration := 0.2  # Длительность отталкивания
+@export var knockback_force := 200.0  # Сила отталкивания
+@export var knockback_duration := 0.4  # Длительность отталкивания
 
 func _ready():
 	randomize()  # Инициализация генератора случайных чисел для критических ударов
