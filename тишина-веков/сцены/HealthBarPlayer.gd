@@ -15,13 +15,14 @@ func take_damage(amount: int):
 	value = health
 	print("У игрока осталось HP: ", health)
 	
-	if health <= 0:
-		die()
+	return health <= 0
+
 
 func heal(amount: int): # типо функция для хила
 	health += amount
 	health = min(health, max_health)  # Не больше максимума
 	value = health
+	return health > 0
 	
 # Добавь в скрипт HealthBar для перманентных улучшений
 func increase_max_health(amount: int):
@@ -29,8 +30,3 @@ func increase_max_health(amount: int):
 	health += amount  # И лечим на эту же величину
 	max_value = max_health
 	value = health
-
-func die():
-	print("Игрок умер!")
-	# Тут логика смерти игрока - перезагрузка уровня и т.д.
-	get_tree().reload_current_scene()  # Например, перезагрузка

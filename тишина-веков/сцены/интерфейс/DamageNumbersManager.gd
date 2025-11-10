@@ -12,7 +12,7 @@ func show_damage(position: Vector2, amount: int, is_crit: bool = false, is_playe
 	is_crit - был ли критический удар
 	"""
 	
-	print('я получил сигнал')
+	#print('я получил сигнал')
 	var dmg_number = damage_number_scene.instantiate() # Создаем экземпляр (копию) заранее загруженной сцены
 	add_child(dmg_number) # Добавляем созданное число урона как дочерний нод менеджера
 
@@ -20,7 +20,7 @@ func show_damage(position: Vector2, amount: int, is_crit: bool = false, is_playe
 	dmg_number.global_position = position
 	
 	# Запускаем анимацию
-	print("запускаю анимацию")
+	#print("запускаю анимацию")
 	dmg_number.get_node("Label").show_damage(amount, is_crit, is_player)
 	
 	# Автоудаление после анимации

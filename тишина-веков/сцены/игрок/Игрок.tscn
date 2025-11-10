@@ -1,6 +1,6 @@
 [gd_scene load_steps=19 format=3 uid="uid://d1rb3vewl6egs"]
 
-[ext_resource type="Script" uid="uid://dq3qoy67q5l0r" path="res://сцены/игрок/игрок.gd" id="1_5firq"]
+[ext_resource type="Script" uid="uid://dq3qoy67q5l0r" path="res://сцены/игрок/Игрок.gd" id="1_5firq"]
 [ext_resource type="Texture2D" uid="uid://cacv7issnjfj7" path="res://ассеты/спрайты/гг/Спрайт_вампир_гг_бег_перед.png" id="2_n8mlp"]
 [ext_resource type="Texture2D" uid="uid://xtmy6uupsswm" path="res://ассеты/спрайты/зеленый квадрат.png" id="3_c8qja"]
 [ext_resource type="Texture2D" uid="uid://t2cfy0fk0foy" path="res://ассеты/спрайты/гг/вампир_ходьба-sheet.png" id="4_h3k5o"]

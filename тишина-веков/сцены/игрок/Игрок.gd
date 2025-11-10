@@ -7,10 +7,16 @@ extends CharacterBody2D
 #@export_range(1, 100, 1) var health: int  # Ограничение диапазона
 #@export_flags("Fire", "Water", "Earth", "Air") var elements: int  # Флаги
 
+# === ССЫЛКИ НА ЭЛЕМЕНТЫ ===
 @onready var animPlayer = $AnimationPlayer  # Ссылка на нод анимаций
 @onready var sprite = $Sprite2D  # Ссылка на спрайт персонажа
 @onready var health_bar = $HealthBar  # Ссылка на полоску здоровья
-signal took_damage(position, amount, is_crit)
+@onready var attack_area = $ОбластьАтаки  # Ссылка на Area2D для атаки
+@onready var damage_area = $ОбластьУронаКасанием
+
+# === СИГНАЛЫ ===
+signal took_damage(position, amount, is_crit) # сигнал о получении урона 
+signal player_died # сигнал о смерти игрока
 
 
 # === НАСТРОЙКИ ПЕРСОНАЖА ===
@@ -40,9 +46,9 @@ func _ready():
 	randomize()  # Инициализация генератора случайных чисел для критических ударов
 	
 	# Настройка области атаки
-	$ОбластьАтаки.monitoring = false  # Отключаем коллизии атаки до момента удара
-	$ОбластьАтаки.body_entered.connect(_on_attack_hit)  # Подключаем сигнал попадания
-	$ОбластьУронаКасанием.body_entered.connect(_on_damage_area_touch_body_entered) # Подключаем сигнал урона от касания
+	attack_area.monitoring = false  # Отключаем коллизии атаки до момента удара
+	attack_area.body_entered.connect(_on_attack_hit)  # Подключаем сигнал попадания
+	damage_area.body_entered.connect(_on_damage_area_touch_body_entered) # Подключаем сигнал урона от касания
 	
 	# Инициализация системы здоровья
 	health_bar.health = player_health
@@ -57,12 +63,15 @@ func take_damage(amount: int):
 	Вызывается когда игрок получает урон
 	amount - количество получаемого урона
 	"""
-	health_bar.take_damage(amount)
+	var is_dead = health_bar.take_damage(amount)
 	took_damage.emit(calculate_damage_position(), amount, false, true)
 	# Проверяем смерть
-	if health_bar.health <= 0:
+	if is_dead:
 		die()
 	else:
+		# Запускаем неуязвимость если выжил
+		start_invincibility()
+		
 		# Эффекты только если игрок выжил
 		# screen_shake()  # Тряска экрана
 		# spawn_blood_particles()  # Частицы крови
@@ -73,8 +82,7 @@ func take_damage(amount: int):
 	# - Тряска камеры
 	# - Звук получения урона
 	# - Эффект крови/частиц
-# Запускаем неуязвимость если выжил
-	start_invincibility()
+
 
 
 func _on_damage_area_touch_body_entered(body):
@@ -91,7 +99,6 @@ func calculate_damage_position() -> Vector2:
 	# Надежное вычисление позиции
 	if sprite:
 		# половина размера спрайта и на 20 повыше
-		print("получил спрайт")
 		return global_position - Vector2(0, sprite.texture.get_height() * sprite.scale.y * 0.5 + 20) 
 	else:
 		return global_position - Vector2(0, 50)  # fallback
@@ -99,7 +106,7 @@ func calculate_damage_position() -> Vector2:
 
 func start_invincibility():
 	is_invincible = true
-	print("Неуязвимость активирована")
+	#print("Неуязвимость активирована")
 	
 	# Простой эффект мигания (позже заменишь на анимацию)
 	var tween = create_tween()
@@ -114,7 +121,14 @@ func start_invincibility():
 
 func die():
 	print("Игрок умер!")
-	get_tree().reload_current_scene()  # Перезагрузка уровня. Тут ошибка!!!!!
+	# Останавливаем логику ДО удаления
+	#set_physics_process(false)
+	#set_process_input(false)
+	#velocity = Vector2.ZERO
+	
+	player_died.emit()
+	print("отправил сигнал, я умер")
+	queue_free()
 
 # === СИСТЕМА ПЕРЕМЕЩЕНИЯ ===
 func _physics_process(delta):
@@ -151,7 +165,7 @@ func _physics_process(delta):
 			animPlayer.play("бег_спина")
 		
 		# Смещаем область атаки в направлении движения
-		$ОбластьАтаки.position = facing_direction * 15
+		attack_area.position = facing_direction * 15
 	
 	else:
 		# Нет движения - проигрываем анимацию покоя
@@ -165,7 +179,7 @@ func _physics_process(delta):
 func apply_knockback(from_position: Vector2):
 	if is_knockback:
 		return
-	print("Отталкивание от:", from_position)
+	#print("Отталкивание от:", from_position)
 
 	is_knockback = true
 	
@@ -184,8 +198,6 @@ func apply_knockback(from_position: Vector2):
 
 
 # === СИСТЕМА АТАКИ ===
-@onready var attack_area = $ОбластьАтаки  # Ссылка на Area2D для атаки
-
 func _input(event):
 	"""
 	Обработка нажатий клавиш (вызывается при каждом вводе)
