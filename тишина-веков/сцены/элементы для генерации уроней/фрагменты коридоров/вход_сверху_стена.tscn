@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=4 uid="uid://cp5tmvw1gf63f"]
+
+[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="1_ykc0w"]
+
+[node name="ВходСверхуСтена" type="Node2D"]
+
+[node name="стена" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAAAAPz/AAABAAMAAAAAAP3/AAABAAAAAAAAAP7/AAABAAEAAAAAAP//AAABAAIAAAABAPz/AAABAAMAAAABAP3/AAABAAAAAAABAP7/AAABAAEAAAABAP//AAABAAIAAAACAPz/AAABAAMAAAACAP3/AAABAAAAAAACAP7/AAABAAEAAAACAP//AAABAAIAAAADAPz/AAABAAMAAAADAP3/AAABAAAAAAADAP7/AAABAAEAAAADAP//AAABAAIAAAAEAPz/AAABAAMAAAAEAP3/AAABAAAAAAAEAP7/AAABAAEAAAAEAP//AAABAAIAAAA=")
+tile_set = ExtResource("1_ykc0w")
+
+[node name="антураж" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAAAAP3/AAAJAAQAAAAAAP7/AAAJAAUAAAABAP7/AAAMAAMAAAACAP7/AAANAAMAAAADAP7/AAAOAAMAAAAEAP3/AAAJAAQAAAAEAP7/AAAJAAUAAAA=")
+tile_set = ExtResource("1_ykc0w")

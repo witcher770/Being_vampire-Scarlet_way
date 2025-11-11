@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dsady74hhmoog"]
+
+[ext_resource type="Script" uid="uid://cl0n7vkot8ixr" path="res://сцены/элементы для генерации уроней/узел_генерации.gd" id="1_u7nwp"]
+
+[node name="УзелГенерации" type="Node2D"]
+script = ExtResource("1_u7nwp")

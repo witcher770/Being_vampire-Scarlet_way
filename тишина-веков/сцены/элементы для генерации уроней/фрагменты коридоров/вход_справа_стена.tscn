@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=4 uid="uid://dy6nvgv1o4l38"]
+
+[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="1_weyvl"]
+
+[node name="ВходСправаСтена" type="Node2D"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAABAAAAAAACAAQAAAABAAEAAAACAAQAAAABAAIAAAACAAQAAAABAAMAAAACAAQAAAABAAQAAAACAAQAAAABAAUAAAACAAQAAAABAAYAAAACAAQAAAABAAcAAAACAAQAAAA=")
+tile_set = ExtResource("1_weyvl")
