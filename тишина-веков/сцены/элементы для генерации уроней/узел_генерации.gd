@@ -25,13 +25,26 @@ var grid_with_rooms = []
 var rng = RandomNumberGenerator.new()
 
 func _ready():
-	#rng.seed = 12345  # фиксированный сид для воспроизводимости
-	rng.randomize() # или для случайного сида каждый раз
+	rng.seed = 12345  # фиксированный сид для воспроизводимости
+	#rng.randomize() # или для случайного сида каждый раз
 	
 	var empty_grid = create_grid(size_level)
-	grid_with_rooms = gen_pos_rooms(empty_grid)
+	grid_with_rooms = gen_pos_rooms(empty_grid.duplicate())
 	for i in range(size_level):
-		print(grid_with_rooms[i])
+		var line = ""
+		for j in range(size_level):
+			#printraw(grid_with_rooms[i][j]["position"]) # печать без переноса строки
+			var cell = grid_with_rooms[i][j]
+			if cell != null:
+				line += " " + cell.["position"]
+			else:
+				print(2)
+				printraw("0")
+		print(1)
+			
+		
+	var a = get_neightbours(grid_with_rooms, Vector2(0, 2))
+	print(a)
 	
 
 func create_grid(size: int) -> Array:
@@ -45,7 +58,7 @@ func create_grid(size: int) -> Array:
 
 func gen_pos_rooms(grid: Array) -> Array:
 	# количество позиций для комнат
-	var quantity_pos = size_level ** 2
+	quantity_pos = size_level ** 2
 	if num_rooms > quantity_pos:
 		num_rooms = quantity_pos
 	
@@ -69,14 +82,18 @@ func gen_pos_rooms(grid: Array) -> Array:
 				"room_type": null, # тип комнаты. первую можно сделать стартовой и в ней создавать игрока
 				"room_instance": null, # тут должжна быть ссылка на комнату, но ывбор комнаты думаю должен быть позже
 				"exits": {"north": false, "south": false, "east": false, "west": false}, # параметры для заполнения пустот в стене
+				"connections": [], # Vector2i(1, 0), соединена с комнатой справа (x+1, y+0), Vector2i(0, 1) соединена с комнатой снизу  (x+0, y+1)
 				"position": Vector2(x, y) # просто координаты
 			}
 		
 		# если комната первая, делаем стартовой
 		if quantity_pos == size_level ** 2:
 			cell_info["room_type"] = "start_room"
-		# на место ячейки записываем вектор с координатами этой позиции вместо null
-		grid[x][y] = Vector2(x, y)
+		
+		# на место ячейки записываем словарь с информацией о ней
+		grid[x][y] = cell_info
+		## на место ячейки записываем вектор с координатами этой позиции вместо null
+		#grid[x][y] = Vector2(x, y)
 		
 		maybe_pos_rooms.remove_at(index)  # удаляем использованную(уже занятую) позицию
 		quantity_pos -= 1 # уменьшаем количество доступных мест
@@ -102,3 +119,58 @@ func gen_pos_rooms(grid: Array) -> Array:
 			#return coords # возвращаем координаты где создали
 		#
 	#return Vector2(-1, -1) # возвращаем если ничего не создали. в отрицательной четверти работать не будем
+
+
+func connect_rooms(grid: Array) -> Array:
+	
+	return[-1]
+
+
+func create_tree_connectoins(grid: Array) -> Array: 
+	var in_tree = []  # комнаты уже в дереве
+	var edges = []    # возможные соединения для добавления
+	
+	
+	return [-1]
+
+
+func get_neightbours(grid: Array, coords: Vector2) -> Array: # возвращает массив соседей
+	var edges = []
+	var size_matrix = 3 # изнчально матрица соседей 3 на 3, с переданным элементом в центре
+	var maybe_pos_edges = create_grid(size_matrix) # массив возможных позиций(не выходящих за сетку) для отладки
+	var depth = 0 # глубина поиска соседей ,кол-во просматриваемых окружностей
+	var depth_for_cicle = 1 # нужна чтобы нормализовывать i и j, делая из индексов относит. смещение
+	
+	for i in range(size_matrix + depth * 2): # изнчально матрица соседей 3 на 3, и каждая следующая откружность на 2 больше
+		for j in range(size_matrix + depth * 2):
+			if i == j: # пропускаем ячейку в которой находится сама проверяемая комната
+				maybe_pos_edges[i][j] = 0
+				continue
+			var move_x = i - 1 * depth_for_cicle # смещение по строкам
+			var move_y = j - 1 * depth_for_cicle # смещение по столбцам
+			
+			if coords.x + move_x >= 0 and coords.x + move_x < size_level:
+				if coords.y + move_y >= 0 and coords.y + move_y < size_level:
+					# если индекс соседа не выходит за пределы сетки(проверки выше),
+					maybe_pos_edges[i][j] = 1 
+					# то проверяем эту позицию на наличие комнаты в ней
+					var cell = grid[coords.x][coords.y]
+					# если комната есть, то добавляем вектор с относительным положением этого соседа
+					#print(cell)
+					if cell:
+						edges.append(Vector2(move_x, move_y))
+						continue
+			maybe_pos_edges[i][j] = 0
+	
+	print("возможные позиции соседей")
+	for d in range(3):
+		print(maybe_pos_edges[d])
+	
+	if edges.size() == 0: # если на соседних клетках соседей нет
+		pass # тут должен быть рекурсивный вызов этой же функции с увеличенными параметрами глубины. Требует доработки
+		var dorobotka = 0
+	
+	return edges
+	
+	
+	

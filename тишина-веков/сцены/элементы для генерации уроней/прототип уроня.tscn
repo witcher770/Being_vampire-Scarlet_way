@@ -1,14 +1,14 @@
 [gd_scene load_steps=10 format=4 uid="uid://bg5fxu4di4858"]
 
-[ext_resource type="PackedScene" path="res://сцены/комнаты/коридор_перевернутая_г_10_10.tscn" id="1_4n6n1"]
-[ext_resource type="PackedScene" path="res://сцены/комнаты/комната_15_15_1.tscn" id="2_sb0ss"]
-[ext_resource type="PackedScene" path="res://сцены/комнаты/коридор_горизонтальный_8.tscn" id="3_ffggr"]
-[ext_resource type="PackedScene" path="res://сцены/комнаты/коридор_вертикальный_8.tscn" id="4_7oggw"]
-[ext_resource type="PackedScene" path="res://сцены/комнаты/вход_в_комнату_справа.tscn" id="5_y2c3s"]
-[ext_resource type="PackedScene" path="res://сцены/комнаты/вход_в_комнату_снизу.tscn" id="6_dr11g"]
+[ext_resource type="PackedScene" uid="uid://4lb03ovg4olf" path="res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_перевернутая_г_10_10.tscn" id="1_4n6n1"]
+[ext_resource type="PackedScene" uid="uid://bsgeb0gmvqyt0" path="res://сцены/элементы для генерации уроней/комнаты/комната_15_15_1.tscn" id="2_sb0ss"]
+[ext_resource type="PackedScene" uid="uid://bp6yxgkydu256" path="res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_горизонтальный_8.tscn" id="3_ffggr"]
+[ext_resource type="PackedScene" uid="uid://ct2eupt81j4pk" path="res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_вертикальный_8.tscn" id="4_7oggw"]
+[ext_resource type="PackedScene" uid="uid://36vyovx0ht7n" path="res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_справа.tscn" id="5_y2c3s"]
+[ext_resource type="PackedScene" uid="uid://c1lgld8ygl15x" path="res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_снизу.tscn" id="6_dr11g"]
 [ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="7_3qexr"]
-[ext_resource type="PackedScene" path="res://сцены/комнаты/коридор_г_10_10.tscn" id="8_bqq1l"]
-[ext_resource type="PackedScene" path="res://сцены/комнаты/вход_в_комнату_сверху.tscn" id="9_wb5m7"]
+[ext_resource type="PackedScene" uid="uid://rvn0xsllc37a" path="res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_г_10_10.tscn" id="8_bqq1l"]
+[ext_resource type="PackedScene" uid="uid://dy1qbo2kdltxv" path="res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_сверху.tscn" id="9_wb5m7"]
 
 [node name="Node2D" type="Node2D"]
 
