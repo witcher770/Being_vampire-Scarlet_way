@@ -22,20 +22,23 @@ extends Node2D
 var rooms_now = 0
 var grid_with_rooms = []
 
-var rng = RandomNumberGenerator.new()
+var rng_rand = RandomNumberGenerator.new()
+var rng_seed = RandomNumberGenerator.new()
 
 func _ready():
-	rng.seed = 12345  # фиксированный сид для воспроизводимости
+	rng_seed.seed = 12345  # фиксированный сид для воспроизводимости
 	#rng.randomize() # или для случайного сида каждый раз
 	
 	var empty_grid = create_grid(size_level)
 	grid_with_rooms = gen_pos_rooms(empty_grid.duplicate())
+	var grid_with_connections = create_tree_connectoins(grid_with_rooms)
 	
-	print_grid(grid_with_rooms)
+	
+	print_grid(grid_with_connections, "connections")
 	
 	
 	var a = get_neightbours(grid_with_rooms, Vector2(0, 2))
-	print(a)
+	#print(a)
 	
 
 func print_grid(grid: Array, param: String = "position") -> void:
@@ -69,7 +72,7 @@ func gen_pos_rooms(grid: Array) -> Array:
 	var maybe_pos_rooms = Array(range(0, quantity_pos, 1)) # не включительно
 	
 	for i in range(num_rooms):
-		var num_pos = rng.randi_range(0, quantity_pos - 1)  # генерируем позицию для комнаты. генерит включительно, поэтому -1
+		var num_pos = rng_seed.randi_range(0, quantity_pos - 1)  # генерируем позицию для комнаты. генерит включительно, поэтому -1
 		
 		# удаляем из списка возможных позиций комнат ту, куда сейчас ставим
 		var index = maybe_pos_rooms.find(num_pos)  # находим индекс элемента
@@ -89,10 +92,6 @@ func gen_pos_rooms(grid: Array) -> Array:
 				"position": Vector2(x, y) # просто координаты
 			}
 		
-		# если комната первая, делаем стартовой
-		if quantity_pos == size_level ** 2:
-			cell_info["room_type"] = "start_room"
-		
 		# на место ячейки записываем словарь с информацией о ней
 		grid[x][y] = cell_info
 		## на место ячейки записываем вектор с координатами этой позиции вместо null
@@ -105,24 +104,6 @@ func gen_pos_rooms(grid: Array) -> Array:
 	return grid
 
 
-# функция добавления в сетку комнаты
-#func append_one_room(coords: Vector2) -> Vector2:
-	## проверяем лимит созданных комнат
-	#if rooms_now < num_rooms:
-		## проверяем переданные координаты на корректность
-		#if 0 <= coords.x <= size_level and 0 <= coords.y <= size_level and grid_with_rooms[coords.x][coords.y] == null:
-			## информация о ячейке
-			#
-			#
-			#if rooms_now == 0:
-				#cell_info["room_type"] = "start_room"
-			## добавляем комнату в сетку
-			#grid_with_rooms[coords.x][coords.y].append(cell_info)
-			#rooms_now += 1
-			#return coords # возвращаем координаты где создали
-		#
-	#return Vector2(-1, -1) # возвращаем если ничего не создали. в отрицательной четверти работать не будем
-
 
 func connect_rooms(grid: Array) -> Array:
 	
@@ -132,12 +113,68 @@ func connect_rooms(grid: Array) -> Array:
 func create_tree_connectoins(grid: Array) -> Array: 
 	var in_tree = []  # комнаты уже в дереве
 	var edges = []    # возможные соединения для добавления
+	var first_room: bool = false
 	
-	
-	return [-1]
+	for i in range(size_level):
+		for j in range(size_level):
+			var cell = grid[i][j]
+			
+			if cell:
+				if cell in in_tree:
+					#continue # если эту комнату уже рассмотре
+					pass
+				
+				# если комната первая, делаем стартовой
+				if first_room:
+					cell["room_type"] = "start_room"
+					in_tree.append(cell) # добавляем первую ячейку в дерево
+					first_room = false
+				var near_rooms = get_neightbours(grid, cell["position"])
+				for near_room in near_rooms:
+					if near_room in in_tree:
+						continue # если комната уже в дереве не считаем ее соседом(пропускаем)
+					"""
+					тут воможно еще стоит добавить расстояние между комнатами, 
+					чтобы выбирать наименьшие растояния и проще строить коридоры
+					и избегать багов
+					"""
+					var connection: Array = [cell["position"], near_room["position"]]
+					edges.append(connection)
+				
+				# если все соседи уже в дереве пропускаем комнату
+				if edges.size() == 0:
+					continue 
+				# теперь из массива всех связей выберем случайную и сформируем ее
+				var num_conct = rng_rand.randi_range(0,edges.size() - 1)  # выбираем случайную связь. генерит включительно, поэтому -1
+				
+				var pos_room1: Vector2 = edges[num_conct][0]
+				var room1 = grid[pos_room1.x][pos_room1.y]
+				var pos_room2: Vector2 = edges[num_conct][1]
+				var room2 = grid[pos_room2.x][pos_room2.y]
+				
+				# удаляем из списка связей рассмотренную
+				edges.remove_at(num_conct)  # удаляем использованную связь
+				
+				# записываем им ссылки друг на друга
+				room1["connections"].append(pos_room1 - pos_room2) # относительное смещение на вторую комнату
+				room2["connections"].append(pos_room2 - pos_room1)
+				
+				# не уверен нужно ли это так как при присваивании ссылки но на всякий случай
+				# перезаписываем в сетке на комнаты с добавленными связями
+				grid[pos_room1.x][pos_room1.y] = room1
+				grid[pos_room2.x][pos_room2.y] = room2
+				
+				
+				# добавляем соединенную комнату в дерево
+				if room1 not in in_tree:
+					in_tree.append(room1)
+				if room2 not in in_tree:
+					in_tree.append(room2)
+
+	return grid
 
 
-func get_neightbours(grid: Array, coords: Vector2) -> Array: # возвращает массив соседей
+func get_neightbours(grid: Array, coords: Vector2) -> Array: # возвращает массив соседей - комнат
 	var edges = []
 	var size_matrix = 3 # изнчально матрица соседей 3 на 3, с переданным элементом в центре
 	var maybe_pos_edges = create_grid(size_matrix) # массив возможных позиций(не выходящих за сетку) для отладки
@@ -159,9 +196,9 @@ func get_neightbours(grid: Array, coords: Vector2) -> Array: # возвраща�
 					# то проверяем эту позицию на наличие комнаты в ней
 					var cell = grid[coords.x  + move_x][coords.y  + move_y]
 					# если комната есть, то добавляем вектор с относительным положением этого соседа
-					#print(cell)
 					if cell:
-						edges.append(Vector2(move_x, move_y))
+						# edges.append(Vector2(move_x, move_y)) # тут добавляем относительное положение
+						edges.append(cell) # добавляем самого соседа
 						continue
 			maybe_pos_edges[i][j] = 0
 	
