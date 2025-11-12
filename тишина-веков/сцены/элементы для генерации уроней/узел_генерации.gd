@@ -30,22 +30,25 @@ func _ready():
 	
 	var empty_grid = create_grid(size_level)
 	grid_with_rooms = gen_pos_rooms(empty_grid.duplicate())
-	for i in range(size_level):
-		var line = ""
-		for j in range(size_level):
-			#printraw(grid_with_rooms[i][j]["position"]) # печать без переноса строки
-			var cell = grid_with_rooms[i][j]
-			if cell != null:
-				line += " " + cell.["position"]
-			else:
-				print(2)
-				printraw("0")
-		print(1)
-			
-		
+	
+	print_grid(grid_with_rooms)
+	
+	
 	var a = get_neightbours(grid_with_rooms, Vector2(0, 2))
 	print(a)
 	
+
+func print_grid(grid: Array, param: String = "position") -> void:
+	for i in range(size_level):
+		var line: String = ""
+		for j in range(size_level):
+			var cell = grid[i][j]
+			if cell != null:
+				line = line + str(cell[param])
+			else:
+				line = line + " null "
+		print(line)
+
 
 func create_grid(size: int) -> Array:
 	var grid: Array = []
@@ -58,7 +61,7 @@ func create_grid(size: int) -> Array:
 
 func gen_pos_rooms(grid: Array) -> Array:
 	# количество позиций для комнат
-	quantity_pos = size_level ** 2
+	var quantity_pos = size_level ** 2
 	if num_rooms > quantity_pos:
 		num_rooms = quantity_pos
 	
@@ -154,7 +157,7 @@ func get_neightbours(grid: Array, coords: Vector2) -> Array: # возвраща�
 					# если индекс соседа не выходит за пределы сетки(проверки выше),
 					maybe_pos_edges[i][j] = 1 
 					# то проверяем эту позицию на наличие комнаты в ней
-					var cell = grid[coords.x][coords.y]
+					var cell = grid[coords.x  + move_x][coords.y  + move_y]
 					# если комната есть, то добавляем вектор с относительным положением этого соседа
 					#print(cell)
 					if cell:
@@ -162,9 +165,9 @@ func get_neightbours(grid: Array, coords: Vector2) -> Array: # возвраща�
 						continue
 			maybe_pos_edges[i][j] = 0
 	
-	print("возможные позиции соседей")
-	for d in range(3):
-		print(maybe_pos_edges[d])
+	#print("возможные позиции соседей")
+	#for d in range(3):
+		#print(maybe_pos_edges[d])
 	
 	if edges.size() == 0: # если на соседних клетках соседей нет
 		pass # тут должен быть рекурсивный вызов этой же функции с увеличенными параметрами глубины. Требует доработки
