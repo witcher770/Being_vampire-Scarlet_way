@@ -25,6 +25,10 @@ var grid_with_rooms = []
 var rng_rand = RandomNumberGenerator.new()
 var rng_seed = RandomNumberGenerator.new()
 
+const SIZE_TILE = 16
+const SIZE_CELL = 25
+const SIZE_ZONE = Vector2(SIZE_TILE * SIZE_CELL, SIZE_TILE * SIZE_CELL)  # размер зоны в пикселях
+
 func _ready():
 	rng_seed.seed = 12345  # фиксированный сид для воспроизводимости
 	#rng.randomize() # или для случайного сида каждый раз
@@ -34,12 +38,17 @@ func _ready():
 	var grid_with_connections = create_tree_connectoins(grid_with_rooms)
 	
 	
-	print_grid(grid_with_connections, "connections")
+	print_grid(grid_with_connections)
+	instantiate_rooms(grid_with_connections)
 	
 	
-	var a = get_neightbours(grid_with_rooms, Vector2(0, 2))
+	#var a = get_neightbours(grid_with_rooms, Vector2(0, 2))
 	#print(a)
-	
+	#var room_scene = preload("res://сцены/элементы для генерации уроней/комнаты/комната_15_15_1.tscn")
+	#var room_instance = room_scene.instantiate()
+	#room_instance.position = Vector2(0, 0)
+	#add_child(room_instance)
+
 
 func print_grid(grid: Array, param: String = "position") -> void:
 	for i in range(size_level):
@@ -104,7 +113,6 @@ func gen_pos_rooms(grid: Array) -> Array:
 	return grid
 
 
-
 func connect_rooms(grid: Array) -> Array:
 	
 	return[-1]
@@ -156,8 +164,8 @@ func create_tree_connectoins(grid: Array) -> Array:
 				edges.remove_at(num_conct)  # удаляем использованную связь
 				
 				# записываем им ссылки друг на друга
-				room1["connections"].append(pos_room1 - pos_room2) # относительное смещение на вторую комнату
-				room2["connections"].append(pos_room2 - pos_room1)
+				room1["connections"].append(pos_room2 - pos_room1) # относительное смещение на вторую комнату
+				room2["connections"].append(pos_room1 - pos_room2)
 				
 				# не уверен нужно ли это так как при присваивании ссылки но на всякий случай
 				# перезаписываем в сетке на комнаты с добавленными связями
@@ -211,6 +219,59 @@ func get_neightbours(grid: Array, coords: Vector2) -> Array: # возвраща�
 		var dorobotka = 0
 	
 	return edges
-	
-	
-	
+
+
+func calculate_exits(grid: Array):
+	for cell in grid:
+		for connection in cell["connections"]:
+			# Если в соединении есть 0 значит комната не по диагонали
+			if connection.x == 0 or connection.y == 0:
+				if connection.x == 0 and connection.y > 0:
+					cell["exits"]["east"] = true
+				elif connection.x == 0 and connection.y < 0:
+					cell["exits"]["west"] = true
+				elif connection.y == 0 and connection.x > 0:
+					cell["exits"]["south"] = true
+				elif  connection.y == 0 and connection.x < 0:
+					cell["exits"]["north"] = true
+				
+			else:
+				# комната по диагонали
+				if connection.x > 0 and connection.y > 0: # вниз и вправо - перевернутая г
+					cell["exits"]["south"] = true
+				# та же ситуация, только для 2й комнаты, соединенной перевернутой г
+				elif connection.x < 0 and connection.y < 0: # вверх и влево - перевернутая г
+					cell["exits"]["west"] = true
+				elif connection.x < 0 and connection.y > 0: # вверх вправо - г
+					cell["exits"]["north"] = true
+				# та же ситуация, только для 2й комнаты, соединенной  г
+				elif connection.x > 0 and connection.y < 0: # вниз влево - г
+					cell["exits"]["west"] = true
+
+
+func grid_to_world(grid_pos: Vector2) -> Vector2:
+	return Vector2(grid_pos.x * SIZE_ZONE.x, grid_pos.y * SIZE_ZONE.y)
+
+
+func instantiate_rooms(grid: Array) -> Array: # возвращает массив с загруженными асетами комнат
+	for i in range(size_level):
+		for j in range(size_level):
+			var cell = grid[i][j]
+			if cell:
+				var pos_cell = cell["position"]
+				var global_pos_cell = grid_to_world(pos_cell) # верхний левый угол ячейки сетки
+				# меняем местами х и у так как в векторе позиции х это положение по строкам, а в мировой сетке это у
+				var pos_for_create = Vector2(global_pos_cell.y + SIZE_ZONE.y / 2, global_pos_cell.x + SIZE_ZONE.x / 2) # координаты центра ячейки
+				# Выбираем префаб комнаты по количеству выходов
+				#var room_scene = choose_room_prefab(cell.exits)
+				var room_scene = preload("res://сцены/элементы для генерации уроней/комнаты/комната_15_15_1.tscn")
+				cell["room_instance"] = room_scene.instantiate()
+				cell["room_instance"].position = pos_for_create
+				grid[i][j] = cell # перезаписываем ячейку в сетке
+				add_child(cell["room_instance"])
+				grid[i][j] = cell
+	return grid
+
+
+# центр коридора поместить в сам поворот и размещать в центре ячейки
+# коридор центр по центру коридора также, а размещать на стыке ячеек
