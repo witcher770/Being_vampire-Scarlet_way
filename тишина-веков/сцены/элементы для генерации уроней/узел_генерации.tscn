@@ -4,5 +4,4 @@
 
 [node name="УзелГенерации" type="Node2D"]
 script = ExtResource("1_u7nwp")
-size_level = 4
-num_rooms = 12
+num_rooms = 5

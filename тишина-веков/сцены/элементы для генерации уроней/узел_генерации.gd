@@ -123,7 +123,6 @@ func create_tree_connectoins(grid: Array) -> Array:
 	for i in range(size_level):
 		for j in range(size_level):
 			var cell = grid[i][j]
-			
 			if cell:
 				if cell in in_tree:
 					#continue # если эту комнату уже рассмотре
@@ -143,14 +142,17 @@ func create_tree_connectoins(grid: Array) -> Array:
 					чтобы выбирать наименьшие растояния и проще строить коридоры
 					и избегать багов
 					"""
-					var connection: Array = [cell["position"], near_room["position"]]
+					var connection: Array = [cell["position"], near_room["position"], cell["position"].distance_to(near_room["position"])]
 					edges.append(connection)
 				
 				# если все соседи уже в дереве пропускаем комнату
 				if edges.size() == 0:
 					continue 
-				# теперь из массива всех связей выберем случайную и сформируем ее
-				var num_conct = rng_rand.randi_range(0,edges.size() - 1)  # выбираем случайную связь. генерит включительно, поэтому -1
+				## теперь из массива всех связей выберем случайную и сформируем ее
+				#var num_conct = rng_rand.randi_range(0,edges.size() - 1)  # выбираем случайную связь. генерит включительно, поэтому -1
+				# сортируем массив по возрастанию по дистанции
+				edges.sort_custom(func(a, b): return a[2] < b[2])
+				var num_conct = 0 # берем первую связь из списка
 				
 				var pos_room1: Vector2 = edges[num_conct][0]
 				var room1 = grid[pos_room1.x][pos_room1.y]
@@ -336,7 +338,6 @@ func instantiate_corridors(grid: Array) -> Array:
 					var exit_inst = exit.instantiate()
 					exit_inst.position = pos_room + offset_room_y
 					add_child(exit_inst)
-					print(i, j, connection)
 					if connection.y == 0: # прямой вниз - логика урощена при опоре на варианты получения этого выхода из функции расчета выходов
 						continue # этот коридор уже нарисован - он же с севера вверх
 					else: # буква г
@@ -414,3 +415,5 @@ func instantiate_exits_walls(cell, pos_room: Vector2):
 		exit_inst.scale.x = -1
 		exit_inst.position = pos_room - Vector2((SIZE_ROOM * SIZE_TILE) / 2, 0)
 		add_child(exit_inst)
+
+# процедурная генерация завершена
