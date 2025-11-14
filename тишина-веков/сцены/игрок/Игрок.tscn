@@ -180,6 +180,7 @@ _data = {
 size = Vector2(14, 7)
 
 [node name="Игрок" type="CharacterBody2D" groups=["игрок"]]
+z_index = 5
 script = ExtResource("1_5firq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

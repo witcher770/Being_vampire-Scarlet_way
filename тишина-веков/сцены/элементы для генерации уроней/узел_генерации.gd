@@ -84,6 +84,7 @@ func gen_pos_rooms(grid: Array) -> Array:
 	
 	for i in range(num_rooms):
 		var num_pos = rng_seed.randi_range(0, quantity_pos - 1)  # генерируем позицию для комнаты. генерит включительно, поэтому -1
+		print("Текущее зерно: ", rng_rand.seed)
 		
 		# удаляем из списка возможных позиций комнат ту, куда сейчас ставим
 		var index = maybe_pos_rooms.find(num_pos)  # находим индекс элемента
@@ -118,7 +119,7 @@ func gen_pos_rooms(grid: Array) -> Array:
 func create_tree_connectoins(grid: Array) -> Array: 
 	var in_tree = []  # комнаты уже в дереве
 	var edges = []    # возможные соединения для добавления
-	var first_room: bool = false
+	var first_room: bool = true
 	
 	for i in range(size_level):
 		for j in range(size_level):
@@ -131,6 +132,15 @@ func create_tree_connectoins(grid: Array) -> Array:
 				# если комната первая, делаем стартовой
 				if first_room:
 					cell["room_type"] = "start_room"
+					
+					# попытка добавить игрока
+					print("ставим игрока")
+					var player = preload("res://сцены/игрок/Игрок.tscn")
+					var player_inst = player.instantiate()
+					print(cell["position"])
+					player_inst.position = grid_to_world(cell["position"]) + Vector2(200, 200)
+					add_child(player_inst)
+					
 					in_tree.append(cell) # добавляем первую ячейку в дерево
 					first_room = false
 				var near_rooms = get_neightbours(grid, cell["position"])
