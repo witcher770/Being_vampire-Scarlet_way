@@ -25,9 +25,10 @@ var grid_with_rooms = []
 var rng_rand = RandomNumberGenerator.new()
 var rng_seed = RandomNumberGenerator.new()
 
-const SIZE_TILE = 16
-const SIZE_CELL = 25
-const SIZE_ZONE = Vector2(SIZE_TILE * SIZE_CELL, SIZE_TILE * SIZE_CELL)  # размер зоны в пикселях
+const SIZE_TILE: int = 16
+const SIZE_CELL: int = 25
+const SIZE_ROOM: int = 15
+const SIZE_ZONE: Vector2 = Vector2(SIZE_TILE * SIZE_CELL, SIZE_TILE * SIZE_CELL)  # размер зоны в пикселях
 
 func _ready():
 	rng_seed.seed = 12345  # фиксированный сид для воспроизводимости
@@ -36,10 +37,11 @@ func _ready():
 	var empty_grid = create_grid(size_level)
 	grid_with_rooms = gen_pos_rooms(empty_grid.duplicate())
 	var grid_with_connections = create_tree_connectoins(grid_with_rooms)
+	calculate_exits(grid_with_connections)
 	
-	
-	print_grid(grid_with_connections)
+	print_grid(grid_with_connections, "connections")
 	instantiate_rooms(grid_with_connections)
+	instantiate_corridors(grid_with_connections)
 	
 	
 	#var a = get_neightbours(grid_with_rooms, Vector2(0, 2))
@@ -113,11 +115,6 @@ func gen_pos_rooms(grid: Array) -> Array:
 	return grid
 
 
-func connect_rooms(grid: Array) -> Array:
-	
-	return[-1]
-
-
 func create_tree_connectoins(grid: Array) -> Array: 
 	var in_tree = []  # комнаты уже в дереве
 	var edges = []    # возможные соединения для добавления
@@ -178,7 +175,6 @@ func create_tree_connectoins(grid: Array) -> Array:
 					in_tree.append(room1)
 				if room2 not in in_tree:
 					in_tree.append(room2)
-
 	return grid
 
 
@@ -221,36 +217,41 @@ func get_neightbours(grid: Array, coords: Vector2) -> Array: # возвраща�
 	return edges
 
 
-func calculate_exits(grid: Array):
-	for cell in grid:
-		for connection in cell["connections"]:
-			# Если в соединении есть 0 значит комната не по диагонали
-			if connection.x == 0 or connection.y == 0:
-				if connection.x == 0 and connection.y > 0:
-					cell["exits"]["east"] = true
-				elif connection.x == 0 and connection.y < 0:
-					cell["exits"]["west"] = true
-				elif connection.y == 0 and connection.x > 0:
-					cell["exits"]["south"] = true
-				elif  connection.y == 0 and connection.x < 0:
-					cell["exits"]["north"] = true
-				
-			else:
-				# комната по диагонали
-				if connection.x > 0 and connection.y > 0: # вниз и вправо - перевернутая г
-					cell["exits"]["south"] = true
-				# та же ситуация, только для 2й комнаты, соединенной перевернутой г
-				elif connection.x < 0 and connection.y < 0: # вверх и влево - перевернутая г
-					cell["exits"]["west"] = true
-				elif connection.x < 0 and connection.y > 0: # вверх вправо - г
-					cell["exits"]["north"] = true
-				# та же ситуация, только для 2й комнаты, соединенной  г
-				elif connection.x > 0 and connection.y < 0: # вниз влево - г
-					cell["exits"]["west"] = true
+func calculate_exits(grid: Array) -> Array:
+	for row in grid:
+		for cell in row:
+			if not cell:
+				continue # если ячейки нет, пропускаем ее
+			for connection in cell["connections"]:
+				# Если в соединении есть 0 значит комната не по диагонали
+				if connection.x == 0 or connection.y == 0:
+					if connection.x == 0 and connection.y > 0:
+						cell["exits"]["east"] = true
+					elif connection.x == 0 and connection.y < 0:
+						cell["exits"]["west"] = true
+					elif connection.y == 0 and connection.x > 0:
+						cell["exits"]["south"] = true
+					elif  connection.y == 0 and connection.x < 0:
+						cell["exits"]["north"] = true
+					
+				else:
+					# комната по диагонали
+					if connection.x > 0 and connection.y > 0: # вниз и вправо - перевернутая г
+						cell["exits"]["south"] = true
+					# та же ситуация, только для 2й комнаты, соединенной перевернутой г
+					elif connection.x < 0 and connection.y < 0: # вверх и влево - перевернутая г
+						cell["exits"]["west"] = true
+					elif connection.x < 0 and connection.y > 0: # вверх вправо - г
+						cell["exits"]["north"] = true
+					# та же ситуация, только для 2й комнаты, соединенной  г
+					elif connection.x > 0 and connection.y < 0: # вниз влево - г
+						cell["exits"]["west"] = true
+	return grid
 
 
 func grid_to_world(grid_pos: Vector2) -> Vector2:
-	return Vector2(grid_pos.x * SIZE_ZONE.x, grid_pos.y * SIZE_ZONE.y)
+	# меняем местами х и у так как в векторе позиции х это положение по строкам, а в мировой сетке это у
+	return Vector2(grid_pos.y * SIZE_ZONE.x, grid_pos.x * SIZE_ZONE.y)
 
 
 func instantiate_rooms(grid: Array) -> Array: # возвращает массив с загруженными асетами комнат
@@ -260,18 +261,156 @@ func instantiate_rooms(grid: Array) -> Array: # возвращает масси�
 			if cell:
 				var pos_cell = cell["position"]
 				var global_pos_cell = grid_to_world(pos_cell) # верхний левый угол ячейки сетки
-				# меняем местами х и у так как в векторе позиции х это положение по строкам, а в мировой сетке это у
-				var pos_for_create = Vector2(global_pos_cell.y + SIZE_ZONE.y / 2, global_pos_cell.x + SIZE_ZONE.x / 2) # координаты центра ячейки
+				var pos_for_create = Vector2(global_pos_cell.x + SIZE_ZONE.x / 2, global_pos_cell.y + SIZE_ZONE.y / 2) # координаты центра ячейки
 				# Выбираем префаб комнаты по количеству выходов
 				#var room_scene = choose_room_prefab(cell.exits)
 				var room_scene = preload("res://сцены/элементы для генерации уроней/комнаты/комната_15_15_1.tscn")
 				cell["room_instance"] = room_scene.instantiate()
 				cell["room_instance"].position = pos_for_create
-				grid[i][j] = cell # перезаписываем ячейку в сетке
 				add_child(cell["room_instance"])
-				grid[i][j] = cell
 	return grid
 
 
 # центр коридора поместить в сам поворот и размещать в центре ячейки
 # коридор центр по центру коридора также, а размещать на стыке ячеек
+func instantiate_corridors(grid: Array) -> Array:
+	for i in range(size_level):
+		for j in range(size_level):
+			var cell = grid[i][j]
+			if not cell:
+				continue
+			
+			# расчитываем координаты ячейки
+			var pos_cell = cell["position"]
+			var global_pos_cell = grid_to_world(pos_cell) # верхний левый угол ячейки сетки
+			var pos_room = Vector2(global_pos_cell.x + SIZE_ZONE.x / 2, global_pos_cell.y + SIZE_ZONE.y / 2) # координаты центра ячейки(комнаты)
+			var offset_cell_y = Vector2(0, SIZE_ZONE.y / 2) # смещение от центра к верхнему/нижнему краю ячейки
+			var offset_cell_x = Vector2(SIZE_ZONE.x / 2, 0)
+			@warning_ignore("integer_division")
+			var offset_room_y = Vector2(0, (SIZE_ROOM * SIZE_TILE) / 2) # смещение от центра к верхнему/нижнему краю комнаты
+			@warning_ignore("integer_division")
+			var offset_room_x = Vector2((SIZE_ROOM * SIZE_TILE) / 2, 0) # смещение от центра к верхнему/нижнему краю комнаты
+			
+			instantiate_exits_walls(cell, pos_room) # рисуем стены там где нет выходов
+			
+			if i == 1 and j == 1:
+				pass
+			
+			var exits_chek: Array = [false, false, false, false] # для отслеживания какие выходы проверяли. 0 индекс - север и дальше по часовой
+			for connection in cell["connections"]: # перебираем связи
+				# обычные проверки + проверяем что текущая связь к комнате сверху или сверху справа
+				if cell["exits"]["north"] and not exits_chek[0] and (connection.x < 0 and (connection.y == 0 or connection.y > 0)): # если есть выход на север
+					exits_chek[0] = true
+					# добавляем к комнате выход
+					var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_сверху.tscn")
+					var exit_inst = exit.instantiate()
+					exit_inst.position = pos_room - offset_room_y
+					add_child(exit_inst)
+					if connection.y == 0: # прямой вверх - логика урощена при опоре на варианты получения этого выхода из функции расчета выходов
+						# меняем знаки, тк связь на эту комнату, от второй комнаты в паре будет с противоположными знаками
+						var corridor_up = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_вертикальный_8.tscn")
+						var corridor_up_inst = corridor_up.instantiate()
+						corridor_up_inst.position = pos_room - offset_cell_y
+						add_child(corridor_up_inst)
+					else: # буква г
+						# меняем знаки, тк связь на эту комнату, от второй комнаты в паре будет с противоположными знаками
+						instantiate_g_corridor(pos_room)
+				# обычные проверки + проверяем что текущая связь к комнате справа
+				elif cell["exits"]["east"] and not exits_chek[1] and (connection.x == 0 and connection.y > 0):
+					exits_chek[1] = true
+					# добавляем к комнате выход
+					var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_справа.tscn")
+					var exit_inst = exit.instantiate()
+					exit_inst.position = pos_room + offset_room_x
+					add_child(exit_inst)
+					# добавляем сам коридор. на восток может идти только прямой коридор
+					var corridor_right = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_горизонтальный_8.tscn")
+					var corridor_right_inst = corridor_right.instantiate()
+					corridor_right_inst.position = pos_room + offset_cell_x
+					add_child(corridor_right_inst)
+				# обычные проверки + проверяем что текущая связь к комнате внизу или внизу справа
+				elif cell["exits"]["south"] and not exits_chek[2] and (connection.x > 0 and (connection.y == 0 or connection.y > 0)):
+					exits_chek[2] = true
+					# добавляем к комнате выход
+					var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_снизу.tscn")
+					var exit_inst = exit.instantiate()
+					exit_inst.position = pos_room + offset_room_y
+					add_child(exit_inst)
+					print(i, j, connection)
+					if connection.y == 0: # прямой вниз - логика урощена при опоре на варианты получения этого выхода из функции расчета выходов
+						continue # этот коридор уже нарисован - он же с севера вверх
+					else: # буква г
+						# меняем знаки, тк связь на эту комнату, от второй комнаты в паре будет с противоположными знаками
+						instantiate_invert_g_corridor(pos_room)
+				elif cell["exits"]["west"] and not exits_chek[3]:
+					exits_chek[3] = true
+					# добавляем к комнате выход
+					var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_справа.tscn")
+					var exit_inst = exit.instantiate()
+					exit_inst.scale.x = -1
+					exit_inst.position = pos_room - offset_room_x
+					add_child(exit_inst)
+	
+	return grid
+
+
+func instantiate_g_corridor(pos_room: Vector2):
+	# загружаем
+	var corridor_up = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_вертикальный_8.tscn")
+	var corridor_right = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_горизонтальный_8.tscn")
+	var corridor_g = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_г_10_10.tscn")
+	# создаем
+	var corridor_up_inst = corridor_up.instantiate()
+	var corridor_right_inst = corridor_right.instantiate()
+	var corridor_g_inst = corridor_g.instantiate()
+	# размещаем
+	corridor_up_inst.position = pos_room - Vector2(0, SIZE_ZONE.y / 2)
+	corridor_g_inst.position = pos_room - Vector2(0, SIZE_ZONE.y)
+	corridor_right_inst.position = pos_room - Vector2(0, SIZE_ZONE.y) + Vector2(SIZE_ZONE.x / 2, 0)
+	# добавляем
+	add_child(corridor_up_inst)
+	add_child(corridor_g_inst)
+	add_child(corridor_right_inst)
+
+
+func instantiate_invert_g_corridor(pos_room: Vector2):
+	# загружаем
+	var corridor_up = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_вертикальный_8.tscn")
+	var corridor_right = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_горизонтальный_8.tscn")
+	var corridor_g = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_перевернутая_г_10_10.tscn")
+	# создаем
+	var corridor_up_inst = corridor_up.instantiate()
+	var corridor_right_inst = corridor_right.instantiate()
+	var corridor_g_inst = corridor_g.instantiate()
+	# размещаем
+	corridor_up_inst.position = pos_room + Vector2(0, SIZE_ZONE.y / 2)
+	corridor_g_inst.position = pos_room + Vector2(0, SIZE_ZONE.y)
+	corridor_right_inst.position = pos_room + Vector2(0, SIZE_ZONE.y) + Vector2(SIZE_ZONE.x / 2, 0)
+	# добавляем
+	add_child(corridor_up_inst)
+	add_child(corridor_g_inst)
+	add_child(corridor_right_inst)
+
+
+func instantiate_exits_walls(cell, pos_room: Vector2):
+	if not cell["exits"]["north"]:
+		var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_сверху_стена.tscn")
+		var exit_inst = exit.instantiate()
+		exit_inst.position = pos_room - Vector2(0, (SIZE_ROOM * SIZE_TILE) / 2)
+		add_child(exit_inst)
+	if not cell["exits"]["east"]:
+		var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_справа_стена.tscn")
+		var exit_inst = exit.instantiate()
+		exit_inst.position = pos_room + Vector2((SIZE_ROOM * SIZE_TILE) / 2, 0)
+		add_child(exit_inst)
+	if not cell["exits"]["south"]:
+		var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_снизу_стена.tscn")
+		var exit_inst = exit.instantiate()
+		exit_inst.position = pos_room + Vector2(0, (SIZE_ROOM * SIZE_TILE) / 2)
+		add_child(exit_inst)
+	if not cell["exits"]["west"]:
+		var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_справа_стена.tscn")
+		var exit_inst = exit.instantiate()
+		exit_inst.scale.x = -1
+		exit_inst.position = pos_room - Vector2((SIZE_ROOM * SIZE_TILE) / 2, 0)
+		add_child(exit_inst)

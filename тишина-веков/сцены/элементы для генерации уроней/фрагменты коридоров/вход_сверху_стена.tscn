@@ -4,10 +4,13 @@
 
 [node name="ВходСверхуСтена" type="Node2D"]
 
-[node name="стена" type="TileMapLayer" parent="."]
+[node name="контейнер" type="Node2D" parent="."]
+position = Vector2(-40, 0)
+
+[node name="стена" type="TileMapLayer" parent="контейнер"]
 tile_map_data = PackedByteArray("AAAAAPz/AAABAAMAAAAAAP3/AAABAAAAAAAAAP7/AAABAAEAAAAAAP//AAABAAIAAAABAPz/AAABAAMAAAABAP3/AAABAAAAAAABAP7/AAABAAEAAAABAP//AAABAAIAAAACAPz/AAABAAMAAAACAP3/AAABAAAAAAACAP7/AAABAAEAAAACAP//AAABAAIAAAADAPz/AAABAAMAAAADAP3/AAABAAAAAAADAP7/AAABAAEAAAADAP//AAABAAIAAAAEAPz/AAABAAMAAAAEAP3/AAABAAAAAAAEAP7/AAABAAEAAAAEAP//AAABAAIAAAA=")
 tile_set = ExtResource("1_ykc0w")
 
-[node name="антураж" type="TileMapLayer" parent="."]
+[node name="антураж" type="TileMapLayer" parent="контейнер"]
 tile_map_data = PackedByteArray("AAAAAP3/AAAJAAQAAAAAAP7/AAAJAAUAAAABAP7/AAAMAAMAAAACAP7/AAANAAMAAAADAP7/AAAOAAMAAAAEAP3/AAAJAAQAAAAEAP7/AAAJAAUAAAA=")
 tile_set = ExtResource("1_ykc0w")

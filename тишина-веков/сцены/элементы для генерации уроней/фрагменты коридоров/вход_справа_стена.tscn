@@ -4,6 +4,7 @@
 
 [node name="ВходСправаСтена" type="Node2D"]
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
+[node name="ВходСправаСтена" type="TileMapLayer" parent="."]
+position = Vector2(-16, -88)
 tile_map_data = PackedByteArray("AAABAAAAAAACAAQAAAABAAEAAAACAAQAAAABAAIAAAACAAQAAAABAAMAAAACAAQAAAABAAQAAAACAAQAAAABAAUAAAACAAQAAAABAAYAAAACAAQAAAABAAcAAAACAAQAAAA=")
 tile_set = ExtResource("1_weyvl")

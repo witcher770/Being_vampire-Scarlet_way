@@ -3,6 +3,7 @@
 [ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="1_d2ymw"]
 
 [node name="КоридорВертикальный_8" type="Node2D"]
+z_index = 1
 
 [node name="КоридорВертикальный_8" type="TileMapLayer" parent="."]
 position = Vector2(-40, -64)
