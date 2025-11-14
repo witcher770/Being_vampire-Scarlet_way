@@ -40,6 +40,7 @@ func _ready():
 	calculate_exits(grid_with_connections)
 	
 	print_grid(grid_with_connections, "connections")
+	print()
 	instantiate_rooms(grid_with_connections)
 	instantiate_corridors(grid_with_connections)
 	
