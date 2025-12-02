@@ -84,7 +84,7 @@ func gen_pos_rooms(grid: Array) -> Array:
 	var maybe_pos_rooms = Array(range(0, quantity_pos, 1)) # не включительно
 	
 	for i in range(num_rooms):
-		var num_pos = rng_rand.randi_range(0, quantity_pos - 1)  # генерируем позицию для комнаты. генерит включительно, поэтому -1
+		var num_pos = rng_seed.randi_range(0, quantity_pos - 1)  # генерируем позицию для комнаты. генерит включительно, поэтому -1
 		print("Текущее зерно: ", rng_rand.seed)
 		
 		# удаляем из списка возможных позиций комнат ту, куда сейчас ставим
@@ -123,6 +123,61 @@ func gen_pos_rooms(grid: Array) -> Array:
 	return grid
 
 
+func create_tree_connectoins_prim(grid: Array) -> Array: 
+	var in_tree = []  # комнаты уже в дереве
+	var edges = []    # возможные соединения для добавления
+	var cell = []
+	var f_room: bool = false
+	for i in range(size_level):
+		for j in range(size_level):
+			cell = grid[i][j]
+			if cell:
+				var first_room = cell #  первая встреченная комната будет первой
+				cell["room_type"] = "start_room"
+				f_room = true
+				
+				# тут добавим игрока
+				break
+		if f_room:
+			break
+	
+	while in_tree.size() < num_rooms:
+		var near_rooms = get_neightbours(grid, cell["position"])
+		for near_room in near_rooms:
+			var connection: Array = [cell["position"], near_room["position"], cell["position"].distance_to(near_room["position"])]
+			edges.append(connection)
+		#if edges.size() == 0:
+		
+		# сортируем массив по возрастанию по дистанции
+		edges.sort_custom(func(a, b): return a[2] < b[2])
+		var num_conct = 0 # берем первую связь из списка
+		
+		var pos_room1: Vector2 = edges[num_conct][0]
+		var room1 = grid[pos_room1.x][pos_room1.y]
+		var pos_room2: Vector2 = edges[num_conct][1]
+		var room2 = grid[pos_room2.x][pos_room2.y]
+		
+		# удаляем из списка связей рассмотренную
+		edges.remove_at(num_conct)  # удаляем использованную связь
+		
+		# записываем им ссылки друг на друга
+		room1["connections"].append(pos_room2 - pos_room1) # относительное смещение на вторую комнату
+		room2["connections"].append(pos_room1 - pos_room2)
+		# не уверен нужно ли это так как при присваивании ссылки но на всякий случай
+		# перезаписываем в сетке на комнаты с добавленными связями
+		grid[pos_room1.x][pos_room1.y] = room1
+		grid[pos_room2.x][pos_room2.y] = room2
+		
+		# добавляем соединенную комнату в дерево
+		if room1 not in in_tree:
+			in_tree.append(room1)
+			cell = room1
+		if room2 not in in_tree:
+			in_tree.append(room2)
+			cell = room2
+	return grid
+
+
 func create_tree_connectoins(grid: Array) -> Array: 
 	var in_tree = []  # комнаты уже в дереве
 	var edges = []    # возможные соединения для добавления
@@ -131,69 +186,69 @@ func create_tree_connectoins(grid: Array) -> Array:
 	for i in range(size_level):
 		for j in range(size_level):
 			var cell = grid[i][j]
-			if cell:
-				if cell in in_tree:
-					#continue # если эту комнату уже рассмотре
-					pass
+			if not cell:
+				continue
+			if cell in in_tree:
+				#continue # если эту комнату уже рассмотре
+				pass
+			
+			# если комната первая, делаем стартовой
+			if first_room:
+				cell["room_type"] = "start_room"
 				
-				# если комната первая, делаем стартовой
-				if first_room:
-					cell["room_type"] = "start_room"
-					
-					# попытка добавить игрока
-					print("ставим игрока")
-					var player = preload("res://сцены/игрок/Игрок.tscn")
-					var player_inst = player.instantiate()
-					print(cell["position"])
-					player_inst.position = grid_to_world(cell["position"]) + Vector2(200, 200)
-					add_child(player_inst)
-					
-					in_tree.append(cell) # добавляем первую ячейку в дерево
-					first_room = false
-				var near_rooms = get_neightbours(grid, cell["position"])
-				for near_room in near_rooms:
-					if near_room in in_tree:
-						continue # если комната уже в дереве не считаем ее соседом(пропускаем)
-					"""
-					тут воможно еще стоит добавить расстояние между комнатами, 
-					чтобы выбирать наименьшие растояния и проще строить коридоры
-					и избегать багов
-					"""
-					var connection: Array = [cell["position"], near_room["position"], cell["position"].distance_to(near_room["position"])]
-					edges.append(connection)
-				
-				# если все соседи уже в дереве пропускаем комнату
-				if edges.size() == 0:
-					continue 
-				## теперь из массива всех связей выберем случайную и сформируем ее
-				#var num_conct = rng_rand.randi_range(0,edges.size() - 1)  # выбираем случайную связь. генерит включительно, поэтому -1
-				# сортируем массив по возрастанию по дистанции
-				edges.sort_custom(func(a, b): return a[2] < b[2])
-				var num_conct = 0 # берем первую связь из списка
-				
-				var pos_room1: Vector2 = edges[num_conct][0]
-				var room1 = grid[pos_room1.x][pos_room1.y]
-				var pos_room2: Vector2 = edges[num_conct][1]
-				var room2 = grid[pos_room2.x][pos_room2.y]
-				
-				# удаляем из списка связей рассмотренную
-				edges.remove_at(num_conct)  # удаляем использованную связь
-				
-				# записываем им ссылки друг на друга
-				room1["connections"].append(pos_room2 - pos_room1) # относительное смещение на вторую комнату
-				room2["connections"].append(pos_room1 - pos_room2)
-				
-				# не уверен нужно ли это так как при присваивании ссылки но на всякий случай
-				# перезаписываем в сетке на комнаты с добавленными связями
-				grid[pos_room1.x][pos_room1.y] = room1
-				grid[pos_room2.x][pos_room2.y] = room2
-				
-				
-				# добавляем соединенную комнату в дерево
-				if room1 not in in_tree:
-					in_tree.append(room1)
-				if room2 not in in_tree:
-					in_tree.append(room2)
+				# попытка добавить игрока
+				#print("ставим игрока")
+				#var player = preload("res://сцены/игрок/Игрок.tscn")
+				#var player_inst = player.instantiate()
+				#print(cell["position"])
+				#player_inst.position = grid_to_world(cell["position"]) + Vector2(200, 200)
+				#add_child(player_inst)
+				#
+				#in_tree.append(cell) # добавляем первую ячейку в дерево
+				first_room = false
+			var near_rooms = get_neightbours(grid, cell["position"])
+			for near_room in near_rooms:
+				if near_room in in_tree:
+					continue # если комната уже в дереве не считаем ее соседом(пропускаем)
+				"""
+				тут воможно еще стоит добавить расстояние между комнатами, 
+				чтобы выбирать наименьшие растояния и проще строить коридоры
+				и избегать багов
+				"""
+				var connection: Array = [cell["position"], near_room["position"], cell["position"].distance_to(near_room["position"])]
+				edges.append(connection)
+			
+			# если все соседи уже в дереве пропускаем комнату
+			if edges.size() == 0:
+				continue 
+			## теперь из массива всех связей выберем случайную и сформируем ее
+			#var num_conct = rng_rand.randi_range(0,edges.size() - 1)  # выбираем случайную связь. генерит включительно, поэтому -1
+			# сортируем массив по возрастанию по дистанции
+			edges.sort_custom(func(a, b): return a[2] < b[2])
+			var num_conct = 0 # берем первую связь из списка
+			
+			var pos_room1: Vector2 = edges[num_conct][0]
+			var room1 = grid[pos_room1.x][pos_room1.y]
+			var pos_room2: Vector2 = edges[num_conct][1]
+			var room2 = grid[pos_room2.x][pos_room2.y]
+			
+			# удаляем из списка связей рассмотренную
+			edges.remove_at(num_conct)  # удаляем использованную связь
+			
+			# записываем им ссылки друг на друга
+			room1["connections"].append(pos_room2 - pos_room1) # относительное смещение на вторую комнату
+			room2["connections"].append(pos_room1 - pos_room2)
+			
+			# не уверен нужно ли это так как при присваивании ссылки но на всякий случай
+			# перезаписываем в сетке на комнаты с добавленными связями
+			grid[pos_room1.x][pos_room1.y] = room1
+			grid[pos_room2.x][pos_room2.y] = room2
+			
+			# добавляем соединенную комнату в дерево
+			if room1 not in in_tree:
+				in_tree.append(room1)
+			if room2 not in in_tree:
+				in_tree.append(room2)
 	return grid
 
 
@@ -280,13 +335,38 @@ func instantiate_rooms(grid: Array) -> Array: # возвращает масси�
 			if cell:
 				var pos_cell = cell["position"]
 				var global_pos_cell = grid_to_world(pos_cell) # верхний левый угол ячейки сетки
-				var pos_for_create = Vector2(global_pos_cell.x + SIZE_ZONE.x / 2, global_pos_cell.y + SIZE_ZONE.y / 2) # координаты центра ячейки
-				# Выбираем префаб комнаты по количеству выходов
+				var pos_for_create: Vector2 = Vector2(global_pos_cell.x + SIZE_ZONE.x / 2, global_pos_cell.y + SIZE_ZONE.y / 2) # координаты центра ячейки
 				#var room_scene = choose_room_prefab(cell.exits)
 				var room_scene = preload("res://сцены/элементы для генерации уроней/комнаты/комната_15_15_1.tscn")
 				cell["room_instance"] = room_scene.instantiate()
 				cell["room_instance"].position = pos_for_create
 				add_child(cell["room_instance"])
+				
+				# добавляем врагов
+				var num_enemies = rng_rand.randi_range(1, 3)  # генерируем количество врагов
+				var dorabotka = 0 # заменить числа на переменные в соответсвии с уровнем сложности
+				for l in range(num_enemies):
+					# генер. коор. х для размещения врага. -2 чтобы не прилипал к стенам и мебели
+					# считаем положение врага в локальной ск комнаты, от ее центра
+					@warning_ignore("integer_division")
+					var coor_x = rng_rand.randi_range(
+						int(-SIZE_TILE * (int(SIZE_ROOM / 2) - 2)),
+						int(+SIZE_TILE * (int(SIZE_ROOM / 2) - 2)))
+					# также y
+					@warning_ignore("integer_division")
+					var coor_y = rng_rand.randi_range(
+							int(-SIZE_TILE * (int(SIZE_ROOM / 2) - 2)),
+							int(+SIZE_TILE * (int(SIZE_ROOM / 2) - 2)))
+					# инстанцируем
+					var enemy_scene = preload("res://сцены/враги/враг.tscn")
+					var enemy_instance = enemy_scene.instantiate()
+					enemy_instance.position = Vector2(coor_x, coor_y)
+					# 
+					cell["room_instance"].add_child(enemy_instance)
+					var dorabotka1 = 0 # сделать функцию проверки колизий, коректного размещения, вынести это все в отдельную функцию
+
+
+				
 	return grid
 
 
