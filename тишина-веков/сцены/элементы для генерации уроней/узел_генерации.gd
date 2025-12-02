@@ -72,7 +72,7 @@ func gen_pos_rooms(grid: Array) -> Array:
 	var maybe_pos_rooms = Array(range(0, quantity_pos, 1)) # не включительно
 	
 	for i in range(num_rooms):
-		var num_pos = rng_seed.randi_range(0, quantity_pos - 1)  # генерируем позицию для комнаты. генерит включительно, поэтому -1
+		var num_pos = rng_rand.randi_range(0, quantity_pos - 1)  # генерируем позицию для комнаты. генерит включительно, поэтому -1
 		print("Текущее зерно: ", rng_rand.seed)
 		
 		# удаляем из списка возможных позиций комнат ту, куда сейчас ставим
@@ -198,6 +198,7 @@ func create_tree_connectoins(grid: Array) -> Array:
 				print(cell["position"])
 				door_inst.position = grid_to_world(cell["position"]) + Vector2(150, 150)
 				add_child(door_inst)
+				door_inst.door_entered.connect(_on_door_entered) # подписываемся на сигнал касания двери
 				
 				# создание ноды для размещения игрока через загрузчик уровней
 				var s = Node2D.new()
@@ -252,6 +253,11 @@ func create_tree_connectoins(grid: Array) -> Array:
 			if room2 not in in_tree:
 				in_tree.append(room2)
 	return grid
+
+
+func _on_door_entered():
+	level_finished.emit() # если игрок вошел в дверь, то посылаем сигнал, что он покинул комнату
+	print("Игрок прошёл уровень!")
 
 
 func get_neightbours(grid: Array, coords: Vector2) -> Array: # возвращает массив соседей - комнат

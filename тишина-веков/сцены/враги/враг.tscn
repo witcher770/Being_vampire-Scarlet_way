@@ -9,10 +9,9 @@
 size = Vector2(21, 23.5)
 
 [node name="враг" type="CharacterBody2D" groups=["враги"]]
-z_index = 1
+z_index = 3
 script = ExtResource("1_romfk")
 move_speed = 25.0
-contact_damage = 20
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

@@ -1,6 +1,6 @@
 extends Node
 
-var num_floor: int = 1            # текущий уровень-этаж
+var num_floor: int = 0            # текущий уровень-этаж
 var player_health: int = 100      # здоровье игрока
 var max_health: int = 100
 
