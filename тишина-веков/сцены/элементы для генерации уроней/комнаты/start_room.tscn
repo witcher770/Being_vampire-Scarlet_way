@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://bju6igpf5uejb"]
+
+[ext_resource type="PackedScene" uid="uid://bsgeb0gmvqyt0" path="res://сцены/элементы для генерации уроней/комнаты/комната_15_15_1.tscn" id="1_dli8v"]
+[ext_resource type="Script" uid="uid://crkh7dpuhmm75" path="res://сцены/элементы для генерации уроней/комнаты/start_room.gd" id="2_2qk7p"]
+[ext_resource type="PackedScene" uid="uid://26tsdw3knkrc" path="res://сцены/элементы для генерации уроней/дверь.tscn" id="2_mlauc"]
+
+[node name="start_room" instance=ExtResource("1_dli8v")]
+script = ExtResource("2_2qk7p")
+
+[node name="Дверь" parent="." index="1" instance=ExtResource("2_mlauc")]
+position = Vector2(0, -72)
+
+[node name="SpawnPoint" type="Node2D" parent="." index="2"]

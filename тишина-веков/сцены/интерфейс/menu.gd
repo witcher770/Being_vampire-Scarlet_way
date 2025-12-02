@@ -2,7 +2,7 @@ extends Node2D
 
 
 func _on_play_pressed() -> void:
-	get_tree().change_scene_to_file("res://сцены/элементы для генерации уроней/узел_генерации.tscn")
+	get_tree().change_scene_to_file("res://сцены/элементы для генерации уроней/dungeon_loader.tscn")
 
 
 func _on_quit_pressed() -> void:

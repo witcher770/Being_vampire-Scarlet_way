@@ -21,18 +21,24 @@ func load_player():
 	player_container.add_child(player_instance)
 
 	# восстановление здоровья
-	player_instance.health = GameState.player_health
+	player_instance.player_health = GameState.player_health
 
 
 func load_start_room():
 	unload_level()
 
-	var scene = preload("res://сцены/элементы для генерации уроней/комнаты/стартовая_комната.tscn")
+	var scene = preload("res://сцены/элементы для генерации уроней/комнаты/start_room.tscn")
 	current_level = scene.instantiate()
 	level_container.add_child(current_level)
+	
+	# подписываемся на сигнал покидания стартовой комнаты
+	level_container.get_node("start_room").leave_start_room.connect(_on_level_finished)
 
 	move_player_to_spawn(current_level)
 
+func _on_level_finished():
+	# при получении сигнала на вхождение в дверь - переход на следующий уровень
+	load_generated_level()
 
 func load_generated_level():
 	unload_level()
@@ -40,10 +46,7 @@ func load_generated_level():
 	var scene = preload("res://сцены/элементы для генерации уроней/узел_генерации.tscn")
 	current_level = scene.instantiate()
 	level_container.add_child(current_level)
-
-	# подписываемся на сигнал от генератора
-	current_level.connect("level_finished", Callable(self, "_on_level_finished"))
-
+	
 	move_player_to_spawn(current_level)
 
 

@@ -3,17 +3,19 @@
 [ext_resource type="Script" uid="uid://7qlhmq8e0ogn" path="res://сцены/интерфейс/menu.gd" id="1_flh13"]
 
 [node name="menu" type="Node2D"]
-position = Vector2(129, 54)
 script = ExtResource("1_flh13")
 
-[node name="Play" type="Button" parent="."]
-offset_right = 8.0
-offset_bottom = 8.0
+[node name="контейнер" type="Node2D" parent="."]
+position = Vector2(130, 55)
+
+[node name="Play" type="Button" parent="контейнер"]
+offset_right = 115.0
+offset_bottom = 50.0
 theme_override_font_sizes/font_size = 30
 text = "Играть"
 metadata/_edit_use_anchors_ = true
 
-[node name="Quit" type="Button" parent="."]
+[node name="Quit" type="Button" parent="контейнер"]
 offset_left = -1.0
 offset_top = 75.0
 offset_right = 114.0
@@ -23,5 +25,5 @@ text = "Выйти
 "
 metadata/_edit_use_anchors_ = true
 
-[connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="контейнер/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="контейнер/Quit" to="." method="_on_quit_pressed"]

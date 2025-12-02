@@ -1,18 +1,26 @@
-[gd_scene load_steps=3 format=4 uid="uid://26tsdw3knkrc"]
+[gd_scene load_steps=4 format=4 uid="uid://26tsdw3knkrc"]
 
+[ext_resource type="Script" uid="uid://cubmcrsvmhql0" path="res://сцены/элементы для генерации уроней/дверь.gd" id="1_07o5v"]
 [ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="1_stq04"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_07o5v"]
 size = Vector2(20, 5)
 
 [node name="Дверь" type="Node2D"]
+script = ExtResource("1_07o5v")
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
+[node name="контейнер" type="Node2D" parent="."]
+z_index = 1
+position = Vector2(0, -16)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="контейнер"]
 tile_map_data = PackedByteArray("AAD///7/AAAFAAAAAAD/////AAAFAAEAAAD//wAAAAAFAAIAAAAAAP7/AAAGAAAAAAAAAP//AAAGAAEAAAAAAAAAAAAGAAIAAAA=")
 tile_set = ExtResource("1_stq04")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="контейнер"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="контейнер/Area2D"]
 position = Vector2(0, 12.5)
 shape = SubResource("RectangleShape2D_07o5v")
+
+[connection signal="body_entered" from="контейнер/Area2D" to="." method="_on_area_2d_body_entered"]

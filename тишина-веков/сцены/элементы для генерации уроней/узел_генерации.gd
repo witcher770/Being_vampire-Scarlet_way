@@ -1,19 +1,7 @@
 extends Node2D
 
-##Массив хранящий прелоады комнат ??
-#var room_array =[]
-#
-##Сам генерируемый лабиринт
-#var labirint_array ={}
-#
-##размер лабиринта 5x5
-#@export var labirint_size = 5
-##Количество комнат
-#@export var room_count = 5
-#
-##Переменная потребуется, для увеличение максимально сгенерированного числа
-##Если вдруг мы не смогли расставить все комнаты, при первом цикле
-#var random_max = 1
+# сигналы
+signal level_finished
 
 # задаем размер сетки и количество комнат
 @export var size_level = 3
@@ -198,14 +186,28 @@ func create_tree_connectoins(grid: Array) -> Array:
 				
 				# попытка добавить игрока
 				#print("ставим игрока")
-				var player = preload("res://сцены/игрок/Игрок.tscn")
-				var player_inst = player.instantiate()
+				#var player = preload("res://сцены/игрок/Игрок.tscn")
+				#var player_inst = player.instantiate()
+				#print(cell["position"])
+				#player_inst.position = grid_to_world(cell["position"]) + Vector2(200, 200)
+				#add_child(player_inst)
+				
+				# тестируем дверь перехода на новый уровень
+				var door = preload("res://сцены/элементы для генерации уроней/дверь.tscn")
+				var door_inst = door.instantiate()
 				print(cell["position"])
-				player_inst.position = grid_to_world(cell["position"]) + Vector2(200, 200)
-				add_child(player_inst)
-				#
+				door_inst.position = grid_to_world(cell["position"]) + Vector2(150, 150)
+				add_child(door_inst)
+				
+				# создание ноды для размещения игрока через загрузчик уровней
+				var s = Node2D.new()
+				s.name = "SpawnPoint"
+				s.position = grid_to_world(cell["position"]) + Vector2(200, 200)
+				add_child(s)
+				
 				#in_tree.append(cell) # добавляем первую ячейку в дерево
 				first_room = false
+				
 			var near_rooms = get_neightbours(grid, cell["position"])
 			for near_room in near_rooms:
 				if near_room in in_tree:
