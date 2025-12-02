@@ -198,11 +198,11 @@ func create_tree_connectoins(grid: Array) -> Array:
 				
 				# попытка добавить игрока
 				#print("ставим игрока")
-				#var player = preload("res://сцены/игрок/Игрок.tscn")
-				#var player_inst = player.instantiate()
-				#print(cell["position"])
-				#player_inst.position = grid_to_world(cell["position"]) + Vector2(200, 200)
-				#add_child(player_inst)
+				var player = preload("res://сцены/игрок/Игрок.tscn")
+				var player_inst = player.instantiate()
+				print(cell["position"])
+				player_inst.position = grid_to_world(cell["position"]) + Vector2(200, 200)
+				add_child(player_inst)
 				#
 				#in_tree.append(cell) # добавляем первую ячейку в дерево
 				first_room = false

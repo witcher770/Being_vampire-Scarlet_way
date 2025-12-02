@@ -27,6 +27,7 @@ window/stretch/scale=3.0
 [global_group]
 
 "игрок"=""
+"враги"=""
 
 [input]
 
