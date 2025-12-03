@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://cyp32d7cupxc4"]
+
+[ext_resource type="PackedScene" uid="uid://bpa3vo4mkck5r" path="res://сцены/враги/враг.tscn" id="1_1h1di"]
+[ext_resource type="Script" uid="uid://bcum4vva22ng7" path="res://сцены/враги/слизь.gd" id="2_21mat"]
+[ext_resource type="Texture2D" uid="uid://dxdxqavgv1byi" path="res://ассеты/спрайты/Slime1_Idle_front.png" id="2_mcdsn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_21mat"]
+size = Vector2(16, 15)
+
+[node name="слизь" instance=ExtResource("1_1h1di")]
+script = ExtResource("2_21mat")
+
+[node name="Sprite2D" type="Sprite2D" parent="." index="1"]
+position = Vector2(-2.3841858e-07, 2.0861626e-07)
+texture = ExtResource("2_mcdsn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
+position = Vector2(-1, 2.5)
+shape = SubResource("RectangleShape2D_21mat")

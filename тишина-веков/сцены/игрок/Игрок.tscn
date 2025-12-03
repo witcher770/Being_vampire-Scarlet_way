@@ -1,12 +1,12 @@
 [gd_scene load_steps=19 format=3 uid="uid://d1rb3vewl6egs"]
 
 [ext_resource type="Script" uid="uid://dq3qoy67q5l0r" path="res://сцены/игрок/Игрок.gd" id="1_5firq"]
-[ext_resource type="Texture2D" uid="uid://cacv7issnjfj7" path="res://ассеты/спрайты/гг/Спрайт_вампир_гг_бег_перед.png" id="2_n8mlp"]
-[ext_resource type="Texture2D" uid="uid://xtmy6uupsswm" path="res://ассеты/спрайты/зеленый квадрат.png" id="3_c8qja"]
-[ext_resource type="Texture2D" uid="uid://t2cfy0fk0foy" path="res://ассеты/спрайты/гг/вампир_ходьба-sheet.png" id="4_6ijbn"]
-[ext_resource type="Texture2D" uid="uid://crx6e8gtodvdo" path="res://ассеты/спрайты/гг/Спрайт_вампир_гг_бег_спина.png" id="5_s38hx"]
-[ext_resource type="Texture2D" uid="uid://cjnvd3o2k7b4y" path="res://ассеты/спрайты/объем_здоровья.png" id="6_gocg3"]
-[ext_resource type="Texture2D" uid="uid://6kg2d42qvpbc" path="res://ассеты/спрайты/полоска здоровья.png" id="7_kqv1k"]
+[ext_resource type="Texture2D" uid="uid://euedvnxq7coc" path="res://ассеты/спрайты/гг/Спрайт_вампир_гг_бег_перед.png" id="2_n8mlp"]
+[ext_resource type="Texture2D" uid="uid://7jitrv21iegb" path="res://ассеты/спрайты/зеленый квадрат.png" id="3_c8qja"]
+[ext_resource type="Texture2D" uid="uid://185knk24e8el" path="res://ассеты/спрайты/гг/вампир_ходьба-sheet.png" id="4_6ijbn"]
+[ext_resource type="Texture2D" uid="uid://c1568q044omy3" path="res://ассеты/спрайты/гг/Спрайт_вампир_гг_бег_спина.png" id="5_s38hx"]
+[ext_resource type="Texture2D" uid="uid://djask047jehdi" path="res://ассеты/спрайты/объем_здоровья.png" id="6_gocg3"]
+[ext_resource type="Texture2D" uid="uid://dxqttca05cpya" path="res://ассеты/спрайты/полоска здоровья.png" id="7_kqv1k"]
 [ext_resource type="Script" uid="uid://bfmhvsv100tms" path="res://сцены/HealthBarPlayer.gd" id="8_or5x4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d51up"]
@@ -185,6 +185,7 @@ script = ExtResource("1_5firq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 12.5)
+scale = Vector2(0.9, 0.9)
 shape = SubResource("RectangleShape2D_d51up")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -226,5 +227,4 @@ script = ExtResource("8_or5x4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ОбластьУронаКасанием"]
 position = Vector2(0, 12.5)
-scale = Vector2(1.01, 1.01)
 shape = SubResource("RectangleShape2D_5firq")

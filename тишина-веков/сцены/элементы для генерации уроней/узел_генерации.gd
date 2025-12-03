@@ -351,31 +351,32 @@ func instantiate_rooms(grid: Array) -> Array: # возвращает масси�
 				add_child(cell["room_instance"])
 				
 				# добавляем врагов
-				var num_enemies = rng_rand.randi_range(1, 3)  # генерируем количество врагов
-				var dorabotka = 0 # заменить числа на переменные в соответсвии с уровнем сложности
-				for l in range(num_enemies):
-					# генер. коор. х для размещения врага. -2 чтобы не прилипал к стенам и мебели
-					# считаем положение врага в локальной ск комнаты, от ее центра
-					@warning_ignore("integer_division")
-					var coor_x = rng_rand.randi_range(
-						int(-SIZE_TILE * (int(SIZE_ROOM / 2) - 2)),
-						int(+SIZE_TILE * (int(SIZE_ROOM / 2) - 2)))
-					# также y
-					@warning_ignore("integer_division")
-					var coor_y = rng_rand.randi_range(
-							int(-SIZE_TILE * (int(SIZE_ROOM / 2) - 2)),
-							int(+SIZE_TILE * (int(SIZE_ROOM / 2) - 2)))
-					# инстанцируем
-					var enemy_scene = preload("res://сцены/враги/враг.tscn")
-					var enemy_instance = enemy_scene.instantiate()
-					enemy_instance.position = Vector2(coor_x, coor_y)
-					# 
-					cell["room_instance"].add_child(enemy_instance)
-					var dorabotka1 = 0 # сделать функцию проверки колизий, коректного размещения, вынести это все в отдельную функцию
-
-
-				
+				instantiate_enemies(cell)
+	
 	return grid
+
+func instantiate_enemies(cell: Dictionary) -> void:
+	var num_enemies = rng_rand.randi_range(1, 3)  # генерируем количество врагов
+	var dorabotka = 0 # заменить числа на переменные в соответсвии с уровнем сложности
+	for l in range(num_enemies):
+		# генер. коор. х для размещения врага. -2 чтобы не прилипал к стенам и мебели
+		# считаем положение врага в локальной ск комнаты, от ее центра
+		@warning_ignore("integer_division")
+		var coor_x = rng_rand.randi_range(
+			int(-SIZE_TILE * (int(SIZE_ROOM / 2) - 2)),
+			int(+SIZE_TILE * (int(SIZE_ROOM / 2) - 2)))
+		# также y
+		@warning_ignore("integer_division")
+		var coor_y = rng_rand.randi_range(
+				int(-SIZE_TILE * (int(SIZE_ROOM / 2) - 2)),
+				int(+SIZE_TILE * (int(SIZE_ROOM / 2) - 2)))
+		# инстанцируем
+		var enemy_scene = preload("res://сцены/враги/слизь.tscn")
+		var enemy_instance = enemy_scene.instantiate()
+		enemy_instance.position = Vector2(coor_x, coor_y)
+		# 
+		cell["room_instance"].add_child(enemy_instance)
+		var dorabotka1 = 0 # сделать функцию проверки колизий, коректного размещения
 
 
 func instantiate_corridors(grid: Array) -> Array:

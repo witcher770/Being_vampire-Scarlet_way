@@ -27,14 +27,14 @@ func _ready():
 
 
 func _physics_process(delta):
-	var player = get_tree().get_first_node_in_group("игрок")
-	if player:
-		if global_position.distance_to(player.global_position) < 50 or is_agr:
-			is_agr = true
-			var direction = (player.global_position - global_position).normalized()
-			velocity = direction * move_speed
-			move_and_slide()
-		if global_position.distance_to(player.global_position) > 150: is_agr = false
+	_process_ai(delta)
+
+
+@warning_ignore("unused_parameter")
+func _process_ai(delta):
+	# Пусто — дети должны переопределить
+	pass
+
 
 func take_damage(amount := 1, is_crit = false):
 	health -= amount
