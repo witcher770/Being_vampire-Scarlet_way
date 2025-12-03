@@ -132,7 +132,7 @@ position = Vector2(447, 199)
 scale = Vector2(1, 0.87004745)
 
 [node name="Игрок" parent="." instance=ExtResource("3_kp8rm")]
-position = Vector2(477, -74)
+position = Vector2(473, -73)
 
 [node name="HUD" type="CanvasLayer" parent="."]
 layer = 0

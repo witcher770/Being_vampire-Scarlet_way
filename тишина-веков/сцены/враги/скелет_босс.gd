@@ -12,10 +12,10 @@ enum State {
 var state : State = State.IDLE
 
 @export var aggro_range = 300.0 # дистанция на которой босс тебя замечает
-@export var attack_range = 20.0 # дистанция на которой босс атакует
+@export var attack_range = 25.0 # дистанция на которой босс атакует
 @export var windup_time = 0.4 # время на подготовку атаки. типо чтобы игрок успел увернуться
 @export var recover_time = 3 # как часто атакует в секундах
-@export var reposition_speed = 180.0 # скорость движения/отступления
+@export var reposition_speed = 180.0 # скорость отступления
 @export var optimal_range = 200.0 # дистанция переключения с отступления на нападение
 
 func _ready():

@@ -27,7 +27,7 @@ var knockback_velocity := Vector2.ZERO
 @export_group("Combat Settings", "combat_")
 @export var combat_attack_damage_min := 1
 @export var combat_attack_damage_max := 3  
-@export var combat_crit_chance := 0.1
+@export var combat_crit_chance := 0.3
 @export var combat_invincibility_time := 1.0
 
 @export_group("Movement Settings") 
@@ -136,7 +136,6 @@ func _physics_process(delta):
 		animPlayer.play('покой') # тут надо переключать на статичные позы чтобы не было добегивания
 		move_and_slide()
 		return
-
 	
 	# Получаем вектор ввода от игрока (нормализованный - длина всегда 1)
 	var input_vector = Vector2(

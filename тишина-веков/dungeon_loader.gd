@@ -38,7 +38,7 @@ func load_start_room():
 
 func _on_level_finished():
 	print(GameState.num_floor)
-	if GameState.num_floor == 3:
+	if GameState.num_floor == 4:
 		load_boss_room()
 		return
 	# при получении сигнала на вхождение в дверь - переход на следующий уровень
