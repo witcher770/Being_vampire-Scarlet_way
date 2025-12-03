@@ -1,25 +1,44 @@
-[gd_scene load_steps=5 format=3 uid="uid://o1chy65nqa20"]
+[gd_scene load_steps=7 format=3 uid="uid://o1chy65nqa20"]
 
 [ext_resource type="PackedScene" uid="uid://bpa3vo4mkck5r" path="res://сцены/враги/враг.tscn" id="1_0nmag"]
 [ext_resource type="Script" uid="uid://pnsonrsw1dwv" path="res://сцены/враги/скелет_босс.gd" id="2_1kvdx"]
+[ext_resource type="Texture2D" uid="uid://cy0t871xsahxe" path="res://ассеты/спрайты/красный прямоугольник.png" id="3_geki2"]
 [ext_resource type="Texture2D" uid="uid://dmtjxl7c7rnaa" path="res://ассеты/Иллюстрация_без_названия-4.png" id="3_txlwb"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_geki2"]
+size = Vector2(15, 6)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_txlwb"]
+size = Vector2(42, 40)
 
 [node name="скелет" instance=ExtResource("1_0nmag")]
 script = ExtResource("2_1kvdx")
 aggro_range = 300.0
-attack_range = 10.0
+attack_range = 20.0
 windup_time = 0.4
-recover_time = 5
-reposition_speed = 100.0
-optimal_range = 120.0
+recover_time = 3
+reposition_speed = 180.0
+optimal_range = 200.0
+health = 50
+max_health = 50
+move_speed = 140.0
+attack_damage = 10
 
-[node name="Sprite2D" type="Sprite2D" parent="." index="1"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="0"]
+position = Vector2(-0.5, 14)
+shape = SubResource("RectangleShape2D_geki2")
+
+[node name="Sprite2D" type="Sprite2D" parent="CollisionShape2D" index="0"]
+position = Vector2(-1.0430813e-07, -2.9802322e-07)
+scale = Vector2(0.49999994, 1.2000002)
+texture = ExtResource("3_geki2")
+
+[node name="Sprite2D" type="Sprite2D" parent="." index="2"]
+position = Vector2(-9, 0)
 texture = ExtResource("3_txlwb")
 
-[node name="ОбластьАтаки" type="Area2D" parent="." index="2"]
+[node name="ОбластьАтаки" type="Area2D" parent="." index="3"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ОбластьАтаки" index="0"]
-position = Vector2(-8, -1)
+position = Vector2(-1, 14)
 shape = SubResource("RectangleShape2D_txlwb")

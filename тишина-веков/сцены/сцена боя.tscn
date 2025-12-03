@@ -150,4 +150,4 @@ tile_set = SubResource("TileSet_hd1ar")
 
 [node name="скелет" parent="." instance=ExtResource("6_n28v2")]
 position = Vector2(813, 16)
-attack_damage = 10
+attack_range = 25.0

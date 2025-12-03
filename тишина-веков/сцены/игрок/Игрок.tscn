@@ -228,3 +228,8 @@ script = ExtResource("8_or5x4")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ОбластьУронаКасанием"]
 position = Vector2(0, 12.5)
 shape = SubResource("RectangleShape2D_5firq")
+
+[node name="Sprite2D" type="Sprite2D" parent="ОбластьУронаКасанием/CollisionShape2D"]
+position = Vector2(-7.4505806e-08, -4.172325e-07)
+scale = Vector2(0.34, 0.17)
+texture = ExtResource("3_c8qja")
