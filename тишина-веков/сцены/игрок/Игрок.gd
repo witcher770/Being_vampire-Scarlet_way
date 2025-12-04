@@ -57,6 +57,51 @@ func _ready():
 	took_damage.connect(DamageNumbersManager.show_damage)
 
 
+func _physics_process(delta):
+	if is_knockback:
+		animPlayer.play('покой') # тут надо переключать на статичные позы чтобы не было добегивания
+		move_and_slide()
+		return
+	
+	# Получаем вектор ввода от игрока (нормализованный - длина всегда 1)
+	var input_vector = Vector2(
+		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),  # Горизонталь: -1..1
+		Input.get_action_strength("move_down") - Input.get_action_strength("move_up")      # Вертикаль: -1..1
+	).normalized()  # Нормализуем чтобы диагональное движение не было быстрее
+	
+	# ОБРАБОТКА ДВИЖЕНИЯ И АНИМАЦИЙ
+	if input_vector != Vector2.ZERO:
+		# Есть движение - обновляем направление и анимации
+		facing_direction = input_vector
+		
+		# ВЫБОР АНИМАЦИИ В ЗАВИСИМОСТИ ОТ НАПРАВЛЕНИЯ:
+		if input_vector.x != 0:
+			# Горизонтальное движение - анимация "вид сбоку"
+			animPlayer.play("бег_с_боку")
+			# Разворот спрайта в направлении движения
+			if sign(sprite.scale.x) != sign(input_vector.x):
+				sprite.scale.x *= -1  # Отражаем спрайт по горизонтали
+
+		elif input_vector.y > 0:
+			# Движение вниз - анимация "вид спереди"
+			animPlayer.play("бег_перед")
+		elif input_vector.y < 0:
+			# Движение вверх - анимация "вид сзади"
+			animPlayer.play("бег_спина")
+		
+		# Смещаем область атаки в направлении движения
+		attack_area.position = facing_direction * 15
+	
+	else:
+		# Нет движения - проигрываем анимацию покоя
+		animPlayer.play('покой')
+
+	# Применяем движение
+	velocity = input_vector * speed
+	move_and_slide()  # Встроенная функция Godot для перемещения с коллизиями
+
+
+
 # === СИСТЕМА ЗДОРОВЬЯ И УРОНА ===
 func take_damage(amount: int):
 	"""
@@ -131,49 +176,6 @@ func die():
 	queue_free()
 
 # === СИСТЕМА ПЕРЕМЕЩЕНИЯ ===
-func _physics_process(delta):
-	if is_knockback:
-		animPlayer.play('покой') # тут надо переключать на статичные позы чтобы не было добегивания
-		move_and_slide()
-		return
-	
-	# Получаем вектор ввода от игрока (нормализованный - длина всегда 1)
-	var input_vector = Vector2(
-		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),  # Горизонталь: -1..1
-		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")      # Вертикаль: -1..1
-	).normalized()  # Нормализуем чтобы диагональное движение не было быстрее
-	
-	# ОБРАБОТКА ДВИЖЕНИЯ И АНИМАЦИЙ
-	if input_vector != Vector2.ZERO:
-		# Есть движение - обновляем направление и анимации
-		facing_direction = input_vector
-		
-		# ВЫБОР АНИМАЦИИ В ЗАВИСИМОСТИ ОТ НАПРАВЛЕНИЯ:
-		if input_vector.x != 0:
-			# Горизонтальное движение - анимация "вид сбоку"
-			animPlayer.play("бег_с_боку")
-			# Разворот спрайта в направлении движения
-			if sign(sprite.scale.x) != sign(input_vector.x):
-				sprite.scale.x *= -1  # Отражаем спрайт по горизонтали
-
-		elif input_vector.y > 0:
-			# Движение вниз - анимация "вид спереди"
-			animPlayer.play("бег_перед")
-		elif input_vector.y < 0:
-			# Движение вверх - анимация "вид сзади"
-			animPlayer.play("бег_спина")
-		
-		# Смещаем область атаки в направлении движения
-		attack_area.position = facing_direction * 15
-	
-	else:
-		# Нет движения - проигрываем анимацию покоя
-		animPlayer.play('покой')
-
-	# Применяем движение
-	velocity = input_vector * speed
-	move_and_slide()  # Встроенная функция Godot для перемещения с коллизиями
-
 
 func apply_knockback(from_position: Vector2):
 	if is_knockback:
