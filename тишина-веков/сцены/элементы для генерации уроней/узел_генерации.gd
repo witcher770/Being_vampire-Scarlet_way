@@ -7,6 +7,35 @@ signal level_finished
 @export var size_level = 3
 @export var num_rooms = 5
 
+# Словарь для хранения всех загружаемых ресурсов
+const PRELOADS = {
+	# Комнаты
+	"room_15_15_1": preload("res://сцены/элементы для генерации уроней/комнаты/комната_15_15_1.tscn"),
+	
+	# Фрагменты коридоров
+	"corridor_vertical_8": preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_вертикальный_8.tscn"),
+	"corridor_horizontal_8": preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_горизонтальный_8.tscn"),
+	"corridor_g": preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_г_10_10.tscn"),
+	"corridor_invert_g": preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_перевернутая_г_10_10.tscn"),
+	
+	# Входы в комнаты
+	"entrance_top": preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_сверху.tscn"),
+	"entrance_right": preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_справа.tscn"),
+	"entrance_bottom": preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_снизу.tscn"),
+	
+	# Стены для закрытых проходов
+	"wall_top": preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_сверху_стена.tscn"),
+	"wall_right": preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_справа_стена.tscn"),
+	"wall_bottom": preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_снизу_стена.tscn"),
+	
+	# Персонажи
+	"player": preload("res://сцены/игрок/Игрок.tscn"),
+	"enemy_slime": preload("res://сцены/враги/слизь.tscn"),
+	
+	# Прочие объекты
+	"door": preload("res://сцены/элементы для генерации уроней/дверь.tscn")
+}
+
 var rooms_now = 0
 var grid_with_rooms = []
 
@@ -35,8 +64,7 @@ func _ready():
 	
 	#var a = get_neightbours(grid_with_rooms, Vector2(0, 2))
 	#print(a)
-	#var room_scene = preload("res://сцены/элементы для генерации уроней/комнаты/комната_15_15_1.tscn")
-	#var room_instance = room_scene.instantiate()
+	#var room_instance = PRELOADS.room_15_15_1.instantiate()
 	#room_instance.position = Vector2(0, 0)
 	#add_child(room_instance)
 
@@ -98,16 +126,12 @@ func gen_pos_rooms(grid: Array) -> Array:
 				"connections": [], # Vector2i(1, 0), соединена с комнатой справа (x+1, y+0), Vector2i(0, 1) соединена с комнатой снизу  (x+0, y+1)
 				"position": Vector2(x, y) # просто координаты
 			}
-		
 		# на место ячейки записываем словарь с информацией о ней
 		grid[x][y] = cell_info
-		## на место ячейки записываем вектор с координатами этой позиции вместо null
-		#grid[x][y] = Vector2(x, y)
 		
 		maybe_pos_rooms.remove_at(index)  # удаляем использованную(уже занятую) позицию
 		quantity_pos -= 1 # уменьшаем количество доступных мест
 
-		
 	return grid
 
 
@@ -186,15 +210,13 @@ func create_tree_connectoins(grid: Array) -> Array:
 				
 				# попытка добавить игрока
 				#print("ставим игрока")
-				#var player = preload("res://сцены/игрок/Игрок.tscn")
-				#var player_inst = player.instantiate()
+				#var player_inst = PRELOADS.player.instantiate()
 				#print(cell["position"])
 				#player_inst.position = grid_to_world(cell["position"]) + Vector2(200, 200)
 				#add_child(player_inst)
 				
 				# тестируем дверь перехода на новый уровень
-				var door = preload("res://сцены/элементы для генерации уроней/дверь.tscn")
-				var door_inst = door.instantiate()
+				var door_inst = PRELOADS.door.instantiate()
 				print(cell["position"])
 				door_inst.position = grid_to_world(cell["position"]) + Vector2(150, 150)
 				add_child(door_inst)
@@ -218,6 +240,7 @@ func create_tree_connectoins(grid: Array) -> Array:
 				чтобы выбирать наименьшие растояния и проще строить коридоры
 				и избегать багов
 				"""
+				
 				var connection: Array = [cell["position"], near_room["position"], cell["position"].distance_to(near_room["position"])]
 				edges.append(connection)
 			
@@ -242,7 +265,7 @@ func create_tree_connectoins(grid: Array) -> Array:
 			room1["connections"].append(pos_room2 - pos_room1) # относительное смещение на вторую комнату
 			room2["connections"].append(pos_room1 - pos_room2)
 			
-			# не уверен нужно ли это так как при присваивании ссылки но на всякий случай
+			# не уверен нужно ли это так как при присваивании ссылки на переменные но на всякий случай
 			# перезаписываем в сетке на комнаты с добавленными связями
 			grid[pos_room1.x][pos_room1.y] = room1
 			grid[pos_room2.x][pos_room2.y] = room2
@@ -269,7 +292,9 @@ func get_neightbours(grid: Array, coords: Vector2) -> Array: # возвраща�
 	
 	for i in range(size_matrix + depth * 2): # изнчально матрица соседей 3 на 3, и каждая следующая откружность на 2 больше
 		for j in range(size_matrix + depth * 2):
-			if i == j  and i == 1: # пропускаем ячейку в которой находится сама проверяемая комната
+			@warning_ignore("integer_division")
+			var center: int = int(size_matrix / 2)
+			if i == center and j == center: # пропускаем ячейку в которой находится сама проверяемая комната
 				maybe_pos_edges[i][j] = 0
 				continue
 			var move_x = i - 1 * depth_for_cicle # смещение по строкам
@@ -345,8 +370,7 @@ func instantiate_rooms(grid: Array) -> Array: # возвращает масси�
 				var global_pos_cell = grid_to_world(pos_cell) # верхний левый угол ячейки сетки
 				var pos_for_create: Vector2 = Vector2(global_pos_cell.x + SIZE_ZONE.x / 2, global_pos_cell.y + SIZE_ZONE.y / 2) # координаты центра ячейки
 				#var room_scene = choose_room_prefab(cell.exits)
-				var room_scene = preload("res://сцены/элементы для генерации уроней/комнаты/комната_15_15_1.tscn")
-				cell["room_instance"] = room_scene.instantiate()
+				cell["room_instance"] = PRELOADS.room_15_15_1.instantiate()
 				cell["room_instance"].position = pos_for_create
 				add_child(cell["room_instance"])
 				
@@ -371,8 +395,7 @@ func instantiate_enemies(cell: Dictionary) -> void:
 				int(-SIZE_TILE * (int(SIZE_ROOM / 2) - 2)),
 				int(+SIZE_TILE * (int(SIZE_ROOM / 2) - 2)))
 		# инстанцируем
-		var enemy_scene = preload("res://сцены/враги/слизь.tscn")
-		var enemy_instance = enemy_scene.instantiate()
+		var enemy_instance = PRELOADS.enemy_slime.instantiate()
 		enemy_instance.position = Vector2(coor_x, coor_y)
 		# 
 		cell["room_instance"].add_child(enemy_instance)
@@ -408,14 +431,12 @@ func instantiate_corridors(grid: Array) -> Array:
 				if cell["exits"]["north"] and not exits_chek[0] and (connection.x < 0 and (connection.y == 0 or connection.y > 0)): # если есть выход на север
 					exits_chek[0] = true
 					# добавляем к комнате выход
-					var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_сверху.tscn")
-					var exit_inst = exit.instantiate()
+					var exit_inst = PRELOADS.entrance_top.instantiate()
 					exit_inst.position = pos_room - offset_room_y
 					add_child(exit_inst)
 					if connection.y == 0: # прямой вверх - логика урощена при опоре на варианты получения этого выхода из функции расчета выходов
 						# меняем знаки, тк связь на эту комнату, от второй комнаты в паре будет с противоположными знаками
-						var corridor_up = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_вертикальный_8.tscn")
-						var corridor_up_inst = corridor_up.instantiate()
+						var corridor_up_inst = PRELOADS.corridor_vertical_8.instantiate()
 						corridor_up_inst.position = pos_room - offset_cell_y
 						add_child(corridor_up_inst)
 					else: # буква г
@@ -425,21 +446,18 @@ func instantiate_corridors(grid: Array) -> Array:
 				elif cell["exits"]["east"] and not exits_chek[1] and (connection.x == 0 and connection.y > 0):
 					exits_chek[1] = true
 					# добавляем к комнате выход
-					var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_справа.tscn")
-					var exit_inst = exit.instantiate()
+					var exit_inst = PRELOADS.entrance_right.instantiate()
 					exit_inst.position = pos_room + offset_room_x
 					add_child(exit_inst)
 					# добавляем сам коридор. на восток может идти только прямой коридор
-					var corridor_right = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_горизонтальный_8.tscn")
-					var corridor_right_inst = corridor_right.instantiate()
+					var corridor_right_inst = PRELOADS.corridor_horizontal_8.instantiate()
 					corridor_right_inst.position = pos_room + offset_cell_x
 					add_child(corridor_right_inst)
 				# обычные проверки + проверяем что текущая связь к комнате внизу или внизу справа
 				elif cell["exits"]["south"] and not exits_chek[2] and (connection.x > 0 and (connection.y == 0 or connection.y > 0)):
 					exits_chek[2] = true
 					# добавляем к комнате выход
-					var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_снизу.tscn")
-					var exit_inst = exit.instantiate()
+					var exit_inst = PRELOADS.entrance_bottom.instantiate()
 					exit_inst.position = pos_room + offset_room_y
 					add_child(exit_inst)
 					if connection.y == 0: # прямой вниз - логика урощена при опоре на варианты получения этого выхода из функции расчета выходов
@@ -450,8 +468,7 @@ func instantiate_corridors(grid: Array) -> Array:
 				elif cell["exits"]["west"] and not exits_chek[3]:
 					exits_chek[3] = true
 					# добавляем к комнате выход
-					var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_в_комнату_справа.tscn")
-					var exit_inst = exit.instantiate()
+					var exit_inst = PRELOADS.entrance_right.instantiate()
 					exit_inst.scale.x = -1
 					exit_inst.position = pos_room - offset_room_x
 					add_child(exit_inst)
@@ -460,14 +477,10 @@ func instantiate_corridors(grid: Array) -> Array:
 
 
 func instantiate_g_corridor(pos_room: Vector2):
-	# загружаем
-	var corridor_up = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_вертикальный_8.tscn")
-	var corridor_right = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_горизонтальный_8.tscn")
-	var corridor_g = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_г_10_10.tscn")
 	# создаем
-	var corridor_up_inst = corridor_up.instantiate()
-	var corridor_right_inst = corridor_right.instantiate()
-	var corridor_g_inst = corridor_g.instantiate()
+	var corridor_up_inst = PRELOADS.corridor_vertical_8.instantiate()
+	var corridor_right_inst = PRELOADS.corridor_horizontal_8.instantiate()
+	var corridor_g_inst = PRELOADS.corridor_g.instantiate()
 	# размещаем
 	corridor_up_inst.position = pos_room - Vector2(0, SIZE_ZONE.y / 2)
 	corridor_g_inst.position = pos_room - Vector2(0, SIZE_ZONE.y)
@@ -479,14 +492,10 @@ func instantiate_g_corridor(pos_room: Vector2):
 
 
 func instantiate_invert_g_corridor(pos_room: Vector2):
-	# загружаем
-	var corridor_up = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_вертикальный_8.tscn")
-	var corridor_right = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_горизонтальный_8.tscn")
-	var corridor_g = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/коридор_перевернутая_г_10_10.tscn")
 	# создаем
-	var corridor_up_inst = corridor_up.instantiate()
-	var corridor_right_inst = corridor_right.instantiate()
-	var corridor_g_inst = corridor_g.instantiate()
+	var corridor_up_inst = PRELOADS.corridor_vertical_8.instantiate()
+	var corridor_right_inst = PRELOADS.corridor_horizontal_8.instantiate()
+	var corridor_g_inst = PRELOADS.corridor_invert_g.instantiate()
 	# размещаем
 	corridor_up_inst.position = pos_room + Vector2(0, SIZE_ZONE.y / 2)
 	corridor_g_inst.position = pos_room + Vector2(0, SIZE_ZONE.y)
@@ -499,23 +508,19 @@ func instantiate_invert_g_corridor(pos_room: Vector2):
 
 func instantiate_exits_walls(cell, pos_room: Vector2):
 	if not cell["exits"]["north"]:
-		var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_сверху_стена.tscn")
-		var exit_inst = exit.instantiate()
+		var exit_inst = PRELOADS.wall_top.instantiate()
 		exit_inst.position = pos_room - Vector2(0, (SIZE_ROOM * SIZE_TILE) / 2)
 		add_child(exit_inst)
 	if not cell["exits"]["east"]:
-		var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_справа_стена.tscn")
-		var exit_inst = exit.instantiate()
+		var exit_inst = PRELOADS.wall_right.instantiate()
 		exit_inst.position = pos_room + Vector2((SIZE_ROOM * SIZE_TILE) / 2, 0)
 		add_child(exit_inst)
 	if not cell["exits"]["south"]:
-		var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_снизу_стена.tscn")
-		var exit_inst = exit.instantiate()
+		var exit_inst = PRELOADS.wall_bottom.instantiate()
 		exit_inst.position = pos_room + Vector2(0, (SIZE_ROOM * SIZE_TILE) / 2)
 		add_child(exit_inst)
 	if not cell["exits"]["west"]:
-		var exit = preload("res://сцены/элементы для генерации уроней/фрагменты коридоров/вход_справа_стена.tscn")
-		var exit_inst = exit.instantiate()
+		var exit_inst = PRELOADS.wall_right.instantiate()
 		exit_inst.scale.x = -1
 		exit_inst.position = pos_room - Vector2((SIZE_ROOM * SIZE_TILE) / 2, 0)
 		add_child(exit_inst)
