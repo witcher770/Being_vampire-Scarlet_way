@@ -1,9 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://igri07lbdmui"]
+[gd_scene load_steps=3 format=3 uid="uid://igri07lbdmui"]
 
 [ext_resource type="Script" uid="uid://7qlhmq8e0ogn" path="res://сцены/интерфейс/menu.gd" id="1_flh13"]
+[ext_resource type="Texture2D" uid="uid://dq23cq13417fu" path="res://ассеты/меню ии 1.png" id="2_tcucq"]
 
 [node name="menu" type="Node2D"]
 script = ExtResource("1_flh13")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(194.6721, 173.83969)
+scale = Vector2(0.3814998, 0.33820376)
+texture = ExtResource("2_tcucq")
 
 [node name="контейнер" type="Node2D" parent="."]
 position = Vector2(130, 55)

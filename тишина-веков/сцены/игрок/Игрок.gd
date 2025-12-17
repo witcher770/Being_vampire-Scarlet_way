@@ -135,7 +135,7 @@ func _on_damage_area_touch_body_entered(body):
 	if body.is_in_group("враги") and not is_invincible:
 		var enemy_pos = body.global_position
 		var damage = body.deal_contact_damage()
-		take_damage(damage) # Пока фиксированный урон 1
+		take_damage(damage)
 		apply_knockback(enemy_pos)
 
 

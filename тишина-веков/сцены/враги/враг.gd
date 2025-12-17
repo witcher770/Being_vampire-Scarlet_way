@@ -26,14 +26,10 @@ func _ready():
 	took_damage.connect(DamageNumbersManager.show_damage)
 
 
-func _physics_process(delta):
-	_process_ai(delta)
-
-
 @warning_ignore("unused_parameter")
-func _process_ai(delta):
-	# Пусто — дети должны переопределить
+func _physics_process(delta):
 	pass
+	# Пусто — дети должны переопределить
 
 
 func take_damage(amount := 1, is_crit = false):
