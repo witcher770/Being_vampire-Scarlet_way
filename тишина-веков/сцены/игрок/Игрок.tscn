@@ -201,6 +201,7 @@ position = Vector2(-18, 6)
 shape = SubResource("RectangleShape2D_acsuq")
 
 [node name="Sprite2D" type="Sprite2D" parent="ОбластьАтаки"]
+visible = false
 texture_filter = 3
 scale = Vector2(0.4278746, 0.41513994)
 texture = ExtResource("3_c8qja")
@@ -226,6 +227,7 @@ script = ExtResource("8_or5x4")
 [node name="ОбластьУронаКасанием" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ОбластьУронаКасанием"]
+visible = false
 position = Vector2(0, 12.5)
 shape = SubResource("RectangleShape2D_5firq")
 

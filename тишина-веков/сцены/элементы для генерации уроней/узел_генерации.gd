@@ -218,7 +218,7 @@ func create_tree_connectoins(grid: Array) -> Array:
 				# тестируем дверь перехода на новый уровень
 				var door_inst = PRELOADS.door.instantiate()
 				print(cell["position"])
-				door_inst.position = grid_to_world(cell["position"]) + Vector2(150, 150)
+				door_inst.position = grid_to_world(cell["position"]) + Vector2(200, 82)
 				add_child(door_inst)
 				door_inst.door_entered.connect(_on_door_entered) # подписываемся на сигнал касания двери
 				
