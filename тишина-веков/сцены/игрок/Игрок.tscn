@@ -13,7 +13,7 @@
 size = Vector2(14, 7)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_acsuq"]
-size = Vector2(11, 11)
+size = Vector2(18, 18)
 
 [sub_resource type="GDScript" id="GDScript_c2kwh"]
 script/source = "extends Camera2D
@@ -202,7 +202,7 @@ shape = SubResource("RectangleShape2D_acsuq")
 
 [node name="Sprite2D" type="Sprite2D" parent="ОбластьАтаки"]
 texture_filter = 3
-scale = Vector2(0.24999997, 0.2500001)
+scale = Vector2(0.4278746, 0.41513994)
 texture = ExtResource("3_c8qja")
 
 [node name="Camera2D" type="Camera2D" parent="."]

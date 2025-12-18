@@ -23,7 +23,7 @@ func _ready():
 	super._ready() # вызываем родительский ready
 
 
-func _process_ai(delta):
+func _physics_process(delta):
 	match state:
 		State.IDLE:
 			print("вошел в состояние idle")

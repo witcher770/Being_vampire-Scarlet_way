@@ -1,6 +1,6 @@
 extends "res://сцены/враги/враг.gd"
 
-func _process_ai(delta):
+func _physics_process(delta):
 	var player = get_tree().get_first_node_in_group("игрок")
 	if player:
 		if global_position.distance_to(player.global_position) < 50 or is_agr:

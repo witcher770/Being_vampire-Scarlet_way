@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=4 uid="uid://thdlgyrm53l3"]
+[gd_scene load_steps=6 format=4 uid="uid://thdlgyrm53l3"]
 
 [ext_resource type="TileSet" uid="uid://vdx4baa8jk83" path="res://ассеты/спрайты/ресурсы карты/набор 1/папина версия.tres" id="1_3o03b"]
 [ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="2_jgemn"]
 [ext_resource type="PackedScene" uid="uid://o1chy65nqa20" path="res://сцены/враги/скелет_босс.tscn" id="3_jgemn"]
+[ext_resource type="Texture2D" uid="uid://dta7uy8tm6pg8" path="res://ассеты/boss.png" id="4_y7o1m"]
+[ext_resource type="Texture2D" uid="uid://by1gks185v17p" path="res://ассеты/boss 1.png" id="5_bfvt7"]
 
 [node name="BossRoom" type="Node2D"]
 
@@ -26,3 +28,13 @@ position = Vector2(144, 96)
 
 [node name="скелет" parent="." instance=ExtResource("3_jgemn")]
 position = Vector2(169, 93)
+
+[node name="Boss" type="Sprite2D" parent="."]
+position = Vector2(202, 89)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("4_y7o1m")
+
+[node name="Boss1" type="Sprite2D" parent="."]
+position = Vector2(119, 88)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("5_bfvt7")
