@@ -37,8 +37,9 @@ func load_start_room():
 	move_player_to_spawn(current_level)
 
 func _on_level_finished():
+	GameState.num_floor = GameState.num_floor + 1
 	print(GameState.num_floor)
-	if GameState.num_floor == 4:
+	if GameState.num_floor == 3:
 		load_boss_room()
 		return
 	# при получении сигнала на вхождение в дверь - переход на следующий уровень
@@ -46,7 +47,6 @@ func _on_level_finished():
 
 func load_generated_level():
 	unload_level()
-	GameState.num_floor = GameState.num_floor + 1
 	
 	var scene = preload("res://сцены/элементы для генерации уроней/узел_генерации.tscn")
 	current_level = scene.instantiate()

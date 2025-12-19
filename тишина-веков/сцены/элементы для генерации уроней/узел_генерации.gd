@@ -4,8 +4,8 @@ extends Node2D
 signal level_finished
 
 # задаем размер сетки и количество комнат
-@export var size_level = 3
-@export var num_rooms = 5
+@export var size_level = GameState.size_dungeon
+@export var num_rooms = GameState.room_count
 
 # Словарь для хранения всех загружаемых ресурсов
 const PRELOADS = {
@@ -56,7 +56,7 @@ func _ready():
 	var grid_with_connections = create_tree_connectoins(grid_with_rooms)
 	calculate_exits(grid_with_connections)
 	
-	print_grid(grid_with_connections, "connections")
+	#print_grid(grid_with_connections, "connections")
 	print()
 	instantiate_rooms(grid_with_connections)
 	instantiate_corridors(grid_with_connections)
@@ -99,9 +99,10 @@ func gen_pos_rooms(grid: Array) -> Array:
 	# создаем массив из возможных позиций для комнаты. array - просто последовательность от 0 до ... с шагом 1
 	var maybe_pos_rooms = Array(range(0, quantity_pos, 1)) # не включительно
 	
+	print("Текущее зерно: ", rng_rand.seed)
 	for i in range(num_rooms):
 		var num_pos = rng_rand.randi_range(0, quantity_pos - 1)  # генерируем позицию для комнаты. генерит включительно, поэтому -1
-		print("Текущее зерно: ", rng_rand.seed)
+		
 		
 		# удаляем из списка возможных позиций комнат ту, куда сейчас ставим
 		var index = maybe_pos_rooms.find(num_pos)  # находим индекс элемента
@@ -375,7 +376,7 @@ func instantiate_rooms(grid: Array) -> Array: # возвращает масси�
 				add_child(cell["room_instance"])
 				
 				# добавляем врагов
-				instantiate_enemies(cell)
+				#instantiate_enemies(cell)
 	
 	return grid
 

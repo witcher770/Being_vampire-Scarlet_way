@@ -1,9 +1,10 @@
 extends Node
 
-var num_floor: int = 0            # текущий уровень-этаж
+var num_floor: int = -1            # текущий уровень-этаж
 var player_health: int = 100      # здоровье игрока
 var max_health: int = 100
 
+var size_dungeon = 3
 var room_count: int = 5           # базовое количество комнат
 var enemy_power: float = 1.0      # множитель силы врагов
 
