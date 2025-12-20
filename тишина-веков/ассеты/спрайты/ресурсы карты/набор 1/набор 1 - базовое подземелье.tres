@@ -1,6 +1,30 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://bmcc5qj7w6wcj"]
+[gd_resource type="TileSet" load_steps=7 format=3 uid="uid://bmcc5qj7w6wcj"]
 
 [ext_resource type="Texture2D" uid="uid://bx0x61afl0f3p" path="res://ассеты/спрайты/ресурсы карты/набор 1/dungeons_demo.png" id="1_fc3h5"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_fc3h5"]
+vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8, -8, 8)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_6tfks"]
+vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-8, 8, -8, -8, 8, -8, 8, 8)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_bswqh"]
+vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_c8uje"]
+vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)])
+agent_radius = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6tfks"]
 texture = ExtResource("1_fc3h5")
@@ -9,8 +33,10 @@ texture = ExtResource("1_fc3h5")
 2:0/0 = 0
 2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:0/0 = 0
+3:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_fc3h5")
 4:0/0 = 0
 4:0/0/probability = 0.1
+4:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_bswqh")
 5:0/0 = 0
 6:0/0 = 0
 7:0/0 = 0
@@ -28,8 +54,10 @@ texture = ExtResource("1_fc3h5")
 2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:1/0 = 0
 3:1/0/probability = 0.2
+3:1/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_6tfks")
 4:1/0 = 0
 4:1/0/probability = 0.2
+4:1/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_c8uje")
 5:1/0 = 0
 6:1/0 = 0
 7:1/0 = 0
@@ -127,4 +155,5 @@ texture = ExtResource("1_fc3h5")
 
 [resource]
 physics_layer_0/collision_layer = 1
+navigation_layer_0/layers = 1
 sources/0 = SubResource("TileSetAtlasSource_6tfks")

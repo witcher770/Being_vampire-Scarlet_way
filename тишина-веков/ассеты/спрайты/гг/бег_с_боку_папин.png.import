@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c2gu35cv0rojj"
-path="res://.godot/imported/бег_новый.png-a4bb36f166463a3eea19e34e4d61223d.ctex"
+uid="uid://vmcyvox0nkep"
+path="res://.godot/imported/бег_с_боку_папин.png-dd0b134435a6aa47f38daae62b957f6b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ассеты/спрайты/гг/бег_новый.png"
-dest_files=["res://.godot/imported/бег_новый.png-a4bb36f166463a3eea19e34e4d61223d.ctex"]
+source_file="res://ассеты/спрайты/гг/бег_с_боку_папин.png"
+dest_files=["res://.godot/imported/бег_с_боку_папин.png-dd0b134435a6aa47f38daae62b957f6b.ctex"]
 
 [params]
 

@@ -56,17 +56,45 @@ func _ready():
 	var grid_with_connections = create_tree_connectoins(grid_with_rooms)
 	calculate_exits(grid_with_connections)
 	
-	#print_grid(grid_with_connections, "connections")
+	#print_grid(grid_with_rooms, "connections")
 	print()
 	instantiate_rooms(grid_with_connections)
 	instantiate_corridors(grid_with_connections)
 	
-	
+	GameState.all_enemies_dead.connect(_on_all_enemies_dead)
+
 	#var a = get_neightbours(grid_with_rooms, Vector2(0, 2))
 	#print(a)
 	#var room_instance = PRELOADS.room_15_15_1.instantiate()
 	#room_instance.position = Vector2(0, 0)
 	#add_child(room_instance)
+
+
+func _on_all_enemies_dead():
+	spawn_exit_door(grid_with_rooms)
+
+
+func spawn_exit_door(grid):
+	for i in range(size_level):
+			for j in range(size_level):
+				var cell = grid[i][j]
+				if not cell:
+					continue
+				if cell["room_type"] == "start_room":
+					var door_inst = PRELOADS.door.instantiate()
+					
+					var global_pos_cell = grid_to_world(cell["position"]) # верхний левый угол ячейки сетки
+					var pos_room = Vector2(global_pos_cell.x + SIZE_ZONE.x / 2, global_pos_cell.y + SIZE_ZONE.y / 2) # координаты центра ячейки(комнаты)
+					@warning_ignore("integer_division")
+					var offset_room_y = Vector2(0, (SIZE_ROOM * SIZE_TILE) / 2) # смещение от центра к верхнему/нижнему краю комнаты					
+					
+					door_inst.position = pos_room - offset_room_y #середина верхней стены комнаты
+					add_child(door_inst)
+					print("Размещена дверь - выход из комнаты")
+					door_inst.door_entered.connect(_on_door_entered) # подписываемся на сигнал касания двери
+					
+					return
+					
 
 
 func print_grid(grid: Array, param: String = "position") -> void:
@@ -217,11 +245,11 @@ func create_tree_connectoins(grid: Array) -> Array:
 				#add_child(player_inst)
 				
 				# тестируем дверь перехода на новый уровень
-				var door_inst = PRELOADS.door.instantiate()
-				print(cell["position"])
-				door_inst.position = grid_to_world(cell["position"]) + Vector2(200, 82)
-				add_child(door_inst)
-				door_inst.door_entered.connect(_on_door_entered) # подписываемся на сигнал касания двери
+				#var door_inst = PRELOADS.door.instantiate()
+				#print(cell["position"])
+				#door_inst.position = grid_to_world(cell["position"]) + Vector2(200, 82)
+				#add_child(door_inst)
+				#door_inst.door_entered.connect(_on_door_entered) # подписываемся на сигнал открытия двери
 				
 				# создание ноды для размещения игрока через загрузчик уровней
 				var s = Node2D.new()
@@ -376,13 +404,14 @@ func instantiate_rooms(grid: Array) -> Array: # возвращает масси�
 				add_child(cell["room_instance"])
 				
 				# добавляем врагов
-				#instantiate_enemies(cell)
+				instantiate_enemies(cell)
 	
 	return grid
 
 func instantiate_enemies(cell: Dictionary) -> void:
 	var num_enemies = rng_rand.randi_range(1, 3)  # генерируем количество врагов
 	var dorabotka = 0 # заменить числа на переменные в соответсвии с уровнем сложности
+	GameState.enemies_count += num_enemies
 	for l in range(num_enemies):
 		# генер. коор. х для размещения врага. -2 чтобы не прилипал к стенам и мебели
 		# считаем положение врага в локальной ск комнаты, от ее центра

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://d1rb3vewl6egs"]
+[gd_scene load_steps=33 format=3 uid="uid://d1rb3vewl6egs"]
 
 [ext_resource type="Script" uid="uid://dq3qoy67q5l0r" path="res://сцены/игрок/Игрок.gd" id="1_5firq"]
 [ext_resource type="Texture2D" uid="uid://euedvnxq7coc" path="res://ассеты/спрайты/гг/Спрайт_вампир_гг_бег_перед.png" id="2_n8mlp"]
@@ -6,8 +6,15 @@
 [ext_resource type="Texture2D" uid="uid://185knk24e8el" path="res://ассеты/спрайты/гг/вампир_ходьба-sheet.png" id="4_6ijbn"]
 [ext_resource type="Texture2D" uid="uid://c1568q044omy3" path="res://ассеты/спрайты/гг/Спрайт_вампир_гг_бег_спина.png" id="5_s38hx"]
 [ext_resource type="Texture2D" uid="uid://djask047jehdi" path="res://ассеты/спрайты/объем_здоровья.png" id="6_gocg3"]
+[ext_resource type="Texture2D" uid="uid://vmcyvox0nkep" path="res://ассеты/спрайты/гг/бег_с_боку_папин.png" id="6_lxwu0"]
 [ext_resource type="Texture2D" uid="uid://dxqttca05cpya" path="res://ассеты/спрайты/полоска здоровья.png" id="7_kqv1k"]
+[ext_resource type="Texture2D" uid="uid://b38s57etsd3up" path="res://ассеты/спрайты/гг/бег_перед_папин.png" id="7_nngo4"]
 [ext_resource type="Script" uid="uid://bfmhvsv100tms" path="res://сцены/HealthBarPlayer.gd" id="8_or5x4"]
+[ext_resource type="Texture2D" uid="uid://cb2f7jmh4n45" path="res://ассеты/спрайты/гг/бег_спина_папин.png" id="8_yt8fh"]
+[ext_resource type="Texture2D" uid="uid://d2ya4muo74r33" path="res://ассеты/спрайты/гг/покой_перед_папин.png" id="9_dw66v"]
+[ext_resource type="Texture2D" uid="uid://d06f1dn71kae2" path="res://ассеты/спрайты/гг/покой_спина_папин.png" id="10_hoqyh"]
+[ext_resource type="Texture2D" uid="uid://bu3s87lrkmoyj" path="res://ассеты/спрайты/гг/покой_с_боку_папин.png" id="11_wwd4g"]
+[ext_resource type="Texture2D" uid="uid://bferixafsyhc" path="res://ассеты/спрайты/гг/атака_с_боку.png" id="12_rj8ll"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d51up"]
 size = Vector2(14, 7)
@@ -32,10 +39,10 @@ tracks/0/path = NodePath("Sprite2D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(-0.033333335),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(-0.033333335, 0),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("2_n8mlp")]
+"values": [ExtResource("2_n8mlp"), ExtResource("9_dw66v")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -47,7 +54,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [1]
+"values": [0]
 }
 
 [sub_resource type="Animation" id="Animation_n28v2"]
@@ -167,13 +174,223 @@ tracks/1/keys = {
 "values": [0]
 }
 
+[sub_resource type="Animation" id="Animation_nngo4"]
+resource_name = "бег_вперед_папин"
+length = 0.8
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_lxwu0")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
+[sub_resource type="Animation" id="Animation_yt8fh"]
+resource_name = "бег_перед_папин"
+length = 0.8
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("7_nngo4")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
+[sub_resource type="Animation" id="Animation_dw66v"]
+resource_name = "бег_спина_папин"
+length = 0.8
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_yt8fh")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
+[sub_resource type="Animation" id="Animation_hoqyh"]
+resource_name = "покой_папин"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("9_dw66v")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_wwd4g"]
+resource_name = "покой_спина_папин"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("10_hoqyh")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_rj8ll"]
+resource_name = "покой_с_боку_папин"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_wwd4g")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_87rhc"]
+resource_name = "атака"
+length = 0.4
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("12_rj8ll")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4f5mk"]
 _data = {
 &"RESET": SubResource("Animation_wbs5n"),
+&"атака_с_боку": SubResource("Animation_87rhc"),
 &"бег_перед": SubResource("Animation_n28v2"),
+&"бег_перед_папин": SubResource("Animation_yt8fh"),
 &"бег_с_боку": SubResource("Animation_kxcxj"),
+&"бег_с_боку_папин": SubResource("Animation_nngo4"),
 &"бег_спина": SubResource("Animation_4f5mk"),
-&"покой": SubResource("Animation_c2kwh")
+&"бег_спина_папин": SubResource("Animation_dw66v"),
+&"покой": SubResource("Animation_c2kwh"),
+&"покой_перед_папин": SubResource("Animation_hoqyh"),
+&"покой_с_боку_папин": SubResource("Animation_rj8ll"),
+&"покой_спина_папин": SubResource("Animation_wwd4g")
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5firq"]
@@ -190,9 +407,8 @@ shape = SubResource("RectangleShape2D_d51up")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 3
-texture = ExtResource("2_n8mlp")
+texture = ExtResource("9_dw66v")
 hframes = 8
-frame = 1
 
 [node name="ОбластьАтаки" type="Area2D" parent="."]
 position = Vector2(-18, 6)

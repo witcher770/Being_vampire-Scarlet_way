@@ -47,6 +47,7 @@ func _on_level_finished():
 
 func load_generated_level():
 	unload_level()
+	GameState.enemies_count = 0
 	
 	var scene = preload("res://сцены/элементы для генерации уроней/узел_генерации.tscn")
 	current_level = scene.instantiate()

@@ -14,6 +14,7 @@ extends CharacterBody2D
 
 # Сигнал для урона вместо жесткой привязки
 signal took_damage(position, amount, is_crit)
+
 var is_agr = false
 
 func _ready():
@@ -52,6 +53,7 @@ func calculate_damage_position() -> Vector2:
 		return global_position - Vector2(0, 50)  # fallback
 
 func die():
+	GameState.enemy_died()
 	queue_free()
 
 
