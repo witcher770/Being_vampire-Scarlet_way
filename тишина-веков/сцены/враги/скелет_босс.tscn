@@ -1,16 +1,44 @@
-[gd_scene load_steps=12 format=3 uid="uid://o1chy65nqa20"]
+[gd_scene load_steps=14 format=3 uid="uid://o1chy65nqa20"]
 
 [ext_resource type="PackedScene" uid="uid://bpa3vo4mkck5r" path="res://сцены/враги/враг.tscn" id="1_0nmag"]
 [ext_resource type="Script" uid="uid://pnsonrsw1dwv" path="res://сцены/враги/скелет_босс.gd" id="2_1kvdx"]
 [ext_resource type="Texture2D" uid="uid://cy0t871xsahxe" path="res://ассеты/спрайты/красный прямоугольник.png" id="3_geki2"]
 [ext_resource type="Texture2D" uid="uid://bfb6tkl28tpo1" path="res://ассеты/спрайты/босс_скелет/бег_скелета.png" id="4_geki2"]
-[ext_resource type="Texture2D" path="res://ассеты/спрайты/босс_скелет/покой.png" id="5_642rv"]
+[ext_resource type="Texture2D" uid="uid://erjcxflwtkts" path="res://ассеты/спрайты/босс_скелет/покой_скелета.png" id="5_642rv"]
+[ext_resource type="Texture2D" uid="uid://c3pxfycrdro10" path="res://ассеты/спрайты/босс_скелет/атака_скелета.png" id="6_2umua"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_geki2"]
 size = Vector2(15, 6)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_txlwb"]
 size = Vector2(42, 40)
+
+[sub_resource type="Animation" id="Animation_642rv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_geki2")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
 [sub_resource type="Animation" id="Animation_geki2"]
 resource_name = "бег_с_боку"
@@ -39,33 +67,6 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5, 6, 7]
-}
-
-[sub_resource type="Animation" id="Animation_642rv"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("4_geki2")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
 }
 
 [sub_resource type="Animation" id="Animation_2umua"]
@@ -97,9 +98,39 @@ tracks/1/keys = {
 "values": [0]
 }
 
+[sub_resource type="Animation" id="Animation_kx7em"]
+resource_name = "атака_скелета"
+length = 0.4
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_2umua")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_642rv"]
 _data = {
 &"RESET": SubResource("Animation_642rv"),
+&"атака_скелета": SubResource("Animation_kx7em"),
 &"бег_с_боку": SubResource("Animation_geki2"),
 &"покой": SubResource("Animation_2umua")
 }

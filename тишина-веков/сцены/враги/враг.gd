@@ -47,9 +47,13 @@ func calculate_damage_position() -> Vector2:
 	# Надежное вычисление позиции
 	if sprite:
 		# половина размера спрайта и на 20 повыше
-		return global_position - Vector2(sprite.texture.get_width() * sprite.scale.x * 0.5, 
-		sprite.texture.get_height() * sprite.scale.y * 0.5 + 20) 
+		print("ширина спрайта - ", sprite.texture.get_width() / 8)
+		print("середина спрайта - ", sprite.texture.get_width() / 8 * sprite.scale.x * 0.5)
+		# еще делим на 8 тк 8 кадров
+		return global_position - Vector2(sprite.texture.get_width() / 8 * sprite.scale.x * 0.5, \
+		sprite.texture.get_height() / 8 * sprite.scale.y * 0.5 + 20) 
 	else:
+		print("спрайт не найден")
 		return global_position - Vector2(0, 50)  # fallback
 
 func die():

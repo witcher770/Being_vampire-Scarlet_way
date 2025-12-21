@@ -111,7 +111,7 @@ func process_move(delta):
 	facing_direction = input_vector
 	velocity = input_vector * speed # Применяем движение
 	# Смещаем область атаки в направлении движения
-	attack_area.position = facing_direction * 15
+	attack_area.position = facing_direction * 10
 	move_and_slide() # Встроенная функция Godot для перемещения с коллизиями
 	update_move_animation()
 

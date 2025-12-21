@@ -33,24 +33,19 @@ func _physics_process(delta):
 			state_idle(delta)
 
 		State.CHASE:
-			print("вошел в состояние chase")
 			state_chase(delta)
 			
 
 		State.ATTACK_WINDUP:
-			print("вошел в состояние attack_windup")
 			state_attack_windup(delta)
 
 		State.ATTACK:
-			print("вошел в состояние attack")
 			state_attack(delta)
 
 		State.RECOVER:
-			print("вошел в состояние recover")
 			state_recover(delta)
 
 		State.REPOSITION:
-			print("вошел в состояние reposition")
 			state_reposition(delta)
 			
 	#print("вошел в состояние - ")
@@ -65,14 +60,23 @@ func state_idle(delta): # работает
 	update_idle_animation()
 
 	if global_position.distance_to(player.global_position) <= aggro_range:
+		print("вошел в состояние chase")
 		state = State.CHASE
 
 
 
 func update_idle_animation():
-		# Нет движения - проигрываем анимацию покоя
-		animSkelet.play('покой')
-	
+	animSkelet.play("покой")
+
+	var player = get_tree().get_first_node_in_group("игрок")
+	if not player:
+		return
+
+	var dir_x = player.global_position.x - global_position.x
+
+	if dir_x != 0:
+		sprite1.scale.x = sign(dir_x)
+
 
 
 var _windup_timer = 0.0
@@ -93,6 +97,7 @@ func state_chase(delta):
 	if dist <= attack_range:
 		_windup_timer = windup_time
 		print("ожидание - ", windup_time)
+		print("вошел в состояние attack_windup")
 		state = State.ATTACK_WINDUP
 		
 
@@ -102,34 +107,47 @@ func update_move_animation():
 	# Горизонтальное движение - анимация "вид сбоку"
 	animSkelet.play("бег_с_боку")
 	# Разворот спрайта в направлении движения
-	if sign(sprite1.scale.x) != sign(velocity.x):
-		#flag_move_right = false
-		sprite1.scale.x *= -1  # Отражаем спрайт по горизонтали
+	if abs(velocity.x) > 5: # задаем типо чувствительность, то есть будет менять направление при изменении хотя бы 5 пикселей
+		if sign(sprite1.scale.x) != sign(velocity.x):
+			sprite1.scale.x *= -1
+
 
 
 func state_attack_windup(delta):
-	print(_windup_timer)
+	#print(_windup_timer)
 	velocity = Vector2.ZERO
 
 	_windup_timer -= delta
 	if _windup_timer <= 0:
-		state = State.ATTACK
+		#state = State.ATTACK
+		enter_attack()
+
+
+func enter_attack():
+	print("вошел в состояние attack")
+	state = State.ATTACK
+	_attack_timer = attack_duration
+	_attack_finished = false
+
+	velocity = Vector2.ZERO
+	#face_player()
+	animSkelet.play("атака_скелета")
+	
+	var player = get_tree().get_first_node_in_group("игрок")
+	# Этот вызов возвращает первый узел, который состоит в группе "игрок" и проверяет пересекается ли он с хитбоксом
+	if not _damage_applied and $"ОбластьАтаки".overlaps_body(player): 
+		await get_tree().create_timer(0.2).timeout
+		player.take_damage(attack_damage)
+		_damage_applied = true
 
 
 var _attack_finished = false
 var attack_duration = 0.6 # длительность атаки
 var _attack_timer = 0.0
 
-
+var _damage_applied = false
 func state_attack(delta):
 	velocity = Vector2.ZERO
-	if _attack_timer <= 0:
-		_attack_timer = attack_duration
-	
-	# Этот вызов возвращает первый узел, который состоит в группе "игрок" и проверяет пересекается ли он с хитбоксом
-	if $"ОбластьАтаки".overlaps_body(get_tree().get_first_node_in_group("игрок")): 
-		get_tree().get_first_node_in_group("игрок").take_damage(attack_damage)
-		_attack_finished = true
 	
 	_attack_timer -= delta
 	
@@ -138,8 +156,10 @@ func state_attack(delta):
 	
 	if _attack_finished:
 		_attack_finished = false
+		_damage_applied = false
 		_recover_timer = recover_time
 		#state = State.RECOVER
+		print("вошел в состояние reposition")
 		state = State.REPOSITION
 
 
@@ -147,6 +167,7 @@ var _recover_timer = 0.0
 
 func state_recover(delta):
 	velocity = Vector2.ZERO
+	update_idle_animation()
 	_recover_timer -= delta
 	if _recover_timer > 0:
 		return # если время ожидания не кончилось, ничего не делаем
@@ -158,8 +179,10 @@ func state_recover(delta):
 	var dist = global_position.distance_to(player.global_position)
 	
 	if dist < attack_range:
+		print("вошел в состояние attack_windup")
 		state = State.ATTACK_WINDUP
 	else:
+		print("вошел в состояние chase")
 		state = State.CHASE
 
 
@@ -167,10 +190,12 @@ func state_reposition(delta):
 	var player = get_tree().get_first_node_in_group("игрок")
 	if not player:
 		return
+	update_move_animation()
 
 	var dir = (global_position - player.global_position).normalized()
 	velocity = dir * reposition_speed
 
 	var dist = global_position.distance_to(player.global_position)
 	if dist >= optimal_range:
+		print("вошел в состояние recover")
 		state = State.RECOVER # отбегает и ждет немного перед следующей атакой
