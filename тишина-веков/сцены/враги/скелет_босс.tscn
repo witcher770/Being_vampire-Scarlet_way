@@ -137,7 +137,7 @@ _data = {
 
 [node name="скелет" instance=ExtResource("1_0nmag")]
 script = ExtResource("2_1kvdx")
-aggro_range = 300.0
+aggro_range = 150.0
 attack_range = 20.0
 windup_time = 0.4
 recover_time = 1.5
