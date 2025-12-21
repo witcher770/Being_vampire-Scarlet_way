@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cyrx41d0rf1vn"
-path="res://.godot/imported/Иллюстрация_без_названия-7 7.png-79af626ce808bab7dc4f878160914e65.ctex"
+uid="uid://cvgwe2ixmhrxj"
+path="res://.godot/imported/атака_перед.png-5de108bb88d78573e75fdda23a05c1f4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ассеты/Иллюстрация_без_названия-7 7.png"
-dest_files=["res://.godot/imported/Иллюстрация_без_названия-7 7.png-79af626ce808bab7dc4f878160914e65.ctex"]
+source_file="res://ассеты/спрайты/гг/атака_перед.png"
+dest_files=["res://.godot/imported/атака_перед.png-5de108bb88d78573e75fdda23a05c1f4.ctex"]
 
 [params]
 

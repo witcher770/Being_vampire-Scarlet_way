@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=4 uid="uid://ckw63u3a8a7p8"]
+[gd_scene load_steps=6 format=4 uid="uid://ckw63u3a8a7p8"]
 
 [ext_resource type="Script" uid="uid://dxipgtm4b1f6y" path="res://сцены/элементы для генерации уроней/комнаты/start_room.gd" id="2_2qk7p"]
 [ext_resource type="PackedScene" uid="uid://26tsdw3knkrc" path="res://сцены/элементы для генерации уроней/дверь.tscn" id="2_mlauc"]
+[ext_resource type="Texture2D" uid="uid://ctbp7quutca0" path="res://ассеты/спрайты/ресурсы карты/темно_серый_фон.png" id="4_2qk7p"]
 [ext_resource type="TileSet" uid="uid://bghhg8dhjinek" path="res://ассеты/спрайты/ресурсы карты/стартовая_комната.tres" id="5_t6lnp"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_2qk7p"]
@@ -70,3 +71,8 @@ scale = Vector2(0.2, 0.2)
 text = "Чтобы открыть дверь  нажмите E"
 label_settings = SubResource("LabelSettings_2qk7p")
 autowrap_mode = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = -1
+scale = Vector2(17.003271, 16.575035)
+texture = ExtResource("4_2qk7p")

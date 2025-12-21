@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxqv363sgww1k"
-path="res://.godot/imported/2.png-90a533483ee47595a560033f941b8a6e.ctex"
+uid="uid://ctbp7quutca0"
+path="res://.godot/imported/темно_серый_фон.png-e104be652f2148c8ecf362accfe2b720.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ассеты/2.png"
-dest_files=["res://.godot/imported/2.png-90a533483ee47595a560033f941b8a6e.ctex"]
+source_file="res://ассеты/спрайты/ресурсы карты/темно_серый_фон.png"
+dest_files=["res://.godot/imported/темно_серый_фон.png-e104be652f2148c8ecf362accfe2b720.ctex"]
 
 [params]
 

@@ -55,22 +55,30 @@ var state: PlayerState = PlayerState.IDLE
 func _physics_process(delta):
 	match state:
 		PlayerState.IDLE:
-			state_idle(delta)
+			print("перешел в состояние idle")
+			process_idle(delta)
 		PlayerState.MOVE:
-			state_move(delta)
+			print("перешел в состояние move")
+			process_move(delta)
 		PlayerState.ATTACK:
-			state_attack(delta)
+			#print("перешел в состояние attack")
+			#state_attack(delta)
+			pass
 		PlayerState.KNOCKBACK:
-			state_knockback(delta)
+			#print("перешел в состояние knockback")
+			process_knockback(delta)
+			#pass
 
 
-func state_idle(delta):
+func process_idle(delta):
+	if Input.is_action_just_pressed("атака"):
+		enter_attack()
+		return
+	
+	update_idle_animation()
 	var input_vector = get_input_vector()
 	if input_vector != Vector2.ZERO:
 		state = PlayerState.MOVE
-	
-	#velocity = Vector2.ZERO
-	update_idle_animation()
 
 
 func update_idle_animation():
@@ -86,15 +94,22 @@ func update_idle_animation():
 		animPlayer.play('покой_спина_папин')
 
 
-func state_move(delta):
+func process_move(delta):
+	# Внутри _state_idle и _state_move добавь:
+	if Input.is_action_just_pressed("атака"):
+		enter_attack()
+		return
+	
 	var input_vector = get_input_vector()
 
 	if input_vector == Vector2.ZERO:
 		state = PlayerState.IDLE
-		#return
+		return
 
 	facing_direction = input_vector
 	velocity = input_vector * speed # Применяем движение
+	# Смещаем область атаки в направлении движения
+	attack_area.position = facing_direction * 15
 	move_and_slide() # Встроенная функция Godot для перемещения с коллизиями
 	update_move_animation()
 
@@ -139,36 +154,47 @@ func update_move_animation():
 		animPlayer.play("бег_спина_папин")
 
 
-func _input(event):
-	if event.is_action_pressed("атака"):
-		if state in [PlayerState.IDLE, PlayerState.MOVE]:
-			state = PlayerState.ATTACK
-
-
-func state_attack(delta):
+func enter_attack():
+	state = PlayerState.ATTACK   # ← ВОТ ЭТО КЛЮЧЕВО
+	print("перешел в состояние attack")
 	velocity = Vector2.ZERO
 
 	play_attack_animation()
-	#attack_area.monitoring = false
+	print("запустил анимацию атаки")
+
+	_attack_sequence()
+
+
+func _attack_sequence() -> void:
 	await get_tree().create_timer(0.2).timeout
 	attack_area.monitoring = true
 
 	await animPlayer.animation_finished
+	print("дождался конца анимации атаки")
 
 	attack_area.monitoring = false
 	state = PlayerState.IDLE
+	print("меняю состояние на idle")
 
 
 func play_attack_animation():
 	if abs(facing_direction.x) > abs(facing_direction.y):
 		animPlayer.play("атака_с_боку")
 	elif facing_direction.y > 0:
+		var dorobotka = 0 # поменять на нужные анимации
 		animPlayer.play("атака_перед")
 	else:
 		animPlayer.play("атака_спина")
 
 
-func state_knockback(from_position: Vector2):
+func process_knockback(delta):
+	update_idle_animation()
+	move_and_slide()
+
+
+func enter_knockback(from_position: Vector2):
+	state = PlayerState.KNOCKBACK
+	print("перешел в состояние knockback")
 	#if state == PlayerState.DEAD:
 		#return
 
@@ -178,9 +204,9 @@ func state_knockback(from_position: Vector2):
 	
 	# создаём плавное затухание (через tween)
 	var tween = create_tween()
-	tween.tween_property(self, "velocity", Vector2.ZERO, knockback_duration)
+	#tween.tween_property(self, "velocity", Vector2.ZERO, knockback_duration)
 	# это первоначальная версия
-	#tween.tween_property(self, "velocity", Vector2.ZERO, knockback_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "velocity", Vector2.ZERO, knockback_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 	await tween.finished
 
@@ -309,7 +335,8 @@ func _on_damage_area_touch_body_entered(body):
 		var enemy_pos = body.global_position
 		var damage = body.deal_contact_damage()
 		take_damage(damage)
-		apply_knockback(enemy_pos)
+		#apply_knockback(enemy_pos)
+		enter_knockback(enemy_pos)
 
 
 
