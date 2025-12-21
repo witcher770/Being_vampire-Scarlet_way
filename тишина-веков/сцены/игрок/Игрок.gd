@@ -21,7 +21,7 @@ signal player_died # сигнал о смерти игрока
 # === НАСТРОЙКИ ПЕРСОНАЖА ===
 var facing_direction := Vector2.RIGHT  # Текущее направление взгляда (для атаки и анимации)
 var is_invincible := false
-var is_knockback := false
+#var is_knockback := false
 var knockback_velocity := Vector2.ZERO
 
 @export_group("Combat Settings", "combat_")
@@ -70,6 +70,7 @@ func _physics_process(delta):
 			#pass
 
 
+@warning_ignore("unused_parameter")
 func process_idle(delta):
 	if Input.is_action_just_pressed("атака"):
 		enter_attack()
@@ -94,6 +95,7 @@ func update_idle_animation():
 		animPlayer.play('покой_спина_папин')
 
 
+@warning_ignore("unused_parameter")
 func process_move(delta):
 	# Внутри _state_idle и _state_move добавь:
 	if Input.is_action_just_pressed("атака"):
@@ -124,15 +126,6 @@ func get_input_vector() -> Vector2:
 
 var flag_last_direction = 0
 func update_move_animation():
-	#if abs(facing_direction.x) > abs(facing_direction.y):
-		#animPlayer.play("бег_с_боку_папин")
-		#sprite.scale.x = sign(facing_direction.x)
-		#var dorobotka = 0 # что делает строчка выше
-	#elif facing_direction.y > 0:
-		#animPlayer.play("бег_перед_папин")
-	#else:
-		#animPlayer.play("бег_спина_папин")
-		
 # ВЫБОР АНИМАЦИИ В ЗАВИСИМОСТИ ОТ НАПРАВЛЕНИЯ:
 	if facing_direction.x != 0:
 		flag_last_direction = 1
@@ -181,12 +174,12 @@ func play_attack_animation():
 	if abs(facing_direction.x) > abs(facing_direction.y):
 		animPlayer.play("атака_с_боку")
 	elif facing_direction.y > 0:
-		var dorobotka = 0 # поменять на нужные анимации
 		animPlayer.play("атака_перед")
 	else:
 		animPlayer.play("атака_спина")
 
 
+@warning_ignore("unused_parameter")
 func process_knockback(delta):
 	update_idle_animation()
 	move_and_slide()
@@ -233,73 +226,6 @@ func _ready():
 	
 	took_damage.connect(DamageNumbersManager.show_damage)
 
-#var flag = 0
-#var flag_move_right = true
-#var is_attacking = false
-#func _physics_process(delta):
-	## еще один костыль
-	#if is_attacking:
-		#move_and_slide()
-		#return
-	#
-	#if is_knockback:
-		#animPlayer.play('покой_перед_папин') # тут надо переключать на статичные позы чтобы не было добегивания
-		#move_and_slide()
-		#return
-	#
-	## Получаем вектор ввода от игрока (нормализованный - длина всегда 1)
-	#var input_vector = Vector2(
-		#Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),  # Горизонталь: -1..1
-		#Input.get_action_strength("move_down") - Input.get_action_strength("move_up")      # Вертикаль: -1..1
-	#).normalized()  # Нормализуем чтобы диагональное движение не было быстрее
-#
-	## ОБРАБОТКА ДВИЖЕНИЯ И АНИМАЦИЙ
-	#if input_vector != Vector2.ZERO:
-		## Есть движение - обновляем направление и анимации
-		#facing_direction = input_vector
-		## ВЫБОР АНИМАЦИИ В ЗАВИСИМОСТИ ОТ НАПРАВЛЕНИЯ:
-		#if input_vector.x != 0:
-			#flag = 1
-			## Горизонтальное движение - анимация "вид сбоку"
-			#animPlayer.play("бег_с_боку_папин")
-			## Разворот спрайта в направлении движения
-			#if sign(sprite.scale.x) != sign(input_vector.x):
-				#flag_move_right = false
-				#sprite.scale.x *= -1  # Отражаем спрайт по горизонтали
-			#else:
-				#flag_move_right = true
-#
-		#elif input_vector.y > 0:
-			#flag = 0
-			## Движение вниз - анимация "вид спереди"
-			#animPlayer.play("бег_перед_папин")
-		#elif input_vector.y < 0:
-			#flag = 2
-			## Движение вверх - анимация "вид сзади"
-			#animPlayer.play("бег_спина_папин")
-		#
-		## Смещаем область атаки в направлении движения
-		#attack_area.position = facing_direction * 15
-	#
-	#else:
-		#if flag == 0:
-			## Нет движения - проигрываем анимацию покоя
-			#animPlayer.play('покой_перед_папин')
-		#elif flag == 1:
-			#animPlayer.play('покой_с_боку_папин')
-			## Разворот спрайта в направлении движения
-			#if not flag_move_right:
-				#sprite.scale.x *= -1  # Отражаем спрайт по горизонтали
-		#elif flag == 2:
-			#animPlayer.play('покой_спина_папин')
-#
-	## Применяем движение
-	#velocity = input_vector * speed
-	#move_and_slide()  # Встроенная функция Godot для перемещения с коллизиями
-
-
-
-
 
 # === СИСТЕМА ЗДОРОВЬЯ И УРОНА ===
 func take_damage(amount: int):
@@ -328,7 +254,6 @@ func take_damage(amount: int):
 	# - Эффект крови/частиц
 
 
-
 func _on_damage_area_touch_body_entered(body):
 	# Проверяем: это враг И игрок не неуязвим
 	if body.is_in_group("враги") and not is_invincible:
@@ -337,7 +262,6 @@ func _on_damage_area_touch_body_entered(body):
 		take_damage(damage)
 		#apply_knockback(enemy_pos)
 		enter_knockback(enemy_pos)
-
 
 
 func calculate_damage_position() -> Vector2:
@@ -375,66 +299,6 @@ func die():
 	print("отправил сигнал, я умер")
 	queue_free()
 
-# === СИСТЕМА ПЕРЕМЕЩЕНИЯ ===
-
-func apply_knockback(from_position: Vector2):
-	if is_knockback:
-		return
-	#print("Отталкивание от:", from_position)
-
-	is_knockback = true
-	
-	var direction = (global_position - from_position).normalized()
-	var knockback = direction * knockback_force
-	
-	# применяем начальный импульс
-	velocity = knockback
-	
-	# создаём плавное затухание (через tween)
-	var tween = create_tween()
-	tween.tween_property(self, "velocity", Vector2.ZERO, knockback_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	
-	await tween.finished
-	is_knockback = false
-
-
-#func _input(event):
-	#if Input.is_action_just_pressed("атака") and not is_attacking:
-		#start_attack()
-
-
-#func start_attack():
-	#is_attacking = true
-	#velocity = Vector2.ZERO
-	#
-	#
-	#animPlayer.play("атака_с_боку")
-	#await get_tree().create_timer(0.2).timeout
-	#attack_area.monitoring = true
-	#await animPlayer.animation_finished
-#
-	#attack_area.monitoring = false
-	#is_attacking = false
-
-# === СИСТЕМА АТАКИ ===
-#func _input(event):
-	#"""
-	#Обработка нажатий клавиш (вызывается при каждом вводе)
-	#"""
-	#if Input.is_action_just_pressed("атака"):
-		## Активируем область атаки на короткое время
-		#attack_area.monitoring = true
-		#
-		## Таймер для автоматического отключения области атаки
-		#await get_tree().create_timer(0.1).timeout
-		#attack_area.monitoring = false
-		#
-		#animPlayer.play("атака_с_боку")
-		#print('запустил анимацию атаки')
-		## МЕСТО ДЛЯ ДОБАВЛЕНИЯ:
-		## - Анимация атаки
-		## - Звук атаки
-		## - Эффекты на оружии
 
 # === ОБРАБОТКА ПОПАДАНИЙ АТАКИ ===
 func _on_attack_hit(body):
