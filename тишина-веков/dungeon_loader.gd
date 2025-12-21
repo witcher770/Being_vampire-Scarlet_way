@@ -61,7 +61,7 @@ func load_generated_level():
 func load_boss_room():
 	unload_level()
 
-	var scene = preload("res://сцены/элементы для генерации уроней/boss_room.tscn")
+	var scene = preload("res://сцены/элементы для генерации уроней/boss_skilet_lev1.tscn")
 	current_level = scene.instantiate()
 	level_container.add_child(current_level)
 

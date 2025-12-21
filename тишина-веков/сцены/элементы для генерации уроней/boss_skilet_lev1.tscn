@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=4 uid="uid://bc8lrpxbg5e2p"]
+[gd_scene load_steps=4 format=4 uid="uid://bc8lrpxbg5e2p"]
 
 [ext_resource type="TileSet" uid="uid://dnbc3ip53d1ij" path="res://ассеты/спрайты/ресурсы карты/boss_skilet_lev1.tres" id="1_1naaf"]
+[ext_resource type="PackedScene" uid="uid://o1chy65nqa20" path="res://сцены/враги/скелет_босс.tscn" id="2_ajj4b"]
+[ext_resource type="PackedScene" uid="uid://d1rb3vewl6egs" path="res://сцены/игрок/Игрок.tscn" id="3_tqi04"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -66,38 +68,46 @@ scale = Vector2(0.8, 0.8)
 tile_map_data = PackedByteArray("AAADAAwAAwAeAAcAAAADAA0AAwAeAAgAAAADAA4AAwAeAAkAAAADAA8AAwAeAAoAAAAEAAwAAwAfAAcAAAAEAA0AAwAfAAgAAAAEAA4AAwAfAAkAAAAEAA8AAwAfAAoAAAAFAAwAAwAgAAcAAAAFAA0AAwAgAAgAAAAFAA4AAwAgAAkAAAAFAA8AAwAgAAoAAAAGAAwAAwAhAAcAAAAGAA0AAwAhAAgAAAAGAA4AAwAhAAkAAAAGAA8AAwAhAAoAAAA=")
 tile_set = ExtResource("1_1naaf")
 
-[node name="TileMapLayer" type="TileMapLayer" parent="Node2D"]
+[node name="зона_с_королем" type="Node2D" parent="Node2D"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Node2D/зона_с_королем"]
 position = Vector2(30.999998, 4)
 scale = Vector2(0.7, 0.7)
 tile_map_data = PackedByteArray("AAABAAIAAwAGAB8AAAACAAIAAwAHAB8AAAADAAIAAwAIAB8AAAABAAMAAwAGACAAAAABAAQAAwAGACEAAAACAAMAAwAHACAAAAACAAQAAwAHACEAAAADAAMAAwAIACAAAAADAAQAAwAIACEAAAA=")
 tile_set = ExtResource("1_1naaf")
 
-[node name="TileMapLayer2" type="TileMapLayer" parent="Node2D"]
+[node name="TileMapLayer2" type="TileMapLayer" parent="Node2D/зона_с_королем"]
 position = Vector2(31.999992, 5)
 scale = Vector2(0.7, 0.7)
 tile_map_data = PackedByteArray("AAADAAMAAwAGAB8AAAADAAQAAwAGACAAAAADAAUAAwAGACEAAAAEAAMAAwAHAB8AAAAEAAQAAwAHACAAAAAEAAUAAwAHACEAAAAFAAMAAwAIAB8AAAAFAAQAAwAIACAAAAAFAAUAAwAIACEAAAA=")
 tile_set = ExtResource("1_1naaf")
 
-[node name="TileMapLayer3" type="TileMapLayer" parent="Node2D"]
+[node name="TileMapLayer3" type="TileMapLayer" parent="Node2D/зона_с_королем"]
 position = Vector2(28.999998, 4.7683716e-07)
 scale = Vector2(0.7, 0.7)
 tile_map_data = PackedByteArray("AAAFAAMAAwAGACAAAAAFAAQAAwAGACEAAAAFAAIAAwAGAB8AAAAGAAIAAwAHAB8AAAAGAAMAAwAHACAAAAAGAAQAAwAHACEAAAAHAAIAAwAIAB8AAAAHAAMAAwAIACAAAAAHAAQAAwAIACEAAAA=")
 tile_set = ExtResource("1_1naaf")
 
-[node name="TileMapLayer4" type="TileMapLayer" parent="Node2D"]
+[node name="TileMapLayer4" type="TileMapLayer" parent="Node2D/зона_с_королем"]
 position = Vector2(30.999998, 4)
 scale = Vector2(0.7, 0.7)
 tile_map_data = PackedByteArray("AAAFAAIAAwAHACEAAAAGAAIAAwAIACEAAAAEAAAAAwAGAB8AAAAEAAEAAwAGACAAAAAEAAIAAwAGACEAAAAFAAAAAwAHAB8AAAAFAAEAAwAHACAAAAAGAAAAAwAIAB8AAAAGAAEAAwAIACAAAAA=")
 tile_set = ExtResource("1_1naaf")
 
-[node name="TileMapLayer5" type="TileMapLayer" parent="Node2D"]
+[node name="TileMapLayer5" type="TileMapLayer" parent="Node2D/зона_с_королем"]
 position = Vector2(37, 4)
 scale = Vector2(0.7, 0.7)
 tile_map_data = PackedByteArray("AAABAAAAAwAGAB8AAAABAAEAAwAGACAAAAABAAIAAwAGACEAAAACAAAAAwAHAB8AAAACAAEAAwAHACAAAAACAAIAAwAHACEAAAADAAAAAwAIAB8AAAADAAEAAwAIACAAAAADAAIAAwAIACEAAAA=")
 tile_set = ExtResource("1_1naaf")
 
-[node name="король" type="TileMapLayer" parent="Node2D"]
+[node name="король" type="TileMapLayer" parent="Node2D/зона_с_королем"]
 position = Vector2(-6, -4)
 scale = Vector2(0.5, 0.5)
 tile_map_data = PackedByteArray("AAAGAAUAAwAKAAMAAAAHAAMAAwALAAEAAAAIAAMAAwAMAAEAAAAJAAIAAwANAAAAAAAGAAYAAwAKAAQAAAAHAAQAAwALAAIAAAAHAAUAAwALAAMAAAAHAAYAAwALAAQAAAAHAAcAAwALAAUAAAAIAAQAAwAMAAIAAAAIAAUAAwAMAAMAAAAIAAYAAwAMAAQAAAAIAAcAAwAMAAUAAAAJAAMAAwANAAEAAAAJAAQAAwANAAIAAAAJAAUAAwANAAMAAAAJAAYAAwANAAQAAAAJAAcAAwANAAUAAAAJAAgAAwANAAYAAAAKAAIAAwAOAAAAAAAKAAMAAwAOAAEAAAAKAAQAAwAOAAIAAAAKAAUAAwAOAAMAAAAKAAYAAwAOAAQAAAAKAAcAAwAOAAUAAAAKAAgAAwAOAAYAAAAKAAkAAwAOAAcAAAALAAIAAwAPAAAAAAALAAMAAwAPAAEAAAALAAQAAwAPAAIAAAALAAUAAwAPAAMAAAALAAYAAwAPAAQAAAALAAcAAwAPAAUAAAALAAgAAwAPAAYAAAAMAAIAAwAQAAAAAAAMAAMAAwAQAAEAAAAMAAQAAwAQAAIAAAAMAAUAAwAQAAMAAAAMAAYAAwAQAAQAAAANAAIAAwARAAAAAAANAAMAAwARAAEAAAANAAQAAwARAAIAAAANAAUAAwARAAMAAAANAAYAAwARAAQAAAAOAAIAAwASAAAAAAAOAAMAAwASAAEAAAAOAAQAAwASAAIAAAAOAAUAAwASAAMAAAAPAAIAAwATAAAAAAAPAAMAAwATAAEAAAAPAAQAAwATAAIAAAA=")
 tile_set = ExtResource("1_1naaf")
+
+[node name="скелет" parent="." instance=ExtResource("2_ajj4b")]
+position = Vector2(157, 99)
+
+[node name="Игрок" parent="." instance=ExtResource("3_tqi04")]
+position = Vector2(112, 107)
