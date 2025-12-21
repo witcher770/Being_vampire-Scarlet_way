@@ -6,10 +6,11 @@ var num_floor: int = -1            # текущий уровень-этаж
 var player_health: int = 100      # здоровье игрока
 var max_health: int = 100
 
-var size_dungeon = 2
+var size_dungeon = 1
 var room_count: int = 3           # базовое количество комнат
 var enemy_power: float = 1.0      # множитель силы врагов
 var enemies_count: int = 0          # количество врагов на уровне
+var levels_for_boss: int = 0
 
 var next_level_type: String = "normal"  # "normal" или "boss"
 

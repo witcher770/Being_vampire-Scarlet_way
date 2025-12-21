@@ -1,5 +1,8 @@
 extends "res://сцены/враги/враг.gd"
 
+@onready var animSkelet = $AnimationPlayer  # Ссылка на нод анимаций
+@onready var sprite1 = $Sprite2D  # Ссылка на спрайт персонажа
+
 enum State {
 	IDLE, # ожидание, пока игрок не войдёт в радиус агро
 	CHASE, # преследование игрока
@@ -58,9 +61,18 @@ func state_idle(delta): # работает
 	var player = get_tree().get_first_node_in_group("игрок")
 	if not player:
 		return
+	
+	update_idle_animation()
 
 	if global_position.distance_to(player.global_position) <= aggro_range:
 		state = State.CHASE
+
+
+
+func update_idle_animation():
+		# Нет движения - проигрываем анимацию покоя
+		animSkelet.play('покой')
+	
 
 
 var _windup_timer = 0.0
@@ -75,12 +87,24 @@ func state_chase(delta):
 	# движение на игрока
 	var dir = (player.global_position - global_position).normalized()
 	velocity = dir * move_speed
+	
+	update_move_animation()
 
 	if dist <= attack_range:
 		_windup_timer = windup_time
 		print("ожидание - ", windup_time)
 		state = State.ATTACK_WINDUP
 		
+
+var flag_last_direction = 0
+func update_move_animation():
+	flag_last_direction = 1
+	# Горизонтальное движение - анимация "вид сбоку"
+	animSkelet.play("бег_с_боку")
+	# Разворот спрайта в направлении движения
+	if sign(sprite1.scale.x) != sign(velocity.x):
+		#flag_move_right = false
+		sprite1.scale.x *= -1  # Отражаем спрайт по горизонтали
 
 
 func state_attack_windup(delta):

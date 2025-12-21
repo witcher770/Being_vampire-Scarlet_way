@@ -55,10 +55,10 @@ var state: PlayerState = PlayerState.IDLE
 func _physics_process(delta):
 	match state:
 		PlayerState.IDLE:
-			print("перешел в состояние idle")
+			#print("перешел в состояние idle")
 			process_idle(delta)
 		PlayerState.MOVE:
-			print("перешел в состояние move")
+			#print("перешел в состояние move")
 			process_move(delta)
 		PlayerState.ATTACK:
 			#print("перешел в состояние attack")
