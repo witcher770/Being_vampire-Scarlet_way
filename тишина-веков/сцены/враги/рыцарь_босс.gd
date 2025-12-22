@@ -15,15 +15,14 @@ enum State {
 var state : State = State.IDLE
 
 @export var aggro_range = 300.0 # дистанция на которой босс тебя замечает
-@export var attack_range = 25.0 # дистанция на которой босс атакует
+@export var attack_range = 35.0 # дистанция на которой босс атакует
 @export var windup_time = 0.4 # время на подготовку атаки. типо чтобы игрок успел увернуться
 @export var recover_time = 1.5 # как часто атакует в секундах
 @export var reposition_speed = 180.0 # скорость отступления
 @export var optimal_range = 100.0 # дистанция переключения с отступления на нападение
 
-func _ready():
-	move_speed = 140.0
-	super._ready() # вызываем родительский ready
+#func _ready():
+	#super._ready() # вызываем родительский ready
 
 
 func _physics_process(delta):
@@ -116,6 +115,7 @@ func update_move_animation():
 func state_attack_windup(delta):
 	#print(_windup_timer)
 	velocity = Vector2.ZERO
+	update_idle_animation()
 
 	_windup_timer -= delta
 	if _windup_timer <= 0:
@@ -131,18 +131,20 @@ func enter_attack():
 
 	velocity = Vector2.ZERO
 	#face_player()
-	animSkelet.play("атака_скелета")
+	animSkelet.play("атака")
 	
 	var player = get_tree().get_first_node_in_group("игрок")
 	# Этот вызов возвращает первый узел, который состоит в группе "игрок" и проверяет пересекается ли он с хитбоксом
+	await get_tree().create_timer(0.5).timeout
+	var dorobotka = 0 # вместо таймера наносить урон на конкретный кадр
 	if not _damage_applied and $"ОбластьАтаки".overlaps_body(player): 
-		await get_tree().create_timer(0.2).timeout
 		player.take_damage(attack_damage)
 		_damage_applied = true
 
 
 var _attack_finished = false
-var attack_duration = 0.6 # длительность атаки
+var attack_duration = 1.2 # длительность атаки
+var dorobotka = 0 # изменить выше на длительность анимации
 var _attack_timer = 0.0
 
 var _damage_applied = false
