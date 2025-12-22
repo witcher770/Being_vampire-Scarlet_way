@@ -7,7 +7,9 @@
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wce88"]
 texture = ExtResource("1_8ec7d")
+0:0/next_alternative_id = 4
 0:0/0 = 0
+1:0/next_alternative_id = 3
 1:0/0 = 0
 2:0/0 = 0
 3:0/0 = 0
@@ -37,6 +39,7 @@ texture = ExtResource("1_8ec7d")
 11:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
 12:1/0 = 0
 13:1/0 = 0
+14:1/next_alternative_id = 2
 14:1/0 = 0
 0:2/0 = 0
 1:2/0 = 0
