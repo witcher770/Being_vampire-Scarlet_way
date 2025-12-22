@@ -38,8 +38,8 @@ func load_start_room():
 
 func _on_level_finished():
 	GameState.num_floor = GameState.num_floor + 1
-	print(GameState.num_floor)
-	if GameState.num_floor == GameState.levels_for_boss:
+	#print(GameState.num_floor)
+	if GameState.num_floor_for_boss == GameState.levels_for_boss:
 		load_boss_room()
 		return
 	# при получении сигнала на вхождение в дверь - переход на следующий уровень
@@ -47,26 +47,35 @@ func _on_level_finished():
 
 func load_generated_level():
 	unload_level()
-	GameState.enemies_count = 0
+	GameState._enemies_count = 0
+	GameState.num_floor_for_boss = GameState.num_floor_for_boss + 1
 	
 	var scene = preload("res://сцены/элементы для генерации уроней/узел_генерации.tscn")
 	current_level = scene.instantiate()
 	level_container.add_child(current_level)
 	
 	current_level.level_finished.connect(_on_level_finished)
+	GameState.enemy_power += 0.1
+	if GameState.num_floor % 3 == 0:
+		GameState.count_rooms += 1
+		GameState.enemies_in_room += 1
 	
 	move_player_to_spawn(current_level)
 
 
 func load_boss_room():
 	unload_level()
+	GameState._enemies_count = 1
 
 	var scene = preload("res://сцены/элементы для генерации уроней/boss_skilet_lev1.tscn")
 	current_level = scene.instantiate()
 	level_container.add_child(current_level)
-
+	
+	current_level.level_finished.connect(_on_level_finished)
 	move_player_to_spawn(current_level)
-
+	
+	GameState.levels_for_boss += 1
+	GameState.num_floor_for_boss = 0
 
 
 func unload_level():

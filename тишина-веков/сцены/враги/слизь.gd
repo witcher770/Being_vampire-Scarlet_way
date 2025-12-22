@@ -1,5 +1,12 @@
 extends "res://сцены/враги/враг.gd"
 
+
+func _ready():
+	# дробная часть усиления будет отбрасываться
+	health = 5 * GameState.enemy_power
+	contact_damage = 2 * GameState.enemy_power
+	super._ready()
+
 func _physics_process(delta):
 	var player = get_tree().get_first_node_in_group("игрок")
 	if player:

@@ -5,7 +5,7 @@ signal level_finished
 
 # задаем размер сетки и количество комнат
 @export var size_level = GameState.size_dungeon
-@export var num_rooms = GameState.room_count
+@export var num_rooms = GameState.count_rooms
 
 # Словарь для хранения всех загружаемых ресурсов
 const PRELOADS = {
@@ -409,9 +409,10 @@ func instantiate_rooms(grid: Array) -> Array: # возвращает масси�
 	return grid
 
 func instantiate_enemies(cell: Dictionary) -> void:
-	var num_enemies = rng_rand.randi_range(1, 3)  # генерируем количество врагов
+	var num_enemies = rng_rand.randi_range(GameState.enemies_in_room - 2, GameState.enemies_in_room)  # генерируем количество врагов
+	num_enemies = max(1, num_enemies)
 	var dorabotka = 0 # заменить числа на переменные в соответсвии с уровнем сложности
-	GameState.enemies_count += num_enemies
+	GameState._enemies_count += num_enemies
 	for l in range(num_enemies):
 		# генер. коор. х для размещения врага. -2 чтобы не прилипал к стенам и мебели
 		# считаем положение врага в локальной ск комнаты, от ее центра

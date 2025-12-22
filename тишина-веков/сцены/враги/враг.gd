@@ -3,14 +3,14 @@ extends CharacterBody2D
 @onready var health_bar = $HealthBar
 @onready var sprite = $Sprite2D  # если он есть
 
-@export var health := 3  # можно задавать в редакторе
-@export var max_health := 3
-@export var move_speed := 50.0
+@export var health = 5  # можно задавать в редакторе
+@export var max_health = 5
+@export var move_speed = 25.0
 
 
 @export_group("Enemy Damage")
-@export var contact_damage := 1  # Урон от прикосновения
-@export var attack_damage := 2   # Урон от будущих атак
+@export var contact_damage = 1  # Урон от прикосновения
+@export var attack_damage = 2   # Урон от будущих атак
 
 # Сигнал для урона вместо жесткой привязки
 signal took_damage(position, amount, is_crit)
