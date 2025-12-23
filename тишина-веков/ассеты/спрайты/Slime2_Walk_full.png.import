@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cn202cc337ayy"
-path="res://.godot/imported/лавовый_набор.png-500dd10003bf3a9d99bba2ad8533a1c6.ctex"
+uid="uid://bfpdatt5ttecy"
+path="res://.godot/imported/Slime2_Walk_full.png-ecab4dbf21e12c1c2a36544a62b8bcfa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ассеты/спрайты/ресурсы карты/лавовый_набор.png"
-dest_files=["res://.godot/imported/лавовый_набор.png-500dd10003bf3a9d99bba2ad8533a1c6.ctex"]
+source_file="res://ассеты/спрайты/Slime2_Walk_full.png"
+dest_files=["res://.godot/imported/Slime2_Walk_full.png-ecab4dbf21e12c1c2a36544a62b8bcfa.ctex"]
 
 [params]
 
