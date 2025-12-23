@@ -1,7 +1,8 @@
 extends "res://сцены/враги/враг.gd"
 
-@onready var animSkelet = $AnimationPlayer  # Ссылка на нод анимаций
-@onready var sprite1 = $Sprite2D  # Ссылка на спрайт персонажа
+#@onready var animSkelet = $AnimationPlayer  # Ссылка на нод анимаций
+@onready var animBossSprite = $AnimatedSprite2D  # Ссылка на нод анимаций
+#@onready var sprite1 = $Sprite2D  # Ссылка на спрайт персонажа
 
 enum State {
 	IDLE, # ожидание, пока игрок не войдёт в радиус агро
@@ -9,7 +10,9 @@ enum State {
 	ATTACK_WINDUP, # подготовка к атаке (телеграф - визульный сигнал)
 	ATTACK, # удар
 	RECOVER, # короткая «перезарядка» после удара
-	REPOSITION # перемещение для удержания оптимальной дистанции (отступление)
+	REPOSITION, # перемещение для удержания оптимальной дистанции (отступление)
+	BLOCK,
+	DEAD
 }
 
 var state : State = State.IDLE
@@ -20,6 +23,15 @@ var state : State = State.IDLE
 @export var recover_time = 1.5 # как часто атакует в секундах
 @export var reposition_speed = 180.0 # скорость отступления
 @export var optimal_range = 100.0 # дистанция переключения с отступления на нападение
+
+var _stuck_timer = 0.0 # сколько уже не двигаемся
+var _last_position = Vector2.ZERO
+@export var stuck_time := 0.5 # сколько нужно не двигаться, чтобы встать в блок
+@export var stuck_distance_threshold = 2.0 # бри перемещении меньше чем на это число, это не будет считаться движением
+
+@export var block_enter_distance = 45.0
+@export var block_exit_distance = 60.0
+
 
 #func _ready():
 	#super._ready() # вызываем родительский ready
@@ -65,7 +77,7 @@ func state_idle(delta): # работает
 
 
 func update_idle_animation():
-	animSkelet.play("покой")
+	animBossSprite.play("покой")
 
 	var player = get_tree().get_first_node_in_group("игрок")
 	if not player:
@@ -74,7 +86,7 @@ func update_idle_animation():
 	var dir_x = player.global_position.x - global_position.x
 
 	if dir_x != 0:
-		sprite1.scale.x = sign(dir_x)
+		animBossSprite.scale.x = sign(dir_x)
 
 
 
@@ -104,11 +116,11 @@ var flag_last_direction = 0
 func update_move_animation():
 	flag_last_direction = 1
 	# Горизонтальное движение - анимация "вид сбоку"
-	animSkelet.play("бег_с_боку")
+	animBossSprite.play("бег_с_боку")
 	# Разворот спрайта в направлении движения
 	if abs(velocity.x) > 5: # задаем типо чувствительность, то есть будет менять направление при изменении хотя бы 5 пикселей
-		if sign(sprite1.scale.x) != sign(velocity.x):
-			sprite1.scale.x *= -1
+		if sign(animBossSprite.scale.x) != sign(velocity.x):
+			animBossSprite.scale.x *= -1
 
 
 
@@ -131,7 +143,7 @@ func enter_attack():
 
 	velocity = Vector2.ZERO
 	#face_player()
-	animSkelet.play("атака")
+	animBossSprite.play("атака")
 	
 	var player = get_tree().get_first_node_in_group("игрок")
 	# Этот вызов возвращает первый узел, который состоит в группе "игрок" и проверяет пересекается ли он с хитбоксом
@@ -143,7 +155,7 @@ func enter_attack():
 
 
 var _attack_finished = false
-var attack_duration = 1.2 # длительность атаки
+var attack_duration = 0.75 # длительность атаки
 var dorobotka = 0 # изменить выше на длительность анимации
 var _attack_timer = 0.0
 
@@ -192,6 +204,8 @@ func state_reposition(delta):
 	var player = get_tree().get_first_node_in_group("игрок")
 	if not player:
 		return
+		
+	update_stuck_check(delta)
 	update_move_animation()
 
 	var dir = (global_position - player.global_position).normalized()
@@ -201,3 +215,19 @@ func state_reposition(delta):
 	if dist >= optimal_range:
 		print("вошел в состояние recover")
 		state = State.RECOVER # отбегает и ждет немного перед следующей атакой
+
+
+func update_stuck_check(delta):
+	if global_position.distance_to(_last_position) < stuck_distance_threshold:
+		_stuck_timer += delta
+	else:
+		_stuck_timer = 0.0
+	_last_position = global_position
+
+
+func die():
+	state = State.DEAD
+	animBossSprite.play("смерть")
+	await get_tree().create_timer(3.5).timeout # ждем конца анимации (2.5) и еще чуть чуть
+	queue_free()
+	
