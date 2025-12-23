@@ -1,5 +1,18 @@
 extends Node
 
+# Централизованный словарь всех загружаемых ресурсов
+const PRELOADS = {
+	# Игрок
+	"player": preload("res://сцены/игрок/Игрок.tscn"),
+	
+	# Комнаты
+	"start_room": preload("res://сцены/элементы для генерации уроней/комнаты/start_room.tscn"),
+	"boss_skilet_lev1": preload("res://сцены/элементы для генерации уроней/boss_skilet_lev1.tscn"),
+	
+	# Уровни/генераторы
+	"generation_node": preload("res://сцены/элементы для генерации уроней/узел_генерации.tscn")
+}
+
 @onready var player_container = $PlayerContainer
 @onready var level_container = $LevelContainer
 
@@ -16,8 +29,7 @@ func load_player():
 	if player_instance:
 		return
 	
-	var player_scene = preload("res://сцены/игрок/Игрок.tscn")
-	player_instance = player_scene.instantiate()
+	player_instance = PRELOADS.player.instantiate()
 	player_container.add_child(player_instance)
 
 	# восстановление здоровья
@@ -27,8 +39,7 @@ func load_player():
 func load_start_room():
 	unload_level()
 
-	var scene = preload("res://сцены/элементы для генерации уроней/комнаты/start_room.tscn")
-	current_level = scene.instantiate()
+	current_level = PRELOADS.start_room.instantiate()
 	level_container.add_child(current_level)
 	
 	# подписываемся на сигнал покидания стартовой комнаты
@@ -50,8 +61,7 @@ func load_generated_level():
 	GameState._enemies_count = 0
 	GameState.num_floor_for_boss = GameState.num_floor_for_boss + 1
 	
-	var scene = preload("res://сцены/элементы для генерации уроней/узел_генерации.tscn")
-	current_level = scene.instantiate()
+	current_level = PRELOADS.generation_node.instantiate()
 	level_container.add_child(current_level)
 	
 	current_level.level_finished.connect(_on_level_finished)
@@ -67,8 +77,7 @@ func load_boss_room():
 	unload_level()
 	GameState._enemies_count = 1
 
-	var scene = preload("res://сцены/элементы для генерации уроней/boss_skilet_lev1.tscn")
-	current_level = scene.instantiate()
+	current_level = PRELOADS.boss_skilet_lev1.instantiate()
 	level_container.add_child(current_level)
 	
 	current_level.level_finished.connect(_on_level_finished)
@@ -76,6 +85,7 @@ func load_boss_room():
 	
 	GameState.levels_for_boss += 1
 	GameState.num_floor_for_boss = 0
+	GameState.num_global_level += 1
 
 
 func unload_level():

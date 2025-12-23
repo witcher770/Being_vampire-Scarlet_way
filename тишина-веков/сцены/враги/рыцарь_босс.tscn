@@ -217,4 +217,4 @@ libraries = {
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." index="5"]
 position = Vector2(0, -30)
 sprite_frames = ExtResource("8_iq48r")
-animation = &"бег_с_боку"
+animation = &"смерть"
