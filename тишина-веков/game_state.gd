@@ -10,9 +10,9 @@ var size_dungeon = 2               # размер квадратной матр�
 var count_rooms: int = 2           # базовое количество комнат
 var enemy_power: float = 1         # множитель силы врагов   + 0.1 каждый уровень
 var enemies_in_room: int = 2
-var levels_for_boss: int = 10       # каждые сколько комнат будет запускаться комната с боссом
+var levels_for_boss: int = 3       # каждые сколько комнат будет запускаться комната с боссом
 var num_floor_for_boss: int = 0    # количество пройденных комнат с прошлого босса
-var num_global_level: int = 1      # глобальный этаж для выбора комнаты босса и ресурсов генерации
+var num_global_level: int = 0      # глобальный этаж для выбора комнаты босса и ресурсов генерации
 
 var _enemies_count: int = 0         # количество врагов на уровне
 

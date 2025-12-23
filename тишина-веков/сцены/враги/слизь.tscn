@@ -74,6 +74,7 @@ size = Vector2(16, 15)
 
 [node name="слизь" instance=ExtResource("1_1h1di")]
 script = ExtResource("2_21mat")
+contact_damage = 3
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." index="1"]
 position = Vector2(-2.3841858e-07, 2.0861626e-07)

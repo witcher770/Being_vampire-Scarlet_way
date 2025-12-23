@@ -10,7 +10,7 @@ func _ready():
 func _physics_process(delta):
 	var player = get_tree().get_first_node_in_group("игрок")
 	if player:
-		if global_position.distance_to(player.global_position) < 50 or is_agr:
+		if global_position.distance_to(player.global_position) < 70 or is_agr:
 			animSl3.play("бег_слищь_лавовый")
 			is_agr = true
 			var direction = (player.global_position - global_position).normalized()

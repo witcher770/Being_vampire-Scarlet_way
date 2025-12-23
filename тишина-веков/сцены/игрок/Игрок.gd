@@ -10,8 +10,9 @@ extends CharacterBody2D
 @onready var animPlayer = $AnimationPlayer  # Ссылка на нод анимаций
 @onready var sprite = $Sprite2D  # Ссылка на спрайт персонажа
 @onready var health_bar = $HealthBar  # Ссылка на полоску здоровья
-@onready var attack_area = $ОбластьАтаки  # Ссылка на Area2D для атаки
+@onready var attack_area = $"AttackSocket/ОбластьАтаки" # Ссылка на Area2D для атаки
 @onready var damage_area = $ОбластьУронаКасанием
+
 
 # === СИГНАЛЫ ===
 signal took_damage(position, amount, is_crit) # сигнал о получении урона 
@@ -112,7 +113,7 @@ func process_move(delta):
 	velocity = input_vector * speed # Применяем движение
 	# Смещаем область атаки в направлении движения
 	
-	attack_area.position = facing_direction * 10
+	attack_area.position = facing_direction * 15
 	move_and_slide() # Встроенная функция Godot для перемещения с коллизиями
 	update_move_animation()
 
@@ -229,6 +230,10 @@ func _ready():
 
 
 # === СИСТЕМА ЗДОРОВЬЯ И УРОНА ===
+func heal(amount: int):
+	health_bar.heal(amount)
+
+
 func take_damage(amount: int):
 	"""
 	Вызывается когда игрок получает урон

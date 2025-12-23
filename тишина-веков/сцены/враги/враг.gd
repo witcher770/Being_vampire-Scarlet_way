@@ -9,7 +9,7 @@ extends CharacterBody2D
 
 
 @export_group("Enemy Damage")
-@export var contact_damage = 1  # Урон от прикосновения
+@export var contact_damage = 2  # Урон от прикосновения
 @export var attack_damage = 2   # Урон от будущих атак
 
 # Сигнал для урона вместо жесткой привязки

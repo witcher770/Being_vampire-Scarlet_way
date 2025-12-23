@@ -474,13 +474,16 @@ position = Vector2(1, -16)
 texture = ExtResource("9_dw66v")
 hframes = 8
 
-[node name="ОбластьАтаки" type="Area2D" parent="."]
-position = Vector2(-18, -14)
+[node name="AttackSocket" type="Node2D" parent="."]
+position = Vector2(0, -8)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ОбластьАтаки"]
+[node name="ОбластьАтаки" type="Area2D" parent="AttackSocket"]
+position = Vector2(-15, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackSocket/ОбластьАтаки"]
 shape = SubResource("RectangleShape2D_acsuq")
 
-[node name="Sprite2D" type="Sprite2D" parent="ОбластьАтаки"]
+[node name="Sprite2D" type="Sprite2D" parent="AttackSocket/ОбластьАтаки"]
 visible = false
 texture_filter = 3
 position = Vector2(0.07355118, 0)

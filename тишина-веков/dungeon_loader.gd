@@ -48,6 +48,7 @@ func load_start_room():
 	move_player_to_spawn(current_level)
 
 func _on_level_finished():
+	player_container.get_child(0).heal(15)
 	GameState.num_floor = GameState.num_floor + 1
 	#print(GameState.num_floor)
 	if GameState.num_floor_for_boss == GameState.levels_for_boss:
