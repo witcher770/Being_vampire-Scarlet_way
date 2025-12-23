@@ -59,6 +59,9 @@ func _physics_process(delta):
 		State.REPOSITION:
 			state_reposition(delta)
 			
+		State.BLOCK:
+			state_block(delta)
+			
 	#print("вошел в состояние - ")
 	move_and_slide()
 
@@ -163,6 +166,13 @@ var _damage_applied = false
 func state_attack(delta):
 	velocity = Vector2.ZERO
 	
+	#var player = get_tree().get_first_node_in_group("игрок")
+	#if not player:
+		#return
+	#var dir_x = player.global_position.x - global_position.x
+	#if dir_x != 0:
+		#animBossSprite.scale.x = sign(dir_x)
+	
 	_attack_timer -= delta
 	
 	if _attack_timer <= 0:
@@ -208,13 +218,30 @@ func state_reposition(delta):
 	update_stuck_check(delta)
 	update_move_animation()
 
-	var dir = (global_position - player.global_position).normalized()
+	#var dir = (global_position - player.global_position).normalized()
+	var dir = get_spiral_escape_direction(player.global_position)
 	velocity = dir * reposition_speed
 
 	var dist = global_position.distance_to(player.global_position)
 	if dist >= optimal_range:
 		print("вошел в состояние recover")
 		state = State.RECOVER # отбегает и ждет немного перед следующей атакой
+	
+	# если застряли
+	if _stuck_timer >= stuck_time:
+		if dist <= block_enter_distance:
+			enter_block()
+		else:
+			state = State.RECOVER
+
+
+func get_spiral_escape_direction(player_pos: Vector2) -> Vector2:
+	var from_player = (global_position - player_pos).normalized()
+	var tangent = Vector2(-from_player.y, from_player.x)
+	return (from_player * 0.6 + tangent * 0.4).normalized()
+	# Коэффициенты 0.7 / 0.3 можешь крутить:
+	# больше tangent → сильнее кружит
+	# больше from_player → быстрее уходит
 
 
 func update_stuck_check(delta):
@@ -223,6 +250,29 @@ func update_stuck_check(delta):
 	else:
 		_stuck_timer = 0.0
 	_last_position = global_position
+
+
+func enter_block():
+	state = State.BLOCK
+	velocity = Vector2.ZERO
+	animBossSprite.play("блок")
+
+
+func state_block(delta):
+	var player = get_tree().get_first_node_in_group("игрок")
+	if not player:
+		return
+
+	var dist = global_position.distance_to(player.global_position)
+
+	velocity = Vector2.ZERO
+	
+	var dir_x = player.global_position.x - global_position.x
+	if dir_x != 0:
+		animBossSprite.scale.x = sign(dir_x)
+
+	if dist >= block_exit_distance:
+		state = State.RECOVER
 
 
 func die():

@@ -464,23 +464,23 @@ combat_attack_damage_min = 10
 combat_attack_damage_max = 10
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 12.5)
+position = Vector2(0, -3.5)
 scale = Vector2(0.9, 0.9)
 shape = SubResource("RectangleShape2D_d51up")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 3
+position = Vector2(1, -16)
 texture = ExtResource("9_dw66v")
 hframes = 8
 
 [node name="ОбластьАтаки" type="Area2D" parent="."]
-position = Vector2(-18, 2)
+position = Vector2(-18, -14)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ОбластьАтаки"]
 shape = SubResource("RectangleShape2D_acsuq")
 
 [node name="Sprite2D" type="Sprite2D" parent="ОбластьАтаки"]
-visible = false
 texture_filter = 3
 position = Vector2(0.07355118, 0)
 scale = Vector2(0.6429421, 0.57069254)
@@ -508,7 +508,7 @@ script = ExtResource("8_or5x4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ОбластьУронаКасанием"]
 visible = false
-position = Vector2(0, 12.5)
+position = Vector2(0, -3.5)
 shape = SubResource("RectangleShape2D_5firq")
 
 [node name="Sprite2D" type="Sprite2D" parent="ОбластьУронаКасанием/CollisionShape2D"]

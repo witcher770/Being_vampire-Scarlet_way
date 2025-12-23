@@ -170,9 +170,9 @@ _data = {
 [node name="рыцарь" instance=ExtResource("1_u6tax")]
 script = ExtResource("2_u6tax")
 aggro_range = 150.0
-attack_range = 15.0
+attack_range = 30.0
 windup_time = 0.1
-recover_time = 1.5
+recover_time = 0.5
 reposition_speed = 160.0
 optimal_range = 80.0
 stuck_time = 0.5
@@ -217,6 +217,4 @@ libraries = {
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." index="5"]
 position = Vector2(0, -30)
 sprite_frames = ExtResource("8_iq48r")
-animation = &"смерть"
-frame = 19
-frame_progress = 1.0
+animation = &"бег_с_боку"
