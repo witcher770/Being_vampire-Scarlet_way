@@ -54,7 +54,7 @@ const PRELOADS = [{
 	"wall_bottom": preload("res://сцены/элементы для генерации уроней/этаж_2/фрагменты коридоров/вход_снизу_стена.tscn"),
 	
 	# Персонажи
-	"enemy_slime": preload("res://сцены/враги/слизь.tscn"),
+	"enemy_slime": preload("res://сцены/враги/lavoviy_слизь.tscn"),
 	
 	# Прочие объекты
 	"door": preload("res://сцены/элементы для генерации уроней/этаж_2/дверь.tscn")

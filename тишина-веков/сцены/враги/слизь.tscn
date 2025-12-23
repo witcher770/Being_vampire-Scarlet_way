@@ -1,8 +1,73 @@
-[gd_scene load_steps=5 format=3 uid="uid://cyp32d7cupxc4"]
+[gd_scene load_steps=15 format=3 uid="uid://cyp32d7cupxc4"]
 
 [ext_resource type="PackedScene" uid="uid://bpa3vo4mkck5r" path="res://сцены/враги/враг.tscn" id="1_1h1di"]
 [ext_resource type="Script" uid="uid://bcum4vva22ng7" path="res://сцены/враги/слизь.gd" id="2_21mat"]
 [ext_resource type="Texture2D" uid="uid://dxdxqavgv1byi" path="res://ассеты/спрайты/Slime1_Idle_front.png" id="2_mcdsn"]
+[ext_resource type="Texture2D" uid="uid://bfpdatt5ttecy" path="res://ассеты/спрайты/Slime2_Walk_full.png" id="3_21mat"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2lxpg"]
+atlas = ExtResource("3_21mat")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cg84r"]
+atlas = ExtResource("3_21mat")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ocski"]
+atlas = ExtResource("3_21mat")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r8cbt"]
+atlas = ExtResource("3_21mat")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1wxgx"]
+atlas = ExtResource("3_21mat")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w3xds"]
+atlas = ExtResource("3_21mat")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_10u3x"]
+atlas = ExtResource("3_21mat")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vd7ig"]
+atlas = ExtResource("3_21mat")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3451f"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2lxpg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cg84r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ocski")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r8cbt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1wxgx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w3xds")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_10u3x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vd7ig")
+}],
+"loop": false,
+"name": &"бег_слищь_скелет",
+"speed": 8.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_21mat"]
 size = Vector2(16, 15)
@@ -10,10 +75,18 @@ size = Vector2(16, 15)
 [node name="слизь" instance=ExtResource("1_1h1di")]
 script = ExtResource("2_21mat")
 
-[node name="Sprite2D" type="Sprite2D" parent="." index="1"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." index="1"]
+position = Vector2(-2.3841858e-07, 2.0861626e-07)
+sprite_frames = SubResource("SpriteFrames_3451f")
+animation = &"бег_слищь_скелет"
+frame = 7
+frame_progress = 1.0
+
+[node name="Sprite2D" type="Sprite2D" parent="." index="2"]
+visible = false
 position = Vector2(-2.3841858e-07, 2.0861626e-07)
 texture = ExtResource("2_mcdsn")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
-position = Vector2(-1, 2.5)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="3"]
+position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_21mat")
