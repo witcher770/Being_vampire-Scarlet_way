@@ -171,6 +171,7 @@ scale = Vector2(49.929436, 34.138203)
 texture = ExtResource("4_tqi04")
 
 [node name="рыцарь" parent="." instance=ExtResource("6_t1bnx")]
+position = Vector2(4, 14)
 
 [node name="скелет" parent="." instance=ExtResource("4_prf2v")]
-position = Vector2(136, -7)
+position = Vector2(130, -4)

@@ -149,7 +149,7 @@ move_speed = 140.0
 attack_damage = 10
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="0"]
-position = Vector2(-0.5, 14)
+position = Vector2(-0.5, -3)
 shape = SubResource("RectangleShape2D_geki2")
 
 [node name="Sprite2D" type="Sprite2D" parent="CollisionShape2D" index="0"]
@@ -158,11 +158,19 @@ position = Vector2(-1.0430813e-07, -2.9802322e-07)
 scale = Vector2(0.49999994, 1.2000002)
 texture = ExtResource("3_geki2")
 
+[node name="HealthBar" parent="." index="1"]
+offset_left = -11.0
+offset_top = -40.0
+offset_right = 11.0
+offset_bottom = -35.0
+
 [node name="Sprite2D" type="Sprite2D" parent="." index="2"]
+position = Vector2(0, -16)
 texture = ExtResource("4_geki2")
 hframes = 8
 
 [node name="ОбластьАтаки" type="Area2D" parent="." index="3"]
+position = Vector2(1, -16)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ОбластьАтаки" index="0"]
 position = Vector2(-1, 14)
