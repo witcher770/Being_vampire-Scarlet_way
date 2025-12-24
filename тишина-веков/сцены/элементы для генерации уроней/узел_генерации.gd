@@ -6,6 +6,8 @@ signal level_finished
 # задаем размер сетки и количество комнат
 @export var size_level = GameState.size_dungeon
 @export var num_rooms = GameState.count_rooms
+#@export var size_level = 4
+#@export var num_rooms = 10
 
 # Словарь для хранения всех загружаемых ресурсов
 const PRELOADS = [{
@@ -73,7 +75,7 @@ const SIZE_ROOM: int = 15
 const SIZE_ZONE: Vector2 = Vector2(SIZE_TILE * SIZE_CELL, SIZE_TILE * SIZE_CELL)  # размер зоны в пикселях
 
 func _ready():
-	rng_seed.seed = 12345  # фиксированный сид для воспроизводимости   6954484218641569678 #
+	rng_seed.seed = 12345  # фиксированный сид для воспроизводимости   6954484218641569678 # 12345
 	#rng.randomize() # или для случайного сида каждый раз
 	
 	var empty_grid = create_grid(size_level)
@@ -154,7 +156,8 @@ func gen_pos_rooms(grid: Array) -> Array:
 	
 	print("Текущее зерно: ", rng_rand.seed)
 	for i in range(num_rooms):
-		var num_pos = rng_rand.randi_range(0, quantity_pos - 1)  # генерируем позицию для комнаты. генерит включительно, поэтому -1
+		var tuta_munyaem_zerno = 0
+		var num_pos = rng_seed.randi_range(0, quantity_pos - 1)  # генерируем позицию для комнаты. генерит включительно, поэтому -1
 		
 		
 		# удаляем из списка возможных позиций комнат ту, куда сейчас ставим
