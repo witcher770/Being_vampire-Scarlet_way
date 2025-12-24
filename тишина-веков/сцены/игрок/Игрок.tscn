@@ -460,8 +460,8 @@ size = Vector2(14, 7)
 [node name="Игрок" type="CharacterBody2D" groups=["игрок"]]
 z_index = 5
 script = ExtResource("1_5firq")
-combat_attack_damage_min = 50
-combat_attack_damage_max = 7
+combat_attack_damage_min = 10
+combat_attack_damage_max = 10
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -3.5)

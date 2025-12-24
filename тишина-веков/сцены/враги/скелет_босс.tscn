@@ -143,8 +143,8 @@ windup_time = 0.4
 recover_time = 1.5
 reposition_speed = 180.0
 optimal_range = 100.0
-health = 50
-max_health = 50
+health = 30
+max_health = 30
 move_speed = 140.0
 attack_damage = 10
 

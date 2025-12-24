@@ -276,6 +276,8 @@ func state_block(delta):
 
 
 func die():
+	velocity = Vector2.ZERO
+	GameState.enemy_died()
 	state = State.DEAD
 	animBossSprite.play("смерть")
 	await get_tree().create_timer(3.5).timeout # ждем конца анимации (2.5) и еще чуть чуть

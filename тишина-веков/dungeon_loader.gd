@@ -7,7 +7,8 @@ const PRELOADS = {
 	
 	# Комнаты
 	"start_room": preload("res://сцены/элементы для генерации уроней/комнаты/start_room.tscn"),
-	"boss_skilet_lev1": preload("res://сцены/элементы для генерации уроней/boss_skilet_lev1.tscn"),
+	"boss_room_1": preload("res://сцены/элементы для генерации уроней/boss_skilet_lev1.tscn"), 
+	"boss_room_2": preload("res://сцены/boss_ricar_lev2.tscn"),
 	
 	# Уровни/генераторы
 	"generation_node": preload("res://сцены/элементы для генерации уроней/узел_генерации.tscn"),
@@ -73,6 +74,7 @@ func load_end_game_scene():
 	
 	current_level = PRELOADS.end_game_scene.instantiate()
 	level_container.add_child(current_level)
+	move_player_to_spawn(current_level)
 	
 	current_level.continue_game.connect(_on_level_finished)
 
@@ -99,11 +101,17 @@ func load_generated_level():
 
 func load_boss_room():
 	unload_level()
-	GameState._enemies_count = 1
-
-	current_level = PRELOADS.boss_skilet_lev1.instantiate()
-	level_container.add_child(current_level)
 	
+	
+	if GameState.num_global_level == 0:
+		GameState._enemies_count = 2
+		current_level = PRELOADS.boss_room_1.instantiate()
+	elif GameState.num_global_level == 1:
+		GameState._enemies_count = 1
+		current_level = PRELOADS.boss_room_2.instantiate()
+
+	level_container.add_child(current_level)
+	print("количество врагов - ", GameState._enemies_count)
 	current_level.level_finished.connect(_on_level_finished)
 	move_player_to_spawn(current_level)
 	
