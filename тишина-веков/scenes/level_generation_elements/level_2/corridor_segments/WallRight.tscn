@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=4 uid="uid://dy6nvgv1o4l38"]
+
+[ext_resource type="TileSet" uid="uid://d0x7vufjxljsp" path="res://assets/sprites/map_resources/лавовый_набор.tres" id="1_gr2s0"]
+
+[node name="ВходСправаСтена" type="Node2D"]
+
+[node name="ВходСправаСтена" type="TileMapLayer" parent="."]
+position = Vector2(-16, -88)
+tile_map_data = PackedByteArray("AAABAAAAAAAEAAsAAAABAAEAAAAEAAoAAAABAAIAAAAEAAsAAAABAAMAAAAEAAkAAAABAAQAAAAEAAoAAAABAAUAAAAEAAkAAAABAAYAAAAEAAoAAAABAAcAAAAEAAoAAAA=")
+tile_set = ExtResource("1_gr2s0")

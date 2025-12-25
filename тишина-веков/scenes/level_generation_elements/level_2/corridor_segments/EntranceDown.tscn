@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://c1lgld8ygl15x"]
+
+[ext_resource type="TileSet" uid="uid://d0x7vufjxljsp" path="res://assets/sprites/map_resources/лавовый_набор.tres" id="1_4eciu"]
+
+[node name="ВходВКомнатуСнизу" type="Node2D"]
+
+[node name="ВходВКомнатуСнизу" type="TileMapLayer" parent="."]
+position = Vector2(-40, 0)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 13, 0, 0, 0, 1, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1, 0, 13, 0, 0, 0)
+tile_set = ExtResource("1_4eciu")

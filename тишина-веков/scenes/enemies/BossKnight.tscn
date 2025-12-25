@@ -1,0 +1,227 @@
+[gd_scene load_steps=17 format=3 uid="uid://cw4uicsxiqydk"]
+
+[ext_resource type="PackedScene" uid="uid://bpa3vo4mkck5r" path="res://scenes/enemies/Enemy.tscn" id="1_u8hum"]
+[ext_resource type="Script" uid="uid://dyyt8cns2y0q7" path="res://scenes/enemies/boss_knight.gd" id="2_s74ak"]
+[ext_resource type="Texture2D" uid="uid://cy0t871xsahxe" path="res://assets/sprites/red_rectangle.png" id="3_4mhjw"]
+[ext_resource type="Texture2D" uid="uid://cl6xw66cur8tr" path="res://assets/sprites/boss_knight/knight_idle.png" id="4_v1lxg"]
+[ext_resource type="Texture2D" uid="uid://bl1rh32xsljoc" path="res://assets/sprites/boss_knight/knight_attack.png" id="5_op4cg"]
+[ext_resource type="Texture2D" uid="uid://chntohp41r6iw" path="res://assets/sprites/boss_knight/knight_run.png" id="6_hq6yd"]
+[ext_resource type="Texture2D" uid="uid://bbyfjqtwfrmfr" path="res://assets/sprites/boss_knight/knight_block.png" id="7_mi61w"]
+[ext_resource type="SpriteFrames" uid="uid://48srq40w7xl0" path="res://scenes/enemies/boss_knight_animations.tres" id="8_chc46"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_geki2"]
+size = Vector2(16.818188, 9)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_txlwb"]
+size = Vector2(111, 83)
+
+[sub_resource type="Animation" id="Animation_642rv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_v1lxg")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_kx7em"]
+resource_name = "атака_скелета"
+length = 0.9
+step = 0.075
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_op4cg")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.07692308, 0.15384616, 0.23076925, 0.30769232, 0.3846154, 0.4615385, 0.53846157, 0.61538464, 0.6923077, 0.7692308, 0.84615386),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+}
+
+[sub_resource type="Animation" id="Animation_geki2"]
+resource_name = "бег_с_боку"
+length = 1.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_hq6yd")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.90000004, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+}
+
+[sub_resource type="Animation" id="Animation_knnfe"]
+resource_name = "блок"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("7_mi61w")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_2umua"]
+resource_name = "покой"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_v1lxg")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_642rv"]
+_data = {
+&"RESET": SubResource("Animation_642rv"),
+&"атака": SubResource("Animation_kx7em"),
+&"бег_с_боку": SubResource("Animation_geki2"),
+&"блок": SubResource("Animation_knnfe"),
+&"покой": SubResource("Animation_2umua")
+}
+
+[node name="рыцарь" instance=ExtResource("1_u8hum")]
+script = ExtResource("2_s74ak")
+aggro_range = 150.0
+attack_range = 30.0
+windup_time = 0.2
+recover_time = 0.8
+reposition_speed = 160.0
+optimal_range = 80.0
+stuck_time = 0.5
+stuck_distance_threshold = 2.0
+block_enter_distance = 45.0
+block_exit_distance = 60.0
+health = 50
+max_health = 50
+move_speed = 140.0
+contact_damage = 5
+attack_damage = 10
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="0"]
+position = Vector2(0.50000143, -4.5)
+scale = Vector2(2.1999993, 1)
+shape = SubResource("RectangleShape2D_geki2")
+
+[node name="Sprite2D" type="Sprite2D" parent="CollisionShape2D" index="0"]
+visible = false
+position = Vector2(-1.0430813e-07, -2.9802322e-07)
+scale = Vector2(0.49999994, 1.2000002)
+texture = ExtResource("3_4mhjw")
+
+[node name="HealthBar" parent="." index="1"]
+offset_left = -20.0
+offset_top = -67.0
+offset_right = -4.0
+offset_bottom = -65.0
+scale = Vector2(2, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="." index="2"]
+visible = false
+position = Vector2(-5, -30)
+texture = ExtResource("4_v1lxg")
+hframes = 12
+
+[node name="ОбластьАтаки" type="Area2D" parent="." index="3"]
+position = Vector2(0, -17)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ОбластьАтаки" index="0"]
+position = Vector2(0.5, 11.5)
+shape = SubResource("RectangleShape2D_txlwb")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="4"]
+libraries = {
+&"": SubResource("AnimationLibrary_642rv")
+}
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." index="5"]
+position = Vector2(0, -30)
+sprite_frames = ExtResource("8_chc46")
+animation = &"смерть"
