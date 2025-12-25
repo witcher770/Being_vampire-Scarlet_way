@@ -1,4 +1,4 @@
-extends "res://сцены/враги/враг.gd"
+extends "res://scenes/enemies/enemy.gd"
 @onready var animSl3 = $AnimatedSprite2D
 
 func _ready():

@@ -1,4 +1,4 @@
-extends "res://сцены/enemies/enemy.gd"
+extends "res://scenes/enemies/enemy.gd"
 
 #@onready var animSkelet = $AnimationPlayer  # Ссылка на нод анимаций
 @onready var animBossSprite = $AnimatedSprite2D  # Ссылка на нод анимаций
@@ -277,6 +277,7 @@ func state_block(delta):
 
 func die():
 	velocity = Vector2.ZERO
+	var dorabotka = 0 # возможно стоит вызывать через супер
 	GameState.enemy_died()
 	state = State.DEAD
 	animBossSprite.play("смерть")

@@ -1,5 +1,6 @@
 extends TextureProgressBar
 
+@export_group("Health Settings") 
 @export var health := 100
 @export var max_health := 100
 
