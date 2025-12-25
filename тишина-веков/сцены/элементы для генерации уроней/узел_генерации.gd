@@ -6,6 +6,7 @@ signal level_finished
 # задаем размер сетки и количество комнат
 @export var size_level = GameState.size_dungeon
 @export var num_rooms = GameState.count_rooms
+
 #@export var size_level = 4
 #@export var num_rooms = 10
 

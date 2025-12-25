@@ -10,8 +10,6 @@ enum GameMode {
 var game_mode: GameMode = GameMode.STORY
 var game_completed: bool = false
 
-
-
 var num_floor: int = -1            # текущий уровень-этаж; -1 чтобы стартовая комната не учитывалась
 var player_health: int = 100      # здоровье игрока
 var max_health: int = 100
