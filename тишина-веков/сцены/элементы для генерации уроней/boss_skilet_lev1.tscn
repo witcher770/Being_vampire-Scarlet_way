@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=4 uid="uid://bc8lrpxbg5e2p"]
 
-[ext_resource type="TileSet" uid="uid://dnbc3ip53d1ij" path="res://ассеты/спрайты/ресурсы карты/boss_skilet_lev1.tres" id="1_1naaf"]
+[ext_resource type="TileSet" uid="uid://dnbc3ip53d1ij" path="res://ассеты/спрайты/map_resources/boss_skilet_lev1.tres" id="1_1naaf"]
 [ext_resource type="Script" uid="uid://dpwdafrxqdt4t" path="res://сцены/элементы для генерации уроней/boss_skilet_lev_1.gd" id="1_prf2v"]
-[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="2_ajj4b"]
+[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/map_resources/set_1/набор 1 - базовое подземелье.tres" id="2_ajj4b"]
 [ext_resource type="PackedScene" uid="uid://o1chy65nqa20" path="res://сцены/враги/скелет_босс.tscn" id="4_prf2v"]
-[ext_resource type="Texture2D" uid="uid://ctbp7quutca0" path="res://ассеты/спрайты/ресурсы карты/темно_серый_фон.png" id="4_tqi04"]
+[ext_resource type="Texture2D" uid="uid://ctbp7quutca0" path="res://ассеты/спрайты/map_resources/темно_серый_фон.png" id="4_tqi04"]
 
 [node name="Комната_босса_1" type="Node2D"]
 script = ExtResource("1_prf2v")

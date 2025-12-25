@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=4 uid="uid://ddcn1hggk6ufv"]
 
 [ext_resource type="Script" uid="uid://cubmcrsvmhql0" path="res://сцены/элементы для генерации уроней/дверь.gd" id="1_07o5v"]
-[ext_resource type="TileSet" uid="uid://d0x7vufjxljsp" path="res://ассеты/спрайты/ресурсы карты/лавовый_набор.tres" id="2_ebceh"]
+[ext_resource type="TileSet" uid="uid://d0x7vufjxljsp" path="res://ассеты/спрайты/map_resources/лавовый_набор.tres" id="2_ebceh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_07o5v"]
 size = Vector2(20, 5)

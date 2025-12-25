@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://d1rb3vewl6egs" path="res://сцены/игрок/Игрок.tscn" id="3_kp8rm"]
 [ext_resource type="PackedScene" uid="uid://cyp32d7cupxc4" path="res://сцены/враги/слизь.tscn" id="3_y428e"]
 [ext_resource type="PackedScene" uid="uid://o1chy65nqa20" path="res://сцены/враги/скелет_босс.tscn" id="6_n28v2"]
-[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="8_4f5mk"]
-[ext_resource type="Texture2D" uid="uid://bx0x61afl0f3p" path="res://ассеты/спрайты/ресурсы карты/набор 1/dungeons_demo.png" id="12_yd2m6"]
+[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/map_resources/set_1/набор 1 - базовое подземелье.tres" id="8_4f5mk"]
+[ext_resource type="Texture2D" uid="uid://bx0x61afl0f3p" path="res://ассеты/спрайты/map_resources/set_1/dungeons_demo.png" id="12_yd2m6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fdy2w"]
 texture = ExtResource("12_yd2m6")

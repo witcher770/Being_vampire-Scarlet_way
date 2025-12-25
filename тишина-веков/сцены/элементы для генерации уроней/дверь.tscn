@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=4 uid="uid://26tsdw3knkrc"]
 
 [ext_resource type="Script" uid="uid://cubmcrsvmhql0" path="res://сцены/элементы для генерации уроней/дверь.gd" id="1_07o5v"]
-[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="1_stq04"]
+[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/map_resources/set_1/набор 1 - базовое подземелье.tres" id="1_stq04"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_07o5v"]
 size = Vector2(20, 5)

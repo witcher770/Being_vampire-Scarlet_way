@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=4 uid="uid://cfvg4sgq2gtgq"]
 
 [ext_resource type="Script" uid="uid://de0mu7denvnaj" path="res://сцены/элементы для генерации уроней/дверь_от_босса.gd" id="1_1biko"]
-[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="2_0hje0"]
+[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/map_resources/set_1/набор 1 - базовое подземелье.tres" id="2_0hje0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_07o5v"]
 size = Vector2(20, 5)

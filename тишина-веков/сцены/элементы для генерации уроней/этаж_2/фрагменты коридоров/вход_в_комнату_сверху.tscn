@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=4 uid="uid://dy1qbo2kdltxv"]
 
-[ext_resource type="TileSet" uid="uid://d0x7vufjxljsp" path="res://ассеты/спрайты/ресурсы карты/лавовый_набор.tres" id="1_srohs"]
+[ext_resource type="TileSet" uid="uid://d0x7vufjxljsp" path="res://ассеты/спрайты/map_resources/лавовый_набор.tres" id="1_srohs"]
 
 [node name="ВходВКомнатуСверху" type="Node2D"]
 z_index = 2

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=4 uid="uid://bsgeb0gmvqyt0"]
 
-[ext_resource type="TileSet" uid="uid://d0x7vufjxljsp" path="res://ассеты/спрайты/ресурсы карты/лавовый_набор.tres" id="1_sdav8"]
-[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="2_fntpq"]
+[ext_resource type="TileSet" uid="uid://d0x7vufjxljsp" path="res://ассеты/спрайты/map_resources/лавовый_набор.tres" id="1_sdav8"]
+[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/map_resources/set_1/набор 1 - базовое подземелье.tres" id="2_fntpq"]
 
 [node name="Комната_15_15_1" type="Node2D"]
 

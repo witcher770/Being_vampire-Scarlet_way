@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://igri07lbdmui"]
 
 [ext_resource type="Script" uid="uid://7qlhmq8e0ogn" path="res://сцены/интерфейс/menu.gd" id="1_flh13"]
-[ext_resource type="Texture2D" uid="uid://dq23cq13417fu" path="res://ассеты/меню ии 1.png" id="2_tcucq"]
+[ext_resource type="Texture2D" uid="uid://dq23cq13417fu" path="res://assets/меню ии 1.png" id="2_tcucq"]
 
 [node name="menu" type="Node2D"]
 script = ExtResource("1_flh13")

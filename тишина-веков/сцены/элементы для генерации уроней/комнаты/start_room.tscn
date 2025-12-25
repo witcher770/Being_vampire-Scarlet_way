@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dxipgtm4b1f6y" path="res://сцены/элементы для генерации уроней/комнаты/start_room.gd" id="2_2qk7p"]
 [ext_resource type="PackedScene" uid="uid://26tsdw3knkrc" path="res://сцены/элементы для генерации уроней/дверь.tscn" id="2_mlauc"]
-[ext_resource type="Texture2D" uid="uid://ctbp7quutca0" path="res://ассеты/спрайты/ресурсы карты/темно_серый_фон.png" id="4_2qk7p"]
-[ext_resource type="TileSet" uid="uid://bghhg8dhjinek" path="res://ассеты/спрайты/ресурсы карты/стартовая_комната.tres" id="5_t6lnp"]
+[ext_resource type="Texture2D" uid="uid://ctbp7quutca0" path="res://ассеты/спрайты/map_resources/темно_серый_фон.png" id="4_2qk7p"]
+[ext_resource type="TileSet" uid="uid://bghhg8dhjinek" path="res://ассеты/спрайты/map_resources/стартовая_комната.tres" id="5_t6lnp"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_2qk7p"]
 font_size = 24

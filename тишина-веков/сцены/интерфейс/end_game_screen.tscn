@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=4 uid="uid://cixvxgsalejpj"]
 
 [ext_resource type="Script" uid="uid://35i4ybettu3k" path="res://end_game_screen.gd" id="1_s1qlh"]
-[ext_resource type="Texture2D" uid="uid://dq23cq13417fu" path="res://ассеты/меню ии 1.png" id="2_f1t78"]
+[ext_resource type="Texture2D" uid="uid://dq23cq13417fu" path="res://assets/меню ии 1.png" id="2_f1t78"]
 [ext_resource type="LabelSettings" uid="uid://dk6s1hy7npb28" path="res://сцены/элементы для генерации уроней/этаж_2/комнаты/стиль_текста_1.tres" id="3_dd43t"]
-[ext_resource type="TileSet" uid="uid://d0x7vufjxljsp" path="res://ассеты/спрайты/ресурсы карты/лавовый_набор.tres" id="4_dd43t"]
+[ext_resource type="TileSet" uid="uid://d0x7vufjxljsp" path="res://ассеты/спрайты/map_resources/лавовый_набор.tres" id="4_dd43t"]
 
 [node name="EndGameScreen" type="Control"]
 layout_mode = 3

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=4 uid="uid://bp6yxgkydu256"]
 
-[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="1_uae7r"]
+[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/map_resources/set_1/набор 1 - базовое подземелье.tres" id="1_uae7r"]
 
 [node name="КоридорГоризонтальный_8" type="Node2D"]
 

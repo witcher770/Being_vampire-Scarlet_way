@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=4 uid="uid://rvn0xsllc37a"]
 
-[ext_resource type="TileSet" uid="uid://d0x7vufjxljsp" path="res://ассеты/спрайты/ресурсы карты/лавовый_набор.tres" id="1_x44nd"]
+[ext_resource type="TileSet" uid="uid://d0x7vufjxljsp" path="res://ассеты/спрайты/map_resources/лавовый_набор.tres" id="1_x44nd"]
 
 [node name="КоридорГ_10_10" type="Node2D"]
 

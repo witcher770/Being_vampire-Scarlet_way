@@ -3,9 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://bpa3vo4mkck5r" path="res://сцены/враги/враг.tscn" id="1_0nmag"]
 [ext_resource type="Script" uid="uid://pnsonrsw1dwv" path="res://сцены/враги/скелет_босс.gd" id="2_1kvdx"]
 [ext_resource type="Texture2D" uid="uid://cy0t871xsahxe" path="res://ассеты/спрайты/красный прямоугольник.png" id="3_geki2"]
-[ext_resource type="Texture2D" uid="uid://bfb6tkl28tpo1" path="res://ассеты/спрайты/босс_скелет/бег_скелета.png" id="4_geki2"]
-[ext_resource type="Texture2D" uid="uid://erjcxflwtkts" path="res://ассеты/спрайты/босс_скелет/покой_скелета.png" id="5_642rv"]
-[ext_resource type="Texture2D" uid="uid://c3pxfycrdro10" path="res://ассеты/спрайты/босс_скелет/атака_скелета.png" id="6_2umua"]
+[ext_resource type="Texture2D" uid="uid://bfb6tkl28tpo1" path="res://ассеты/спрайты/boss_skeleton/skeleton_run.png" id="4_geki2"]
+[ext_resource type="Texture2D" uid="uid://erjcxflwtkts" path="res://ассеты/спрайты/boss_skeleton/skeleton_idle.png" id="5_642rv"]
+[ext_resource type="Texture2D" uid="uid://c3pxfycrdro10" path="res://ассеты/спрайты/boss_skeleton/skeleton_attack.png" id="6_2umua"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_geki2"]
 size = Vector2(15, 6)

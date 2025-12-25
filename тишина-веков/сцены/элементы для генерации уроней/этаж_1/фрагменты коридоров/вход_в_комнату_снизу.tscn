@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c1lgld8ygl15x"]
 
-[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="1_j80rq"]
+[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/map_resources/set_1/набор 1 - базовое подземелье.tres" id="1_j80rq"]
 
 [node name="ВходВКомнатуСнизу" type="Node2D"]
 

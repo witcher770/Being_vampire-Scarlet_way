@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=4 uid="uid://thdlgyrm53l3"]
 
-[ext_resource type="TileSet" uid="uid://vdx4baa8jk83" path="res://ассеты/спрайты/ресурсы карты/набор 1/папина версия.tres" id="1_3o03b"]
-[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/ресурсы карты/набор 1/набор 1 - базовое подземелье.tres" id="2_jgemn"]
+[ext_resource type="TileSet" uid="uid://vdx4baa8jk83" path="res://ассеты/спрайты/map_resources/set_1/папина версия.tres" id="1_3o03b"]
+[ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://ассеты/спрайты/map_resources/set_1/набор 1 - базовое подземелье.tres" id="2_jgemn"]
 [ext_resource type="PackedScene" uid="uid://o1chy65nqa20" path="res://сцены/враги/скелет_босс.tscn" id="3_jgemn"]
-[ext_resource type="Texture2D" uid="uid://dta7uy8tm6pg8" path="res://ассеты/boss.png" id="4_y7o1m"]
-[ext_resource type="Texture2D" uid="uid://by1gks185v17p" path="res://ассеты/boss 1.png" id="5_bfvt7"]
+[ext_resource type="Texture2D" uid="uid://dta7uy8tm6pg8" path="res://assets/boss.png" id="4_y7o1m"]
+[ext_resource type="Texture2D" uid="uid://by1gks185v17p" path="res://assets/boss 1.png" id="5_bfvt7"]
 
 [node name="BossRoom" type="Node2D"]
 
