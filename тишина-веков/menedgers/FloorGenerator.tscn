@@ -1,0 +1,55 @@
+[gd_scene load_steps=30 format=3 uid="uid://dsady74hhmoog"]
+
+[ext_resource type="Script" uid="uid://cl0n7vkot8ixr" path="res://menedgers/floor_generator.gd" id="1_u7nwp"]
+[ext_resource type="Texture2D" uid="uid://ctbp7quutca0" path="res://assets/sprites/map_resources/темно_серый_фон.png" id="2_3xp1h"]
+[ext_resource type="Resource" uid="uid://de2adrgod0c30" path="res://menedgers/sets_for_generator/floor_1_rooms.tres" id="3_0aewb"]
+[ext_resource type="Resource" uid="uid://ye4bixkmp5nx" path="res://menedgers/sets_for_generator/floor_2_rooms.tres" id="4_7lfof"]
+[ext_resource type="Script" uid="uid://dyym0cqjrivvk" path="res://some_resources/room_set.gd" id="4_kkwq1"]
+[ext_resource type="Resource" uid="uid://cyxrf3iufifda" path="res://menedgers/sets_for_generator/floor_1_corridor_vertical.tres" id="5_0aewb"]
+[ext_resource type="Resource" uid="uid://bbod2p7dssf2x" path="res://menedgers/sets_for_generator/floor_2_corridor_vertical.tres" id="6_0aewb"]
+[ext_resource type="Resource" uid="uid://dkdq2kvj5iqxb" path="res://menedgers/sets_for_generator/floor_1_corridor_horizontal.tres" id="7_n5fpb"]
+[ext_resource type="Resource" uid="uid://dmv1hapopukan" path="res://menedgers/sets_for_generator/floor_2_corridor_horizontal.tres" id="8_n4arp"]
+[ext_resource type="Resource" uid="uid://ro2db6ss5du6" path="res://menedgers/sets_for_generator/floor_1_corridor_g.tres" id="9_n5fpb"]
+[ext_resource type="Resource" uid="uid://dhdq04itd5461" path="res://menedgers/sets_for_generator/floor_2_corridor_g.tres" id="10_2wkgh"]
+[ext_resource type="Resource" uid="uid://c4gqsnkfs3tla" path="res://menedgers/sets_for_generator/floor_1_corridor_invert_g.tres" id="11_7of6j"]
+[ext_resource type="Resource" uid="uid://decsq4ts03sil" path="res://menedgers/sets_for_generator/floor_2_corridor_invert_g.tres" id="12_sqcuj"]
+[ext_resource type="Resource" uid="uid://5u30h1qbvhov" path="res://menedgers/sets_for_generator/floor_1_entrance_top.tres" id="13_dw68d"]
+[ext_resource type="Resource" uid="uid://csriarjllp6d" path="res://menedgers/sets_for_generator/floor_2_entrance_top.tres" id="14_g5mqk"]
+[ext_resource type="Resource" uid="uid://b6ckk73mxo60q" path="res://menedgers/sets_for_generator/floor_1_entrance_right.tres" id="15_5j5e7"]
+[ext_resource type="Resource" uid="uid://mvl3lmuhux5l" path="res://menedgers/sets_for_generator/floor_2_entrance_right.tres" id="16_dwqvu"]
+[ext_resource type="Resource" uid="uid://c2qnhjk81dtps" path="res://menedgers/sets_for_generator/floor_1_entrance_down.tres" id="17_5j5e7"]
+[ext_resource type="Resource" uid="uid://dip8efvuxjupt" path="res://menedgers/sets_for_generator/floor_2_entrance_down.tres" id="18_dwqvu"]
+[ext_resource type="Resource" uid="uid://dxi6n1sukrdpl" path="res://menedgers/sets_for_generator/floor_1_wall_top.tres" id="19_4ee7n"]
+[ext_resource type="Resource" uid="uid://vag42nlkptp" path="res://menedgers/sets_for_generator/floor_2_wall_top.tres" id="20_jc7oq"]
+[ext_resource type="Resource" uid="uid://dqludra1k551c" path="res://menedgers/sets_for_generator/floor_1_wall_right.tres" id="21_8r56h"]
+[ext_resource type="Resource" uid="uid://cocsfntoobht1" path="res://menedgers/sets_for_generator/floor_1_wall_down.tres" id="21_48m5k"]
+[ext_resource type="Resource" uid="uid://c3nkghqfdr0hr" path="res://menedgers/sets_for_generator/floor_2_wall_down.tres" id="22_a0omt"]
+[ext_resource type="Resource" uid="uid://bu8p8tyfkfluw" path="res://menedgers/sets_for_generator/floor_2_wall_right.tres" id="22_o0chk"]
+[ext_resource type="Resource" uid="uid://ccbuvpmfsp8dg" path="res://menedgers/sets_for_generator/floor_1_enemies.tres" id="23_8r56h"]
+[ext_resource type="Resource" uid="uid://byex3edg8c08o" path="res://menedgers/sets_for_generator/floor_2_enemies.tres" id="24_o0chk"]
+[ext_resource type="Resource" uid="uid://ba8lukbk5rvup" path="res://menedgers/sets_for_generator/floor_1_door.tres" id="25_8r56h"]
+[ext_resource type="Resource" uid="uid://bfjyygct7mpgw" path="res://menedgers/sets_for_generator/floor_2_door.tres" id="26_o0chk"]
+
+[node name="FloorGenerator" type="Node2D"]
+script = ExtResource("1_u7nwp")
+size_level = 3
+num_rooms = 6
+rooms = Array[ExtResource("4_kkwq1")]([ExtResource("3_0aewb"), ExtResource("4_7lfof")])
+corridor_vertical = Array[ExtResource("4_kkwq1")]([ExtResource("5_0aewb"), ExtResource("6_0aewb")])
+corridor_horizontal = Array[ExtResource("4_kkwq1")]([ExtResource("7_n5fpb"), ExtResource("8_n4arp")])
+corridor_g = Array[ExtResource("4_kkwq1")]([ExtResource("9_n5fpb"), ExtResource("10_2wkgh")])
+corridor_invert_g = Array[ExtResource("4_kkwq1")]([ExtResource("11_7of6j"), ExtResource("12_sqcuj")])
+entrance_top = Array[ExtResource("4_kkwq1")]([ExtResource("13_dw68d"), ExtResource("14_g5mqk")])
+entrance_right = Array[ExtResource("4_kkwq1")]([ExtResource("15_5j5e7"), ExtResource("16_dwqvu")])
+entrance_down = Array[ExtResource("4_kkwq1")]([ExtResource("17_5j5e7"), ExtResource("18_dwqvu")])
+wall_top = Array[ExtResource("4_kkwq1")]([ExtResource("19_4ee7n"), ExtResource("20_jc7oq")])
+wall_right = Array[ExtResource("4_kkwq1")]([ExtResource("21_8r56h"), ExtResource("22_o0chk")])
+wall_down = Array[ExtResource("4_kkwq1")]([ExtResource("21_48m5k"), ExtResource("22_a0omt")])
+enemies = Array[ExtResource("4_kkwq1")]([ExtResource("23_8r56h"), ExtResource("24_o0chk")])
+door = Array[ExtResource("4_kkwq1")]([ExtResource("25_8r56h"), ExtResource("26_o0chk")])
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = -3
+position = Vector2(24532, 16534.5)
+scale = Vector2(1835.7778, 1317.6388)
+texture = ExtResource("2_3xp1h")

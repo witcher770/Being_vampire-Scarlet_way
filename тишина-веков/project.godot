@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-DamageNumbersManager="*res://singletons/damage_numbers_manager.gd"
-GameState="*res://singletons/game_state.gd"
+DamageNumbersManager="*res://autoloads/damage_numbers_manager.gd"
+GameState="*res://autoloads/game_state.gd"
 
 [display]
 

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="FloorElementSet" load_steps=3 format=3 uid="uid://byex3edg8c08o"]
+
+[ext_resource type="PackedScene" uid="uid://d0ijba4xlcxq0" path="res://enemies/LavaSlime.tscn" id="1_v627c"]
+[ext_resource type="Script" uid="uid://dyym0cqjrivvk" path="res://some_resources/room_set.gd" id="2_xccoi"]
+
+[resource]
+script = ExtResource("2_xccoi")
+floor_index = 1
+elements = Array[PackedScene]([ExtResource("1_v627c")])
+metadata/_custom_type_script = "uid://dyym0cqjrivvk"

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="FloorElementSet" load_steps=3 format=3 uid="uid://bfjyygct7mpgw"]
+
+[ext_resource type="PackedScene" uid="uid://ddcn1hggk6ufv" path="res://level_generation_elements/level_2/Door.tscn" id="1_fb2ir"]
+[ext_resource type="Script" uid="uid://dyym0cqjrivvk" path="res://some_resources/room_set.gd" id="2_1opde"]
+
+[resource]
+script = ExtResource("2_1opde")
+floor_index = 1
+elements = Array[PackedScene]([ExtResource("1_fb2ir")])
+metadata/_custom_type_script = "uid://dyym0cqjrivvk"

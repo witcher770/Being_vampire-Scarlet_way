@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="FloorElementSet" load_steps=3 format=3 uid="uid://ccbuvpmfsp8dg"]
+
+[ext_resource type="PackedScene" uid="uid://cyp32d7cupxc4" path="res://enemies/Slime.tscn" id="1_sjj86"]
+[ext_resource type="Script" uid="uid://dyym0cqjrivvk" path="res://some_resources/room_set.gd" id="2_o4irr"]
+
+[resource]
+script = ExtResource("2_o4irr")
+elements = Array[PackedScene]([ExtResource("1_sjj86")])
+metadata/_custom_type_script = "uid://dyym0cqjrivvk"
