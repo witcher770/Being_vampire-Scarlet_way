@@ -2,7 +2,7 @@ extends Node2D
 
 # сигналы
 signal level_finished
-
+# @export_group
 # задаем размер сетки и количество комнат
 @export var size_level = GameState.size_dungeon
 @export var num_rooms = GameState.count_rooms
@@ -121,6 +121,7 @@ func get_element(
 ) -> PackedScene:
 	for one_set in sets:
 		if one_set.floor_index == floor:
+			# pick_random системный метод
 			return one_set.elements.pick_random()
 	return null
 
