@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=4 uid="uid://ct2eupt81j4pk"]
+[gd_scene format=4 uid="uid://ct2eupt81j4pk"]
 
 [ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://assets/sprites/map_resources/set_1/набор 1 - базовое подземелье.tres" id="1_d2ymw"]
 

@@ -4,7 +4,7 @@ signal level_finished
 
 const PRELOADS = {
 	# Прочие объекты
-	"door": preload("res://сцены/элементы для генерации уроней/дверь_от_босса_лава.tscn")
+	"door": preload("res://level_generation_elements/boss_rooms/DoorBossLevel2.tscn")
 }
 
 func _ready():

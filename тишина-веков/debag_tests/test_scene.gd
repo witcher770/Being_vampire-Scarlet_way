@@ -9,7 +9,7 @@ func _ready():
 func _on_player_died():
 	# Создаем нового игрока
 	print("получил сигнал, создаю игрока")
-	var new_player = preload("res://scenes/player/Player.tscn").instantiate()
+	var new_player = preload("res://player/Player.tscn").instantiate()
 	add_child(new_player)
 	new_player.position = Vector2(100, 100)  # Позиция возрождения
 	

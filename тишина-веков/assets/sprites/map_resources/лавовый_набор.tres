@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://d0x7vufjxljsp"]
+[gd_resource type="TileSet" format=3 uid="uid://d0x7vufjxljsp"]
 
 [ext_resource type="Texture2D" uid="uid://cn202cc337ayy" path="res://assets/sprites/map_resources/лавовый_набор.png" id="1_51x2l"]
 

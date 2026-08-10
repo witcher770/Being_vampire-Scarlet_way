@@ -1,4 +1,4 @@
-extends "res://scenes/enemies/enemy.gd"
+extends "res://enemies/enemy.gd"
 
 #@onready var animSkelet = $AnimationPlayer  # Ссылка на нод анимаций
 @onready var animBossSprite = $AnimatedSprite2D  # Ссылка на нод анимаций

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FloorElementSet" load_steps=3 format=3 uid="uid://c2qnhjk81dtps"]
+[gd_resource type="Resource" script_class="FloorElementSet" format=3 uid="uid://c2qnhjk81dtps"]
 
 [ext_resource type="PackedScene" uid="uid://c1lgld8ygl15x" path="res://level_generation_elements/level_1/corridor_segments/EntranceDown.tscn" id="1_wgyua"]
 [ext_resource type="Script" uid="uid://dyym0cqjrivvk" path="res://some_resources/room_set.gd" id="2_aavcu"]

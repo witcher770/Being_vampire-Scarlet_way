@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=49 format=3 uid="uid://48srq40w7xl0"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://48srq40w7xl0"]
 
 [ext_resource type="Texture2D" uid="uid://bl1rh32xsljoc" path="res://assets/sprites/boss_knight/knight_attack.png" id="1_4qffb"]
 [ext_resource type="Texture2D" uid="uid://chntohp41r6iw" path="res://assets/sprites/boss_knight/knight_run.png" id="2_nggg4"]
@@ -208,7 +208,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_1hfp0")
 }],
-"loop": false,
+"loop": 0,
 "name": &"атака",
 "speed": 12.0
 }, {
@@ -249,7 +249,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_d8jd0")
 }],
-"loop": false,
+"loop": 0,
 "name": &"бег_с_боку",
 "speed": 12.0
 }, {
@@ -257,7 +257,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_loeng")
 }],
-"loop": true,
+"loop": 1,
 "name": &"блок",
 "speed": 5.0
 }, {
@@ -265,7 +265,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_m3ukt")
 }],
-"loop": true,
+"loop": 1,
 "name": &"покой",
 "speed": 5.0
 }, {
@@ -330,7 +330,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_078ke")
 }],
-"loop": false,
+"loop": 0,
 "name": &"смерть",
 "speed": 8.0
 }]

@@ -14,11 +14,11 @@ var num_floor: int = -1            # текущий уровень-этаж; -1 
 var player_health: int = 100      # здоровье игрока
 var max_health: int = 100
 
-var size_dungeon = 2               # размер квадратной матрицы
+var size_dungeon = 1               # размер квадратной матрицы
 var count_rooms: int = 2           # базовое количество комнат
 var enemy_power: float = 1         # множитель силы врагов   + 0.1 каждый уровень
 var enemies_in_room: int = 2
-var levels_for_boss: int = 3       # каждые сколько комнат будет запускаться комната с боссом
+var levels_for_boss: int = 1       # каждые сколько комнат будет запускаться комната с боссом
 var num_floor_for_boss: int = 0    # количество пройденных комнат с прошлого босса
 var num_global_level: int = 0      # глобальный этаж для выбора комнаты босса и ресурсов генерации
 

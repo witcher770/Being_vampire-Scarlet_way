@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=9 format=3 uid="uid://dnbc3ip53d1ij"]
+[gd_resource type="TileSet" format=3 uid="uid://dnbc3ip53d1ij"]
 
 [ext_resource type="Texture2D" uid="uid://bx0x61afl0f3p" path="res://assets/sprites/map_resources/set_1/dungeons_demo.png" id="1_8ec7d"]
 [ext_resource type="Texture2D" uid="uid://bfyap1lt2k15c" path="res://assets/sprites/map_resources/set_1/папина_версия.png" id="2_qw5vt"]

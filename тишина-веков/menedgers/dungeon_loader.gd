@@ -3,17 +3,17 @@ extends Node
 # Централизованный словарь всех загружаемых ресурсов
 const PRELOADS = {
 	# Игрок
-	"player": preload("res://сцены/player/Player.tscn"),
+	"player": preload("res://player/Player.tscn"),
 	
 	# Комнаты
-	"start_room": preload("res://сцены/элементы для генерации уроней/комнаты/start_room.tscn"),
-	"boss_room_1": preload("res://сцены/элементы для генерации уроней/boss_skilet_lev1.tscn"), 
-	"boss_room_2": preload("res://сцены/boss_ricar_lev2.tscn"),
+	"start_room": preload("res://level_generation_elements/public_elements/StartRoom.tscn"),
+	"boss_room_1": preload("res://level_generation_elements/boss_rooms/BossLevel1.tscn"), 
+	"boss_room_2": preload("res://level_generation_elements/boss_rooms/BossLevel2.tscn"),
 	
 	# Уровни/генераторы
-	"generation_node": preload("res://сцены/элементы для генерации уроней/узел_генерации.tscn"),
+	"generation_node": preload("res://menedgers/FloorGenerator.tscn"),
 	
-	"end_game_scene": preload("res://сцены/интерфейс/end_game_screen.tscn")
+	"end_game_scene": preload("res://interface/EndGameScreen.tscn")
 }
 
 @onready var player_container = $PlayerContainer

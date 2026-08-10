@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://bghhg8dhjinek"]
+[gd_resource type="TileSet" format=3 uid="uid://bghhg8dhjinek"]
 
 [ext_resource type="Texture2D" uid="uid://c3arn8sfyd7wb" path="res://assets/sprites/map_resources/карта_тайлов_стартовая_комната.png" id="1_ldkwj"]
 
