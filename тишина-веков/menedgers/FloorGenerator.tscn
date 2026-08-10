@@ -5,7 +5,7 @@
 [ext_resource type="Resource" uid="uid://de2adrgod0c30" path="res://menedgers/sets_for_generator/floor_1_rooms.tres" id="3_0aewb"]
 [ext_resource type="Resource" uid="uid://ye4bixkmp5nx" path="res://menedgers/sets_for_generator/floor_2_rooms.tres" id="4_7lfof"]
 [ext_resource type="Script" uid="uid://dyym0cqjrivvk" path="res://some_resources/room_set.gd" id="4_kkwq1"]
-[ext_resource type="Resource" uid="uid://cyxrf3iufifda" path="res://menedgers/sets_for_generator/floor_1_corridor_vertical.tres" id="5_0aewb"]
+[ext_resource type="PackedScene" uid="uid://ct2eupt81j4pk" path="res://level_generation_elements/level_1/corridor_segments/CorridorVertical8.tscn" id="5_1nf4t"]
 [ext_resource type="Resource" uid="uid://bbod2p7dssf2x" path="res://menedgers/sets_for_generator/floor_2_corridor_vertical.tres" id="6_0aewb"]
 [ext_resource type="Resource" uid="uid://dkdq2kvj5iqxb" path="res://menedgers/sets_for_generator/floor_1_corridor_horizontal.tres" id="7_n5fpb"]
 [ext_resource type="Resource" uid="uid://dmv1hapopukan" path="res://menedgers/sets_for_generator/floor_2_corridor_horizontal.tres" id="8_n4arp"]
@@ -30,12 +30,17 @@
 [ext_resource type="Resource" uid="uid://ba8lukbk5rvup" path="res://menedgers/sets_for_generator/floor_1_door.tres" id="25_8r56h"]
 [ext_resource type="Resource" uid="uid://bfjyygct7mpgw" path="res://menedgers/sets_for_generator/floor_2_door.tres" id="26_o0chk"]
 
+[sub_resource type="Resource" id="Resource_i7b0l"]
+script = ExtResource("4_kkwq1")
+elements = Array[PackedScene]([ExtResource("5_1nf4t")])
+metadata/_custom_type_script = "uid://dyym0cqjrivvk"
+
 [node name="FloorGenerator" type="Node2D" unique_id=1949922667]
 script = ExtResource("1_u7nwp")
 size_level = 3
-num_rooms = 7
+num_rooms = 6
 rooms = Array[ExtResource("4_kkwq1")]([ExtResource("3_0aewb"), ExtResource("4_7lfof")])
-corridor_vertical = Array[ExtResource("4_kkwq1")]([ExtResource("5_0aewb"), ExtResource("6_0aewb")])
+corridor_vertical = Array[ExtResource("4_kkwq1")]([SubResource("Resource_i7b0l"), ExtResource("6_0aewb")])
 corridor_horizontal = Array[ExtResource("4_kkwq1")]([ExtResource("7_n5fpb"), ExtResource("8_n4arp")])
 corridor_g = Array[ExtResource("4_kkwq1")]([ExtResource("9_n5fpb"), ExtResource("10_2wkgh")])
 corridor_invert_g = Array[ExtResource("4_kkwq1")]([ExtResource("11_7of6j"), ExtResource("12_sqcuj")])
