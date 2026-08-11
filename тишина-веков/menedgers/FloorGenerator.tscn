@@ -32,7 +32,7 @@
 
 [node name="FloorGenerator" type="Node2D" unique_id=1949922667]
 script = ExtResource("1_u7nwp")
-size_level = 3
+size_level = 4
 num_rooms = 2
 rooms = Array[ExtResource("4_kkwq1")]([ExtResource("3_0aewb"), ExtResource("4_7lfof")])
 corridor_vertical = Array[ExtResource("4_kkwq1")]([ExtResource("5_1nf4t"), ExtResource("6_0aewb")])
