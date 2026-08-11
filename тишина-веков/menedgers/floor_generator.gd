@@ -6,8 +6,6 @@ signal level_finished
 # задаем размер сетки и количество комнат
 @export var size_level = GameState.size_dungeon
 @export var num_rooms = GameState.count_rooms
-#@export var size_level = 4
-#@export var num_rooms = 10
 
 @export var rooms: Array[FloorElementSet]
 # Фрагменты коридоров
@@ -93,12 +91,21 @@ const SIZE_ROOM: int = 15
 const SIZE_ZONE: Vector2 = Vector2(SIZE_TILE * SIZE_CELL, SIZE_TILE * SIZE_CELL)  # размер зоны в пикселях
 
 func _ready():
-	rng_seed.seed = 12345  # фиксированный сид для воспроизводимости   6954484218641569678 # 12345
+	# ошибочные сиды
+		# -3984759562172433446 - угловой коридор через комнату
+		# 8949200502619799211 - угловой коридор через комнату
+		# 6213835094434982300 - выход из тупиковой комнаты
+		# -2962645705040086136 - т-перекресток
+		#
+	var tyt_zadaem_zerno = 0
+	rng_seed.seed = -3984759562172433446  # фиксированный сид для воспроизводимости   6954484218641569678 # 12345
 	#rng.randomize() # или для случайного сида каждый раз
+	rng_rand = rng_seed
 	
 	var empty_grid = create_grid(size_level)
 	grid_with_rooms = gen_pos_rooms(empty_grid.duplicate())
-	var grid_with_connections = create_tree_connectoins(grid_with_rooms)
+	#var grid_with_connections = create_tree_connectoins(grid_with_rooms)
+	var grid_with_connections = build_dungeon_graph(grid_with_rooms)
 	calculate_exits(grid_with_connections)
 	
 	#print_grid(grid_with_rooms, "connections")
@@ -183,6 +190,7 @@ func gen_pos_rooms(grid: Array) -> Array:
 	# создаем массив из возможных позиций для комнаты. array - просто последовательность от 0 до ... с шагом 1
 	var maybe_pos_rooms = Array(range(0, quantity_pos, 1)) # не включительно
 	
+	var tyt_use_zerno = 0
 	print("Текущее зерно: ", rng_rand.seed)
 	for i in range(num_rooms):
 		var tuta_munyaem_zerno = 0
@@ -195,7 +203,7 @@ func gen_pos_rooms(grid: Array) -> Array:
 		"""
 		в строчке выше было еще написано -1. и это ОЧЕНЬ ОЧЕНЬ СИЛЬНО ломало мне генерацию. 
 		ПРЯМ ВООБЩЕ В НУЛИНУ ЛОМАЛО. Генераций без артефактов процентов 30 было всего
-		Детали важныю
+		Детали важны
 		Пусть этот коментарий останется тут для истории
 		"""
 		
@@ -600,3 +608,131 @@ func instantiate_exits_walls(cell, pos_room: Vector2):
 		add_child(exit_inst)
 
 # процедурная генерация завершена
+
+
+# новая версия расставления связей от клода
+@export var loop_chance: float = 0.5  # 0 = чистое дерево без циклов, 1 = максимум циклов
+
+
+func build_dungeon_graph(grid: Array) -> Array:
+	var all_cells: Array = []
+	for i in range(size_level):
+		for j in range(size_level):
+			if grid[i][j]:
+				all_cells.append(grid[i][j])
+
+	# первая найденная комната - стартовая (перенесено как было, без изменений логики)
+	if all_cells.size() > 0:
+		var start_cell = all_cells[0]
+		start_cell["room_type"] = "start_room"
+		var s = Node2D.new()
+		s.name = "SpawnPoint"
+		s.position = grid_to_world(start_cell["position"]) + Vector2(200, 200)
+		add_child(s)
+
+	# 1. собираем всех валидных кандидатов-рёбер (без дублей; диагонали - с проверкой угла)
+	var candidates: Array = []  # [pos1, pos2, dist]
+	var seen_edges: Dictionary = {}
+
+	for cell in all_cells:
+		var pos = cell["position"]
+		for neighbor in get_neightbours(grid, pos):
+			var npos = neighbor["position"]
+			var key = _edge_key(pos, npos)
+			if seen_edges.has(key):
+				continue
+			seen_edges[key] = true
+
+			var diff = npos - pos
+			if diff.x != 0 and diff.y != 0:
+				# диагональ - угловая клетка должна быть физически пустой
+				var corner = _diagonal_corner(pos, npos)
+				if grid[corner.x][corner.y] != null:
+					continue  # там комната - Г-коридор через нее не проведёшь
+
+			candidates.append([pos, npos, pos.distance_to(npos)])
+
+	candidates.sort_custom(func(a, b): return a[2] < b[2])
+
+	# 2. Kruskal: гарантированно связное дерево через DSU
+	var parent: Dictionary = {}
+	for cell in all_cells:
+		parent[cell["position"]] = cell["position"]
+
+	var claimed_corners: Dictionary = {}  # угловые клетки, уже занятые под другой диагональный коридор
+	var leftover: Array = [] # массив для лишних ребер - между комнатами, которые уже в одной компоненте связности
+
+	for edge in candidates:
+		var diff = edge[1] - edge[0]
+		var corner = null
+		if diff.x != 0 and diff.y != 0:
+			corner = _diagonal_corner(edge[0], edge[1])
+			if claimed_corners.has(corner):
+				continue  # угол уже занят другим диагональным коридором
+
+		var root1 = _uf_find(parent, edge[0])
+		var root2 = _uf_find(parent, edge[1])
+		if root1 != root2:
+			parent[root1] = root2
+			_apply_edge(grid, edge[0], edge[1])
+			if corner != null:
+				claimed_corners[corner] = true
+		else:
+			leftover.append(edge)
+
+	# 3. страховка: если компонент больше одной - есть комната совсем без
+	# соседей в радиусе 1 клетки (see get_neightbours - там recursive fallback не реализован)
+	var roots: Dictionary = {}
+	for cell in all_cells:
+		roots[_uf_find(parent, cell["position"])] = true
+	print(roots.size())
+	if roots.size() > 1:
+		push_warning("FloorGenerator: %d изолированных групп комнат вместо 1. Сид: %s" % [roots.size(), rng_seed.seed])
+
+	# 4. часть оставшихся валидных рёбер возвращаем как петли (циклы)
+	for edge in leftover:
+		if rng_rand.randf() >= loop_chance:
+			continue
+		var diff = edge[1] - edge[0]
+		var corner = null
+		if diff.x != 0 and diff.y != 0:
+			corner = _diagonal_corner(edge[0], edge[1])
+			if claimed_corners.has(corner):
+				continue
+		_apply_edge(grid, edge[0], edge[1])
+		if corner != null:
+			claimed_corners[corner] = true
+
+	return grid
+
+
+func _apply_edge(grid: Array, pos1: Vector2, pos2: Vector2) -> void:
+	var room1 = grid[pos1.x][pos1.y]
+	var room2 = grid[pos2.x][pos2.y]
+	room1["connections"].append(pos2 - pos1)
+	room2["connections"].append(pos1 - pos2)
+
+
+func _diagonal_corner(pos1: Vector2, pos2: Vector2) -> Vector2:
+	# именно этот угол физически использует instantiate_g_corridor/instantiate_invert_g_corridor
+	var west_pos = pos1 if pos1.y < pos2.y else pos2
+	var east_pos = pos2 if pos1.y < pos2.y else pos1
+	return Vector2(east_pos.x, west_pos.y)
+
+
+func _edge_key(a: Vector2, b: Vector2) -> String:
+	if a.x < b.x or (a.x == b.x and a.y < b.y):
+		return "%s|%s" % [a, b]
+	return "%s|%s" % [b, a]
+
+
+func _uf_find(parent: Dictionary, pos: Vector2) -> Vector2:
+	var root = pos
+	while parent[root] != root:
+		root = parent[root]
+	var cur = pos
+	while parent[cur] != root:
+		var next_pos = parent[cur]
+		parent[cur] = root
+		cur = next_pos
+	return root
