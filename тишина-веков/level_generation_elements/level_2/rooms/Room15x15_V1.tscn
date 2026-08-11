@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=4 uid="uid://bsgeb0gmvqyt0"]
+[gd_scene load_steps=3 format=4 uid="uid://c7l68lmt6gift"]
 
 [ext_resource type="TileSet" uid="uid://d0x7vufjxljsp" path="res://assets/sprites/map_resources/лавовый_набор.tres" id="1_sdav8"]
 [ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://assets/sprites/map_resources/set_1/набор 1 - базовое подземелье.tres" id="2_fntpq"]

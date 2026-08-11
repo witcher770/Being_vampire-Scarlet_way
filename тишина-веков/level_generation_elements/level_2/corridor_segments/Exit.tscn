@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=4 uid="uid://bmu4f2rswgv7b"]
+[gd_scene load_steps=4 format=4 uid="uid://bo1l0etgmlnes"]
 
 [ext_resource type="PackedScene" uid="uid://26tsdw3knkrc" path="res://level_generation_elements/public_elements/Door.tscn" id="1_rqvvc"]
 [ext_resource type="PackedScene" uid="uid://cp5tmvw1gf63f" path="res://level_generation_elements/level_2/corridor_segments/WallTop.tscn" id="2_ilbeo"]
