@@ -505,7 +505,7 @@ func instantiate_corridors(grid: Array) -> Array:
 			instantiate_exits_walls(cell, pos_room) # рисуем стены там где нет выходов
 			
 			if i == 1 and j == 1:
-				pass
+				pass # зачем тут это
 			
 			var exits_chek: Array = [false, false, false, false] # для отслеживания какие выходы проверяли. 0 индекс - север и дальше по часовой
 			for connection in cell["connections"]: # перебираем связи
@@ -691,18 +691,7 @@ func build_dungeon_graph(grid: Array) -> Array:
 		push_warning("FloorGenerator: %d изолированных групп комнат вместо 1. Сид: %s" % [roots.size(), rng_seed.seed])
 
 	# 4. часть оставшихся валидных рёбер возвращаем как петли (циклы)
-	for edge in leftover:
-		if rng_rand.randf() >= loop_chance:
-			continue
-		var diff = edge[1] - edge[0]
-		var corner = null
-		if diff.x != 0 and diff.y != 0:
-			corner = _diagonal_corner(edge[0], edge[1])
-			if claimed_corners.has(corner):
-				continue
-		_apply_edge(grid, edge[0], edge[1])
-		if corner != null:
-			claimed_corners[corner] = true
+
 
 	return grid
 
@@ -739,3 +728,18 @@ func _diagonal_corner(pos1: Vector2, pos2: Vector2) -> Vector2:
 	var west_pos = pos1 if pos1.y < pos2.y else pos2
 	var east_pos = pos2 if pos1.y < pos2.y else pos1
 	return Vector2(east_pos.x, west_pos.y)
+
+
+func _adding_cycle_edges(leftover: Array) -> void:
+	for edge in leftover:
+		if rng_rand.randf() >= loop_chance:
+			continue
+		var diff = edge[1] - edge[0]
+		var corner = null
+		if diff.x != 0 and diff.y != 0:
+			corner = _diagonal_corner(edge[0], edge[1])
+			if claimed_corners.has(corner):
+				continue
+		_apply_edge(grid, edge[0], edge[1])
+		if corner != null:
+			claimed_corners[corner] = true
