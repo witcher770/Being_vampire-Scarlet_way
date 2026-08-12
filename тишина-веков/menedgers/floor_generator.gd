@@ -484,78 +484,78 @@ func instantiate_enemies(cell: Dictionary) -> void:
 		var dorabotka1 = 0 # сделать функцию проверки колизий, коректного размещения
 
 
-#func instantiate_corridors(grid: Array) -> Array:
-	#for i in range(size_level):
-		#for j in range(size_level):
-			#var cell = grid[i][j]
-			#if not cell:
-				#continue
-			#
-			## расчитываем координаты ячейки
-			#var pos_cell = cell["position"]
-			#var global_pos_cell = grid_to_world(pos_cell) # верхний левый угол ячейки сетки
-			#var pos_room = Vector2(global_pos_cell.x + SIZE_ZONE.x / 2, global_pos_cell.y + SIZE_ZONE.y / 2) # координаты центра ячейки(комнаты)
-			#var offset_cell_y = Vector2(0, SIZE_ZONE.y / 2) # смещение от центра к верхнему/нижнему краю ячейки
-			#var offset_cell_x = Vector2(SIZE_ZONE.x / 2, 0)
-			#@warning_ignore("integer_division")
-			#var offset_room_y = Vector2(0, (SIZE_ROOM * SIZE_TILE) / 2) # смещение от центра к верхнему/нижнему краю комнаты
-			#@warning_ignore("integer_division")
-			#var offset_room_x = Vector2((SIZE_ROOM * SIZE_TILE) / 2, 0) # смещение от центра к верхнему/нижнему краю комнаты
-			#
-			#instantiate_exits_walls(cell, pos_room) # рисуем стены там где нет выходов
-			#
-			#if i == 1 and j == 1:
-				#pass
-			#
-			#var exits_chek: Array = [false, false, false, false] # для отслеживания какие выходы проверяли. 0 индекс - север и дальше по часовой
-			#for connection in cell["connections"]: # перебираем связи
-				## обычные проверки + проверяем что текущая связь к комнате сверху или сверху справа
-				#if cell["exits"]["north"] and not exits_chek[0] and (connection.x < 0 and (connection.y == 0 or connection.y > 0)): # если есть выход на север
-					#exits_chek[0] = true
-					## добавляем к комнате выход
-					#var exit_inst = get_element(entrance_top, GameState.num_global_level).instantiate()
-					#exit_inst.position = pos_room - offset_room_y
-					#add_child(exit_inst)
-					#if connection.y == 0: # прямой вверх - логика урощена при опоре на варианты получения этого выхода из функции расчета выходов
-						## меняем знаки, тк связь на эту комнату, от второй комнаты в паре будет с противоположными знаками
-						#var corridor_up_inst = get_element(corridor_vertical, GameState.num_global_level).instantiate()
-						#corridor_up_inst.position = pos_room - offset_cell_y
-						#add_child(corridor_up_inst)
-					#else: # буква г
-						## меняем знаки, тк связь на эту комнату, от второй комнаты в паре будет с противоположными знаками
-						#instantiate_g_corridor(pos_room)
-				## обычные проверки + проверяем что текущая связь к комнате справа
-				#elif cell["exits"]["east"] and not exits_chek[1] and (connection.x == 0 and connection.y > 0):
-					#exits_chek[1] = true
-					## добавляем к комнате выход
-					#var exit_inst = get_element(entrance_right, GameState.num_global_level).instantiate()
-					#exit_inst.position = pos_room + offset_room_x
-					#add_child(exit_inst)
-					## добавляем сам коридор. на восток может идти только прямой коридор
-					#var corridor_right_inst = get_element(corridor_horizontal, GameState.num_global_level).instantiate()
-					#corridor_right_inst.position = pos_room + offset_cell_x
-					#add_child(corridor_right_inst)
-				## обычные проверки + проверяем что текущая связь к комнате внизу или внизу справа
-				#elif cell["exits"]["south"] and not exits_chek[2] and (connection.x > 0 and (connection.y == 0 or connection.y > 0)):
-					#exits_chek[2] = true
-					## добавляем к комнате выход
-					#var exit_inst = get_element(entrance_down, GameState.num_global_level).instantiate()
-					#exit_inst.position = pos_room + offset_room_y
-					#add_child(exit_inst)
-					#if connection.y == 0: # прямой вниз - логика урощена при опоре на варианты получения этого выхода из функции расчета выходов
-						#continue # этот коридор уже нарисован - он же с севера вверх
-					#else: # буква г
-						## меняем знаки, тк связь на эту комнату, от второй комнаты в паре будет с противоположными знаками
-						#instantiate_invert_g_corridor(pos_room)
-				#elif cell["exits"]["west"] and not exits_chek[3]:
-					#exits_chek[3] = true
-					## добавляем к комнате выход
-					#var exit_inst = get_element(entrance_right, GameState.num_global_level).instantiate()
-					#exit_inst.scale.x = -1
-					#exit_inst.position = pos_room - offset_room_x
-					#add_child(exit_inst)
-	#
-	#return grid
+func instantiate_corridors(grid: Array) -> Array:
+	for i in range(size_level):
+		for j in range(size_level):
+			var cell = grid[i][j]
+			if not cell:
+				continue
+			
+			# расчитываем координаты ячейки
+			var pos_cell = cell["position"]
+			var global_pos_cell = grid_to_world(pos_cell) # верхний левый угол ячейки сетки
+			var pos_room = Vector2(global_pos_cell.x + SIZE_ZONE.x / 2, global_pos_cell.y + SIZE_ZONE.y / 2) # координаты центра ячейки(комнаты)
+			var offset_cell_y = Vector2(0, SIZE_ZONE.y / 2) # смещение от центра к верхнему/нижнему краю ячейки
+			var offset_cell_x = Vector2(SIZE_ZONE.x / 2, 0)
+			@warning_ignore("integer_division")
+			var offset_room_y = Vector2(0, (SIZE_ROOM * SIZE_TILE) / 2) # смещение от центра к верхнему/нижнему краю комнаты
+			@warning_ignore("integer_division")
+			var offset_room_x = Vector2((SIZE_ROOM * SIZE_TILE) / 2, 0) # смещение от центра к верхнему/нижнему краю комнаты
+			
+			instantiate_exits_walls(cell, pos_room) # рисуем стены там где нет выходов
+			
+			if i == 1 and j == 1:
+				pass
+			
+			var exits_chek: Array = [false, false, false, false] # для отслеживания какие выходы проверяли. 0 индекс - север и дальше по часовой
+			for connection in cell["connections"]: # перебираем связи
+				# обычные проверки + проверяем что текущая связь к комнате сверху или сверху справа
+				if cell["exits"]["north"] and not exits_chek[0] and (connection.x < 0 and (connection.y == 0 or connection.y > 0)): # если есть выход на север
+					exits_chek[0] = true
+					# добавляем к комнате выход
+					var exit_inst = get_element(entrance_top, GameState.num_global_level).instantiate()
+					exit_inst.position = pos_room - offset_room_y
+					add_child(exit_inst)
+					if connection.y == 0: # прямой вверх - логика урощена при опоре на варианты получения этого выхода из функции расчета выходов
+						# меняем знаки, тк связь на эту комнату, от второй комнаты в паре будет с противоположными знаками
+						var corridor_up_inst = get_element(corridor_vertical, GameState.num_global_level).instantiate()
+						corridor_up_inst.position = pos_room - offset_cell_y
+						add_child(corridor_up_inst)
+					else: # буква г
+						# меняем знаки, тк связь на эту комнату, от второй комнаты в паре будет с противоположными знаками
+						instantiate_g_corridor(pos_room)
+				# обычные проверки + проверяем что текущая связь к комнате справа
+				elif cell["exits"]["east"] and not exits_chek[1] and (connection.x == 0 and connection.y > 0):
+					exits_chek[1] = true
+					# добавляем к комнате выход
+					var exit_inst = get_element(entrance_right, GameState.num_global_level).instantiate()
+					exit_inst.position = pos_room + offset_room_x
+					add_child(exit_inst)
+					# добавляем сам коридор. на восток может идти только прямой коридор
+					var corridor_right_inst = get_element(corridor_horizontal, GameState.num_global_level).instantiate()
+					corridor_right_inst.position = pos_room + offset_cell_x
+					add_child(corridor_right_inst)
+				# обычные проверки + проверяем что текущая связь к комнате внизу или внизу справа
+				elif cell["exits"]["south"] and not exits_chek[2] and (connection.x > 0 and (connection.y == 0 or connection.y > 0)):
+					exits_chek[2] = true
+					# добавляем к комнате выход
+					var exit_inst = get_element(entrance_down, GameState.num_global_level).instantiate()
+					exit_inst.position = pos_room + offset_room_y
+					add_child(exit_inst)
+					if connection.y == 0: # прямой вниз - логика урощена при опоре на варианты получения этого выхода из функции расчета выходов
+						continue # этот коридор уже нарисован - он же с севера вверх
+					else: # буква г
+						# меняем знаки, тк связь на эту комнату, от второй комнаты в паре будет с противоположными знаками
+						instantiate_invert_g_corridor(pos_room)
+				elif cell["exits"]["west"] and not exits_chek[3]:
+					exits_chek[3] = true
+					# добавляем к комнате выход
+					var exit_inst = get_element(entrance_right, GameState.num_global_level).instantiate()
+					exit_inst.scale.x = -1
+					exit_inst.position = pos_room - offset_room_x
+					add_child(exit_inst)
+	
+	return grid
 
 
 func instantiate_g_corridor(pos_room: Vector2):
@@ -611,103 +611,103 @@ func instantiate_exits_walls(cell, pos_room: Vector2):
 
 
 # новая версия расставления связей от клода
-#@export var loop_chance: float = 0.5  # 0 = чистое дерево без циклов, 1 = максимум циклов
-#
-#
-#func build_dungeon_graph(grid: Array) -> Array:
-	#var all_cells: Array = []
-	#for i in range(size_level):
-		#for j in range(size_level):
-			#if grid[i][j]:
-				#all_cells.append(grid[i][j])
-#
-	## первая найденная комната - стартовая (перенесено как было, без изменений логики)
-	#if all_cells.size() > 0:
-		#var start_cell = all_cells[0]
-		#start_cell["room_type"] = "start_room"
-		#var s = Node2D.new()
-		#s.name = "SpawnPoint"
-		#s.position = grid_to_world(start_cell["position"]) + Vector2(200, 200)
-		#add_child(s)
-#
-	## 1. собираем всех валидных кандидатов-рёбер (без дублей; диагонали - с проверкой угла)
-	#var candidates: Array = []  # [pos1, pos2, dist]
-	#var seen_edges: Dictionary = {}
-#
-	#for cell in all_cells:
-		#var pos = cell["position"]
-		#for neighbor in get_neightbours(grid, pos):
-			#var npos = neighbor["position"]
-			#var key = _edge_key(pos, npos)
-			#if seen_edges.has(key):
-				#continue
-			#seen_edges[key] = true
-#
-			#var diff = npos - pos
-			#if diff.x != 0 and diff.y != 0:
-				## диагональ - угловая клетка должна быть физически пустой
-				#var corner = _diagonal_corner(pos, npos)
-				#if grid[corner.x][corner.y] != null:
-					#continue  # там комната - Г-коридор через нее не проведёшь
-#
-			#candidates.append([pos, npos, pos.distance_to(npos)])
-#
-	#candidates.sort_custom(func(a, b): return a[2] < b[2])
-#
-	## 2. Kruskal: гарантированно связное дерево через DSU
-	#var parent: Dictionary = {}
-	#for cell in all_cells:
-		#parent[cell["position"]] = cell["position"]
-#
-	#var claimed_corners: Dictionary = {}  # угловые клетки, уже занятые под другой диагональный коридор
-	#var leftover: Array = [] # массив для лишних ребер - между комнатами, которые уже в одной компоненте связности
-#
-	#for edge in candidates:
-		#var diff = edge[1] - edge[0]
-		#var corner = null
-		#if diff.x != 0 and diff.y != 0:
-			#corner = _diagonal_corner(edge[0], edge[1])
-			#if claimed_corners.has(corner):
-				#continue  # угол уже занят другим диагональным коридором
-#
-		#var root1 = _uf_find(parent, edge[0])
-		#var root2 = _uf_find(parent, edge[1])
-		#if root1 != root2:
-			#parent[root1] = root2
-			#_apply_edge(grid, edge[0], edge[1])
-			#if corner != null:
-				#claimed_corners[corner] = true
-		#else:
-			#leftover.append(edge)
-#
-	## 3. страховка: если компонент больше одной - есть комната совсем без
-	## соседей в радиусе 1 клетки (see get_neightbours - там recursive fallback не реализован)
-	#var roots: Dictionary = {}
-	#for cell in all_cells:
-		#roots[_uf_find(parent, cell["position"])] = true
-	#print(roots.size())
-	#if roots.size() > 1:
-		#print("⚠ FloorGenerator: %d изолированных групп комнат вместо 1. Сид: %s" % [roots.size(), rng_seed.seed])
-		#push_warning("FloorGenerator: %d изолированных групп комнат вместо 1. Сид: %s" % [roots.size(), rng_seed.seed])
-#
-	## 4. часть оставшихся валидных рёбер возвращаем как петли (циклы)
-	#for edge in leftover:
-		#if rng_rand.randf() >= loop_chance:
-			#continue
-		#var diff = edge[1] - edge[0]
-		#var corner = null
-		#if diff.x != 0 and diff.y != 0:
-			#corner = _diagonal_corner(edge[0], edge[1])
-			#if claimed_corners.has(corner):
-				#continue
-		#_apply_edge(grid, edge[0], edge[1])
-		#if corner != null:
-			#claimed_corners[corner] = true
-#
-	#return grid
+@export var loop_chance: float = 0.5  # 0 = чистое дерево без циклов, 1 = максимум циклов
 
 
-## Соединение двух комнат
+func build_dungeon_graph(grid: Array) -> Array:
+	var all_cells: Array = []
+	for i in range(size_level):
+		for j in range(size_level):
+			if grid[i][j]:
+				all_cells.append(grid[i][j])
+
+	# первая найденная комната - стартовая (перенесено как было, без изменений логики)
+	if all_cells.size() > 0:
+		var start_cell = all_cells[0]
+		start_cell["room_type"] = "start_room"
+		var s = Node2D.new()
+		s.name = "SpawnPoint"
+		s.position = grid_to_world(start_cell["position"]) + Vector2(200, 200)
+		add_child(s)
+
+	# 1. собираем всех валидных кандидатов-рёбер (без дублей; диагонали - с проверкой угла)
+	var candidates: Array = []  # [pos1, pos2, dist]
+	var seen_edges: Dictionary = {}
+
+	for cell in all_cells:
+		var pos = cell["position"]
+		for neighbor in get_neightbours(grid, pos):
+			var npos = neighbor["position"]
+			var key = _edge_key(pos, npos)
+			if seen_edges.has(key):
+				continue
+			seen_edges[key] = true
+
+			var diff = npos - pos
+			if diff.x != 0 and diff.y != 0:
+				# диагональ - угловая клетка должна быть физически пустой
+				var corner = _diagonal_corner(pos, npos)
+				if grid[corner.x][corner.y] != null:
+					continue  # там комната - Г-коридор через нее не проведёшь
+
+			candidates.append([pos, npos, pos.distance_to(npos)])
+
+	candidates.sort_custom(func(a, b): return a[2] < b[2])
+
+	# 2. Kruskal: гарантированно связное дерево через DSU
+	var parent: Dictionary = {}
+	for cell in all_cells:
+		parent[cell["position"]] = cell["position"]
+
+	var claimed_corners: Dictionary = {}  # угловые клетки, уже занятые под другой диагональный коридор
+	var leftover: Array = [] # массив для лишних ребер - между комнатами, которые уже в одной компоненте связности
+
+	for edge in candidates:
+		var diff = edge[1] - edge[0]
+		var corner = null
+		if diff.x != 0 and diff.y != 0:
+			corner = _diagonal_corner(edge[0], edge[1])
+			if claimed_corners.has(corner):
+				continue  # угол уже занят другим диагональным коридором
+
+		var root1 = _uf_find(parent, edge[0])
+		var root2 = _uf_find(parent, edge[1])
+		if root1 != root2:
+			parent[root1] = root2
+			_apply_edge(grid, edge[0], edge[1])
+			if corner != null:
+				claimed_corners[corner] = true
+		else:
+			leftover.append(edge)
+
+	# 3. страховка: если компонент больше одной - есть комната совсем без
+	# соседей в радиусе 1 клетки (see get_neightbours - там recursive fallback не реализован)
+	var roots: Dictionary = {}
+	for cell in all_cells:
+		roots[_uf_find(parent, cell["position"])] = true
+	print(roots.size())
+	if roots.size() > 1:
+		print("⚠ FloorGenerator: %d изолированных групп комнат вместо 1. Сид: %s" % [roots.size(), rng_seed.seed])
+		push_warning("FloorGenerator: %d изолированных групп комнат вместо 1. Сид: %s" % [roots.size(), rng_seed.seed])
+
+	# 4. часть оставшихся валидных рёбер возвращаем как петли (циклы)
+	for edge in leftover:
+		if rng_rand.randf() >= loop_chance:
+			continue
+		var diff = edge[1] - edge[0]
+		var corner = null
+		if diff.x != 0 and diff.y != 0:
+			corner = _diagonal_corner(edge[0], edge[1])
+			if claimed_corners.has(corner):
+				continue
+		_apply_edge(grid, edge[0], edge[1])
+		if corner != null:
+			claimed_corners[corner] = true
+
+	return grid
+
+
+## Соединение двух комнат - добавление им свезей друг на друга
 func _apply_edge(grid: Array, pos1: Vector2, pos2: Vector2) -> void:
 	var room1 = grid[pos1.x][pos1.y]
 	var room2 = grid[pos2.x][pos2.y]
@@ -739,264 +739,3 @@ func _diagonal_corner(pos1: Vector2, pos2: Vector2) -> Vector2:
 	var west_pos = pos1 if pos1.y < pos2.y else pos2
 	var east_pos = pos2 if pos1.y < pos2.y else pos1
 	return Vector2(east_pos.x, west_pos.y)
-
-
-# продолжение от клода - фикс изоляции
-
-func _segment_is_clear(grid: Array, claimed_cells: Dictionary, a: Vector2, b: Vector2) -> bool:
-	if a.x == b.x:
-		var lo = min(a.y, b.y); var hi = max(a.y, b.y)
-		for y in range(lo + 1, hi):
-			if grid[a.x][y] != null or claimed_cells.has(Vector2(a.x, y)):
-				return false
-		return true
-	elif a.y == b.y:
-		var lo = min(a.x, b.x); var hi = max(a.x, b.x)
-		for x in range(lo + 1, hi):
-			if grid[x][a.y] != null or claimed_cells.has(Vector2(x, a.y)):
-				return false
-		return true
-	return false
-
-
-func _path_is_clear(grid: Array, claimed_cells: Dictionary, pos1: Vector2, pos2: Vector2) -> bool:
-	var diff = pos2 - pos1
-	if diff.x == 0 or diff.y == 0:
-		return _segment_is_clear(grid, claimed_cells, pos1, pos2)
-
-	# в оригинале ниже после . было у
-	var west_pos = pos1 if pos1.x < pos2.x else pos2
-	var east_pos = pos2 if pos1.x < pos2.x else pos1
-	var corner = Vector2(east_pos.x, west_pos.y)
-
-	if grid[corner.x][corner.y] != null or claimed_cells.has(corner):
-		return false
-
-	return _segment_is_clear(grid, claimed_cells, west_pos, corner) \
-		and _segment_is_clear(grid, claimed_cells, corner, east_pos)
-
-
-func _mark_segment_claimed(claimed_cells: Dictionary, a: Vector2, b: Vector2) -> void:
-	if a.x == b.x:
-		var lo = min(a.y, b.y); var hi = max(a.y, b.y)
-		for y in range(lo + 1, hi):
-			claimed_cells[Vector2(a.x, y)] = true
-	elif a.y == b.y:
-		var lo = min(a.x, b.x); var hi = max(a.x, b.x)
-		for x in range(lo + 1, hi):
-			claimed_cells[Vector2(x, a.y)] = true
-
-
-func _mark_path_claimed(claimed_cells: Dictionary, pos1: Vector2, pos2: Vector2) -> void:
-	var diff = pos2 - pos1
-	if diff.x == 0 or diff.y == 0:
-		_mark_segment_claimed(claimed_cells, pos1, pos2)
-		return
-	var west_pos = pos1 if pos1.y < pos2.y else pos2
-	var east_pos = pos2 if pos1.y < pos2.y else pos1
-	var corner = Vector2(east_pos.x, west_pos.y)
-	claimed_cells[corner] = true
-	_mark_segment_claimed(claimed_cells, west_pos, corner)
-	_mark_segment_claimed(claimed_cells, corner, east_pos)
-	
-	
-	
-@export var loop_chance: float = 0.15
-
-func build_dungeon_graph(grid: Array) -> Array:
-	var all_cells: Array = []
-	for i in range(size_level):
-		for j in range(size_level):
-			if grid[i][j]:
-				all_cells.append(grid[i][j])
-
-	if all_cells.size() > 0:
-		var start_cell = all_cells[0]
-		start_cell["room_type"] = "start_room"
-		var s = Node2D.new()
-		s.name = "SpawnPoint"
-		s.position = grid_to_world(start_cell["position"]) + Vector2(200, 200)
-		add_child(s)
-
-	var candidates: Array = []
-	var seen_edges: Dictionary = {}
-	for cell in all_cells:
-		var pos = cell["position"]
-		for neighbor in get_neightbours(grid, pos):
-			var npos = neighbor["position"]
-			var key = _edge_key(pos, npos)
-			if seen_edges.has(key):
-				continue
-			seen_edges[key] = true
-			candidates.append([pos, npos, pos.distance_to(npos)])
-
-	candidates.sort_custom(func(a, b): return a[2] < b[2])
-
-	var parent: Dictionary = {}
-	for cell in all_cells:
-		parent[cell["position"]] = cell["position"]
-
-	var claimed_cells: Dictionary = {}
-	var leftover: Array = []
-
-	for edge in candidates:
-		if not _path_is_clear(grid, claimed_cells, edge[0], edge[1]):
-			continue
-		var root1 = _uf_find(parent, edge[0])
-		var root2 = _uf_find(parent, edge[1])
-		if root1 != root2:
-			parent[root1] = root2
-			_apply_edge(grid, edge[0], edge[1])
-			_mark_path_claimed(claimed_cells, edge[0], edge[1])
-		else:
-			leftover.append(edge)
-
-	for edge in leftover:
-		if rng_rand.randf() >= loop_chance:
-			continue
-		if not _path_is_clear(grid, claimed_cells, edge[0], edge[1]):
-			continue
-		_apply_edge(grid, edge[0], edge[1])
-		_mark_path_claimed(claimed_cells, edge[0], edge[1])
-
-	# запасной шаг: если после Kruskal остались изолированные группы -
-	# соединяем их коридорами "среднего" размера
-	_connect_remaining_components(grid, parent, all_cells, claimed_cells)
-
-	return grid
-
-
-func _connect_remaining_components(grid: Array, parent: Dictionary, all_cells: Array, claimed_cells: Dictionary) -> void:
-	while true:
-		var components: Dictionary = {}
-		for cell in all_cells:
-			var root = _uf_find(parent, cell["position"])
-			if not components.has(root):
-				components[root] = []
-			components[root].append(cell)
-
-		if components.size() <= 1:
-			return
-
-		var roots = components.keys()
-		var cross_candidates: Array = []
-		for a in range(roots.size()):
-			for b in range(a + 1, roots.size()):
-				for cell_a in components[roots[a]]:
-					for cell_b in components[roots[b]]:
-						var pos_a = cell_a["position"]
-						var pos_b = cell_b["position"]
-						cross_candidates.append([pos_a, pos_b, pos_a.distance_to(pos_b)])
-
-		cross_candidates.sort_custom(func(a, b): return a[2] < b[2])
-
-		var chosen = _pick_medium_valid_edge(grid, cross_candidates, claimed_cells)
-		if chosen == null:
-			push_warning("FloorGenerator: не удалось связать все комнаты (%d групп осталось). Сид: %s" % [components.size(), rng_seed.seed])
-			print("FloorGenerator: не удалось связать все комнаты (%d групп осталось). Сид: %s" % [components.size(), rng_seed.seed])
-			return
-
-		_apply_edge(grid, chosen[0], chosen[1])
-		_mark_path_claimed(claimed_cells, chosen[0], chosen[1])
-		var root1 = _uf_find(parent, chosen[0])
-		var root2 = _uf_find(parent, chosen[1])
-		parent[root1] = root2
-
-
-func _pick_medium_valid_edge(grid: Array, sorted_candidates: Array, claimed_cells: Dictionary):
-	var n = sorted_candidates.size()
-	if n == 0:
-		return null
-	var target_idx = int(n / 2.0)  # медиана по расстоянию среди пар из разных компонент
-
-	# от медианы - в сторону КОРОТКИХ, если она перекрыта
-	for idx in range(target_idx, -1, -1):
-		var c = sorted_candidates[idx]
-		if _path_is_clear(grid, claimed_cells, c[0], c[1]):
-			return c
-
-	# и только если ничего короче медианы не подошло - пробуем длиннее
-	for idx in range(target_idx + 1, n):
-		var c = sorted_candidates[idx]
-		if _path_is_clear(grid, claimed_cells, c[0], c[1]):
-			return c
-
-	return null
-
-
-
-func instantiate_corridors(grid: Array) -> Array:
-	for i in range(size_level):
-		for j in range(size_level):
-			var cell = grid[i][j]
-			if not cell:
-				continue
-
-			var pos_cell = cell["position"]
-			var global_pos_cell = grid_to_world(pos_cell)
-			var pos_room = Vector2(global_pos_cell.x + SIZE_ZONE.x / 2, global_pos_cell.y + SIZE_ZONE.y / 2)
-			var offset_room_y = Vector2(0, (SIZE_ROOM * SIZE_TILE) / 2)
-			var offset_room_x = Vector2((SIZE_ROOM * SIZE_TILE) / 2, 0)
-
-			instantiate_exits_walls(cell, pos_room)
-
-			var exits_chek: Array = [false, false, false, false]
-			for connection in cell["connections"]:
-				if cell["exits"]["north"] and not exits_chek[0] and (connection.x < 0 and (connection.y == 0 or connection.y > 0)):
-					exits_chek[0] = true
-					var exit_inst = get_element(entrance_top, GameState.num_global_level).instantiate()
-					exit_inst.position = pos_room - offset_room_y
-					add_child(exit_inst)
-					if connection.y == 0:
-						_place_straight_run(Vector2(0, -1), pos_room, abs(connection.x), corridor_vertical)
-					else:
-						_place_diagonal_run(pos_room, connection, true)
-				elif cell["exits"]["east"] and not exits_chek[1] and (connection.x == 0 and connection.y > 0):
-					exits_chek[1] = true
-					var exit_inst = get_element(entrance_right, GameState.num_global_level).instantiate()
-					exit_inst.position = pos_room + offset_room_x
-					add_child(exit_inst)
-					_place_straight_run(Vector2(1, 0), pos_room, connection.y, corridor_horizontal)
-				elif cell["exits"]["south"] and not exits_chek[2] and (connection.x > 0 and (connection.y == 0 or connection.y > 0)):
-					exits_chek[2] = true
-					var exit_inst = get_element(entrance_down, GameState.num_global_level).instantiate()
-					exit_inst.position = pos_room + offset_room_y
-					add_child(exit_inst)
-					if connection.y == 0:
-						continue  # уже нарисован с северной стороны соседа
-					else:
-						_place_diagonal_run(pos_room, connection, false)
-				elif cell["exits"]["west"] and not exits_chek[3]:
-					exits_chek[3] = true
-					var exit_inst = get_element(entrance_right, GameState.num_global_level).instantiate()
-					exit_inst.scale.x = -1
-					exit_inst.position = pos_room - offset_room_x
-					add_child(exit_inst)
-
-	return grid
-
-
-func _place_straight_run(dir: Vector2, origin: Vector2, count: int, element_set: Array) -> void:
-	for k in range(1, count + 1):
-		var tile = get_element(element_set, GameState.num_global_level).instantiate()
-		if dir.x != 0:
-			tile.position = origin + Vector2(dir.x * SIZE_ZONE.x * (k - 0.5), 0)
-		else:
-			tile.position = origin + Vector2(0, dir.y * SIZE_ZONE.y * (k - 0.5))
-		add_child(tile)
-
-
-func _place_diagonal_run(pos_room: Vector2, connection: Vector2, is_north_family: bool) -> void:
-	var m_row = abs(connection.x)
-	var m_col = abs(connection.y)
-	var row_dir = -1 if is_north_family else 1
-	var corner_set = corridor_g if is_north_family else corridor_invert_g
-
-	_place_straight_run(Vector2(0, row_dir), pos_room, m_row, corridor_vertical)
-
-	var corner_pos = pos_room + Vector2(0, row_dir * SIZE_ZONE.y * m_row)
-	var corner_tile = get_element(corner_set, GameState.num_global_level).instantiate()
-	corner_tile.position = corner_pos
-	add_child(corner_tile)
-
-	_place_straight_run(Vector2(1, 0), corner_pos, m_col, corridor_horizontal)
