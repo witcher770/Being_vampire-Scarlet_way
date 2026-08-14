@@ -29,9 +29,23 @@ var is_aggro: bool = false
 signal took_damage(position, amount, is_crit)
 
 
-func _ready():
-	health = max_health
+enum EnemyRole {
+	CHASER,
+	FAST,
+	TANK,
+	RANGED
+}
 
+@export_category("Type_enemy")
+@export var role: EnemyRole = EnemyRole.CHASER
+# хз надо ли и как использовать в дочерних классах
+
+func _ready():
+	# дробная часть усиления будет отбрасываться
+	health = max_health * GameState.enemy_power
+	contact_damage *= GameState.enemy_power
+	attack_damage *= GameState.enemy_power
+	
 	health_bar.max_value = max_health
 	health_bar.value = health
 	
@@ -82,7 +96,7 @@ func _process_idle(delta):
 
 func move_towards_player():
 	var direction = global_position.direction_to(player.global_position)
-
+	
 	velocity = direction * move_speed
 	move_and_slide()
 
