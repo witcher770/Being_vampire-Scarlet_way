@@ -9,6 +9,7 @@ extends Node2D
 
 # сигналы
 signal level_finished
+
 # @export_group
 # задаем размер сетки и количество комнат
 @export var size_level = GameState.size_dungeon
@@ -99,36 +100,61 @@ const SIZE_CELL: int = 25
 const SIZE_ROOM: int = 15
 const SIZE_ZONE: Vector2 = Vector2(SIZE_TILE * SIZE_CELL, SIZE_TILE * SIZE_CELL)  # размер зоны в пикселях
 
+@export var max_generation_attempts: int = 10
+var _fully_connected: bool = true
+
 func _ready():
 	# ошибочные сиды
 		# -3984759562172433446 - угловой коридор через комнату
 		# 8949200502619799211 - угловой коридор через комнату
 		# 6213835094434982300 - выход из тупиковой комнаты
 		# -2962645705040086136 - т-перекресток
-		#
-	var tyt_zadaem_zerno = 0
-	rng_seed.seed = -2797975839473596248  # фиксированный сид для воспроизводимости   6954484218641569678 # 12345
-	#rng.randomize() # или для случайного сида каждый раз
+	
+	rng_seed.seed = -2962645705040086136  # фиксированный сид для воспроизводимости   6954484218641569678 # 12345
+	# чтобы включить фиксированный сид снять коментарий ниже
 	#rng_rand = rng_seed
 	
-	var empty_grid = create_grid(size_level)
-	grid_with_rooms = gen_pos_rooms(empty_grid.duplicate())
-	#var grid_with_connections = create_tree_connectoins(grid_with_rooms)
-	var grid_with_connections = build_dungeon_graph(grid_with_rooms)
-	calculate_exits(grid_with_connections)
-	
-	#print_grid(grid_with_rooms, "connections")
-	print()
-	instantiate_rooms(grid_with_connections)
-	instantiate_corridors(grid_with_connections)
+	generate_dungeon()
 	
 	GameState.all_enemies_dead.connect(_on_all_enemies_dead)
 
-	#var a = get_neightbours(grid_with_rooms, Vector2(0, 2))
-	#print(a)
-	#var room_instance = PRELOADS.room_15_15_1.instantiate()
-	#room_instance.position = Vector2(0, 0)
-	#add_child(room_instance)
+
+func generate_dungeon() -> void:
+	var grid_with_connections: Array = []
+	var attempt := 0
+
+	while true:
+		attempt += 1
+
+		var empty_grid = create_grid(size_level)
+		grid_with_rooms = gen_pos_rooms(empty_grid.duplicate())
+		grid_with_connections = build_dungeon_graph(grid_with_rooms)
+
+		if _fully_connected:
+			break
+		if attempt >= max_generation_attempts:
+			push_error("FloorGenerator: не удалось сгенерировать связный уровень за %d попыток" % attempt)
+			break
+
+		print("FloorGenerator: попытка #%d не связалась полностью, пробую новый сид" % attempt)
+		rng_rand.randomize()
+
+	_spawn_start_point(grid_with_connections)
+	calculate_exits(grid_with_connections)
+	instantiate_rooms(grid_with_connections)
+	instantiate_corridors(grid_with_connections)
+
+
+func _spawn_start_point(grid: Array) -> void:
+	for row in grid:
+		for cell in row:
+			if cell and cell["room_type"] == "start_room":
+				var s = Node2D.new()
+				s.name = "SpawnPoint"
+				s.position = grid_to_world(cell["position"]) + Vector2(200, 200)
+				add_child(s)
+				return
+
 
 
 func get_element(
@@ -314,14 +340,6 @@ func create_tree_connectoins(grid: Array) -> Array:
 			# если комната первая, делаем стартовой
 			if first_room:
 				cell["room_type"] = "start_room"
-				
-				# создание ноды для размещения игрока через загрузчик уровней
-				var s = Node2D.new()
-				s.name = "SpawnPoint"
-				s.position = grid_to_world(cell["position"]) + Vector2(200, 200)
-				add_child(s)
-				
-				#in_tree.append(cell) # добавляем первую ячейку в дерево
 				first_room = false
 				
 			var near_rooms = get_neightbours(grid, cell["position"])
@@ -694,6 +712,7 @@ func _place_straight_run(origin: Vector2, dir: Vector2, count: int, border_set: 
 ##       Тот же массив grid после добавления связей
 ##       между комнатами.
 func build_dungeon_graph(grid: Array) -> Array:
+	_fully_connected = true
 	## Массив всех существующих комнат уровня. Сюда будут помещены только те элементы grid,
 	## которые существуют, то есть grid[i][j] не равен null.
 	var all_cells: Array = []
@@ -712,10 +731,6 @@ func build_dungeon_graph(grid: Array) -> Array:
 		# Получаем первую найденную комнату.
 		var start_cell = all_cells[0]
 		start_cell["room_type"] = "start_room"
-		var s = Node2D.new()
-		s.name = "SpawnPoint"
-		s.position = grid_to_world(start_cell["position"]) + Vector2(200, 200)
-		add_child(s)
 
 	# Здесь формируется список кандидатов на соединение комнат.
 	# Каждое ребро хранится в виде:
@@ -856,7 +871,7 @@ func build_dungeon_graph(grid: Array) -> Array:
 
 	# Если компонент больше одной, весь граф не является связным.
 	if roots.size() > 1:
-		print("FloorGenerator: %d изолированных групп, пробую связать доп. коридором. Сид: %s" % [roots.size(), rng_seed.seed])
+		print("FloorGenerator: %d изолированных групп, пробую связать доп. коридором. Сид: %s" % [roots.size(), rng_rand.seed])
 
 	# Даже если после основного прохода осталась одна компонента,
 	# функция безопасно завершится сразу. Если компонентов несколько,
@@ -1190,8 +1205,8 @@ func _connect_remaining_components(grid: Array, parent: Dictionary, all_cells: A
 
 		# Если подходящей пары не нашлось, соединить оставшиеся компоненты с текущими правилами невозможно.
 		if best_pair == null:
-			push_warning("FloorGenerator: не удалось связать все комнаты (%d групп). Сид: %s" % [components.size(), rng_seed.seed])
-			print("FloorGenerator: не удалось связать все комнаты (%d групп). Сид: %s" % [components.size(), rng_seed.seed])
+			_fully_connected = false
+			print("FloorGenerator: не удалось связать все комнаты (%d групп). Сид: %s" % [components.size(), rng_rand.seed])
 			return
 
 		# Добавляем найденное лучшее соединение в граф.
