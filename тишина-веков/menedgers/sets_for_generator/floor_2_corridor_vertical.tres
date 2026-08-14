@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="FloorElementSet" load_steps=3 format=3 uid="uid://bbod2p7dssf2x"]
+[gd_resource type="Resource" script_class="FloorElementSet" format=3 uid="uid://bbod2p7dssf2x"]
 
-[ext_resource type="PackedScene" uid="uid://ct2eupt81j4pk" path="res://level_generation_elements/level_2/corridor_segments/CorridorVertical8.tscn" id="1_mre38"]
+[ext_resource type="PackedScene" uid="uid://cco8jo1ibkdm3" path="res://level_generation_elements/level_2/corridor_segments/CorridorVertical8.tscn" id="1_a0alm"]
 [ext_resource type="Script" uid="uid://dyym0cqjrivvk" path="res://some_resources/room_set.gd" id="2_j7w7e"]
 
 [resource]
 script = ExtResource("2_j7w7e")
 floor_index = 1
-elements = Array[PackedScene]([ExtResource("1_mre38")])
+elements = Array[PackedScene]([ExtResource("1_a0alm")])
 metadata/_custom_type_script = "uid://dyym0cqjrivvk"

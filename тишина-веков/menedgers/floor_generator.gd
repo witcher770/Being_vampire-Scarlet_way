@@ -142,12 +142,10 @@ var _fully_connected: bool = true
 ## Чтобы использовать фиксированный сид ниже, а не случайный - раскомментируй строку [code]rng_rand = rng_seed[/code].
 func _ready():
 	# ошибочные сиды
-		# -3984759562172433446 - угловой коридор через комнату
-		# 8949200502619799211 - угловой коридор через комнату
 		# 6213835094434982300 - выход из тупиковой комнаты
 		# -2962645705040086136 - т-перекресток
 	
-	rng_seed.seed = -2962645705040086136  # фиксированный сид для воспроизводимости   6954484218641569678 # 12345
+	rng_seed.seed = -2962645705040086136  # фиксированный сид для воспроизводимости
 	# чтобы включить фиксированный сид снять коментарий ниже
 	#rng_rand = rng_seed
 	
@@ -165,6 +163,7 @@ func generate_dungeon() -> void:
 	var attempt := 0
 
 	while true:
+		print("Текущее зерно: ", rng_rand.seed)
 		attempt += 1
 
 		var empty_grid = create_grid(size_level)
@@ -207,10 +206,10 @@ func _spawn_start_point(grid: Array) -> void:
 ## Возвращает: PackedScene - случайно выбранная сцена нужного этажа, или null, если набор не найден.
 func get_element(
 	sets: Array[FloorElementSet],
-	floor: int
+	num_floor: int
 ) -> PackedScene:
 	for one_set in sets:
-		if one_set.floor_index == floor:
+		if one_set.floor_index == num_floor:
 			# pick_random системный метод
 			return one_set.elements.pick_random()
 	return null
@@ -288,8 +287,6 @@ func gen_pos_rooms(grid: Array) -> Array:
 	# создаем массив из возможных позиций для комнаты. array - просто последовательность от 0 до ... с шагом 1
 	var maybe_pos_rooms = Array(range(0, quantity_pos, 1)) # не включительно
 	
-	var tyt_use_zerno = 0
-	print("Текущее зерно: ", rng_rand.seed)
 	for i in range(num_rooms):
 		var num_pos = rng_rand.randi_range(0, quantity_pos - 1)  # генерируем позицию для комнаты. генерит включительно, поэтому -1
 		
@@ -337,7 +334,6 @@ func create_tree_connectoins_prim(grid: Array) -> Array:
 		for j in range(size_level):
 			cell = grid[i][j]
 			if cell:
-				var first_room = cell #  первая встреченная комната будет первой
 				cell["room_type"] = "start_room"
 				f_room = true
 				
@@ -592,7 +588,6 @@ func instantiate_rooms(grid: Array) -> Array: # возвращает масси�
 func instantiate_enemies(cell: Dictionary) -> void:
 	var num_enemies = rng_rand.randi_range(GameState.enemies_in_room - 2, GameState.enemies_in_room)  # генерируем количество врагов
 	num_enemies = max(1, num_enemies)
-	var dorabotka = 0 # заменить числа на переменные в соответсвии с уровнем сложности
 	GameState._enemies_count += num_enemies
 	for l in range(num_enemies):
 		# генер. коор. х для размещения врага. -2 чтобы не прилипал к стенам и мебели
@@ -649,7 +644,7 @@ func instantiate_corridors(grid: Array) -> Array:
 			var exits_chek: Array = [false, false, false, false] # для отслеживания какие выходы проверяли. 0 индекс - север и дальше по часовой
 			for connection in cell["connections"]: # перебираем связи
 				# обычные проверки + проверяем что текущая связь к комнате сверху или сверху справа
-				if cell["exits"]["north"] and not exits_chek[0] and (connection.x < 0 and (connection.y == 0 or connection.y > 0)): # если есть выход на север
+				if cell["exits"]["north"] and not exits_chek[0] and (connection.x < 0 and connection.y >= 0): # если есть выход на север
 					exits_chek[0] = true
 					# добавляем к комнате выход
 					var exit_inst = get_element(entrance_top, GameState.num_global_level).instantiate()
@@ -673,7 +668,7 @@ func instantiate_corridors(grid: Array) -> Array:
 					_place_straight_run(pos_room, Vector2(1, 0), int(connection.y), corridor_horizontal, corridor_filler_horizontal)
 				
 				# обычные проверки + проверяем что текущая связь к комнате внизу или внизу справа
-				elif cell["exits"]["south"] and not exits_chek[2] and (connection.x > 0 and (connection.y == 0 or connection.y > 0)):
+				elif cell["exits"]["south"] and not exits_chek[2] and (connection.x > 0 and (connection.y >= 0)):
 					exits_chek[2] = true
 					# добавляем к комнате выход
 					var exit_inst = get_element(entrance_down, GameState.num_global_level).instantiate()
