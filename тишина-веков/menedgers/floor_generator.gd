@@ -10,16 +10,18 @@ extends Node2D
 ## Испускается, когда игрок заходит в дверь-выход и уровень считается пройденным.
 signal level_finished
 
-# @export_group
+@export_category("Размеры подземелья")
 # задаем размер сетки и количество комнат
 ## Размер игровой сетки уровня (size_level x size_level ячеек).
 @export var size_level = GameState.size_dungeon
 ## Желаемое количество комнат на уровне. Если превышает вместимость сетки, обрезается в gen_pos_rooms().
 @export var num_rooms = GameState.count_rooms
 
+@export_category("Комнаты")
 ## Наборы сцен комнат по этажам (FloorElementSet), из которых get_element() выбирает случайный вариант.
 @export var rooms: Array[FloorElementSet]
-#@export_group ('Фрагменты коридоров')
+
+@export_category("Фрагменты коридоров")
 ## Прямой вертикальный сегмент коридора - один "бордюрный" тайл-переход между соседними ячейками.
 @export var corridor_vertical: Array[FloorElementSet]
 ## Прямой горизонтальный сегмент коридора - один "бордюрный" тайл-переход между соседними ячейками.
@@ -32,14 +34,16 @@ signal level_finished
 @export var corridor_filler_vertical: Array[FloorElementSet]
 ## Заполняющий сегмент горизонтального коридора для полностью пустых промежуточных ячеек на длинных путях.
 @export var corridor_filler_horizontal: Array[FloorElementSet]
-# Входы в комнаты
+
+@export_category("Входы в комнаты")
 ## Декоративный вход в комнату с северной стороны.
 @export var entrance_top: Array[FloorElementSet]
 ## Декоративный вход в комнату с восточной стороны (используется также зеркально для западной).
 @export var entrance_right: Array[FloorElementSet]
 ## Декоративный вход в комнату с южной стороны.
 @export var entrance_down: Array[FloorElementSet]
-# Стены для закрытых проходов
+
+@export_category("Стены для закрытых проходов")
 ## Стена, закрывающая северную сторону комнаты при отсутствии выхода.
 @export var wall_top: Array[FloorElementSet]
 ## Стена, закрывающая восточную сторону комнаты при отсутствии выхода (используется также зеркально для западной).
@@ -47,11 +51,15 @@ signal level_finished
 ## Стена, закрывающая южную сторону комнаты при отсутствии выхода.
 @export var wall_down: Array[FloorElementSet]
 
+@export_category("Враги")
 ## Наборы сцен врагов по этажам, из которых instantiate_enemies() выбирает случайный вариант.
 @export var enemies: Array[FloorElementSet]
 
+@export_category("Дверь")
 ## Наборы сцен двери-выхода из уровня по этажам.
 @export var door: Array[FloorElementSet]
+
+@export_category("Прочее")
 
 # Словарь для хранения всех загружаемых ресурсов
 #const PRELOADS = [{

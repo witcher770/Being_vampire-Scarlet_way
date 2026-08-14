@@ -1,39 +1,98 @@
 extends CharacterBody2D
+class_name Enemy
 
 @onready var health_bar = $HealthBar
-@onready var sprite = $Sprite2D  # если он есть
+@onready var sprite = $Sprite2D
 
-@export var health = 5  # можно задавать в редакторе
-@export var max_health = 5
-@export var move_speed = 25.0
+# BASE STATS
+# =========================
+@export_category("Stats")
+@export var max_health: float = 5.0
+@export var move_speed: float = 25.0
 
+@export_category("Damage")
+@export var contact_damage: float = 2.0
+@export var attack_damage: float = 2.0
 
-@export_group("Enemy Damage")
-@export var contact_damage = 2  # Урон от прикосновения
-@export var attack_damage = 2   # Урон от будущих атак
+# AI
+# =========================
+@export_category("AI")
+@export var aggro_range: float = 70.0
+@export var lose_aggro_range: float = 150.0
 
-# Сигнал для урона вместо жесткой привязки
+var health: float
+var player: Node2D = null
+var is_aggro: bool = false
+
+# SIGNALS
+# =========================
 signal took_damage(position, amount, is_crit)
 
-var is_agr = false
 
 func _ready():
-	if health > max_health:
-		max_health = health
+	health = max_health
+
 	health_bar.max_value = max_health
 	health_bar.value = health
 	
-	# Подключаем сигнал к менеджеру	
+	# Подключаем сигнал к менеджеру
 	took_damage.connect(DamageNumbersManager.show_damage)
+
+	player = get_tree().get_first_node_in_group("игрок")
+
+
+func _physics_process(delta):
+	if not player:
+		return
+	
+	update_aggro()
+	
+	if is_aggro:
+		_process_combat(delta)
+	else:
+		_process_idle(delta)
+
+
+# AI
+# =========================
+
+func update_aggro():
+	var distance = global_position.distance_to(player.global_position)
+	
+	if not is_aggro and distance <= aggro_range:
+		is_aggro = true
+	elif is_aggro and distance >= lose_aggro_range:
+		is_aggro = false
 
 
 @warning_ignore("unused_parameter")
-func _physics_process(delta):
+func _process_combat(delta):
+	# Переопределяется конкретным врагом
 	pass
-	# Пусто — дети должны переопределить
 
 
-func take_damage(amount := 1, is_crit = false):
+@warning_ignore("unused_parameter")
+func _process_idle(delta):
+	velocity = Vector2.ZERO
+	move_and_slide()
+
+
+# MOVEMENT
+# =========================
+
+func move_towards_player():
+	var direction = global_position.direction_to(player.global_position)
+
+	velocity = direction * move_speed
+	move_and_slide()
+
+
+func stop_moving():
+	velocity = Vector2.ZERO
+	move_and_slide()
+
+
+func take_damage(amount: int = 1, is_crit: bool = false):
 	health -= amount
 	health_bar.value = health  # обновляем полоску
 	
@@ -43,9 +102,10 @@ func take_damage(amount := 1, is_crit = false):
 	if health <= 0:
 		die()
 
+
 func calculate_damage_position() -> Vector2:
 	# Надежное вычисление позиции
-	if sprite:
+	if sprite and sprite.texture:
 		# половина размера спрайта и на 20 повыше
 		#print("ширина спрайта - ", sprite.texture.get_width() / 8)
 		#print("середина спрайта - ", sprite.texture.get_width() / 8 * sprite.scale.x * 0.5)
@@ -56,10 +116,17 @@ func calculate_damage_position() -> Vector2:
 		print("спрайт не найден")
 		return global_position - Vector2(0, 50)  # fallback
 
+
+# DEATH
+# =========================
+
 func die():
 	GameState.enemy_died()
 	queue_free()
 
+
+# ATTACK
+# =========================
 
 # Враг наносит урон игроку
 func deal_contact_damage():
