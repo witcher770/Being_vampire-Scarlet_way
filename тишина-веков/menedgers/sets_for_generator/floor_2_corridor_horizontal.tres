@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="FloorElementSet" load_steps=3 format=3 uid="uid://dmv1hapopukan"]
+[gd_resource type="Resource" script_class="FloorElementSet" format=3 uid="uid://dmv1hapopukan"]
 
-[ext_resource type="PackedScene" uid="uid://bp6yxgkydu256" path="res://level_generation_elements/level_2/corridor_segments/CorridorHorizontal8.tscn" id="1_e2oit"]
+[ext_resource type="PackedScene" uid="uid://dfwy5jk58p87r" path="res://level_generation_elements/level_2/corridor_segments/CorridorHorizontal8.tscn" id="1_e2oit"]
 [ext_resource type="Script" uid="uid://dyym0cqjrivvk" path="res://some_resources/room_set.gd" id="2_htiv2"]
 
 [resource]

@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="FloorElementSet" load_steps=3 format=3 uid="uid://c3nkghqfdr0hr"]
+[gd_resource type="Resource" script_class="FloorElementSet" format=3 uid="uid://c3nkghqfdr0hr"]
 
-[ext_resource type="PackedScene" uid="uid://dqtygtowcw7qu" path="res://level_generation_elements/level_2/corridor_segments/WallDown.tscn" id="1_o3877"]
+[ext_resource type="PackedScene" uid="uid://6btnwicf1ynj" path="res://level_generation_elements/level_2/corridor_segments/WallDown.tscn" id="1_o3877"]
 [ext_resource type="Script" uid="uid://dyym0cqjrivvk" path="res://some_resources/room_set.gd" id="2_7ndpf"]
 
 [resource]
