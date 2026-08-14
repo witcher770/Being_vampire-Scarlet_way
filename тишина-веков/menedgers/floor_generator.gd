@@ -15,7 +15,7 @@ signal level_finished
 @export var num_rooms = GameState.count_rooms
 
 @export var rooms: Array[FloorElementSet]
-# Фрагменты коридоров
+#@export_group ('Фрагменты коридоров')
 @export var corridor_vertical: Array[FloorElementSet]
 @export var corridor_horizontal: Array[FloorElementSet]
 @export var corridor_g: Array[FloorElementSet]
@@ -107,7 +107,7 @@ func _ready():
 		# -2962645705040086136 - т-перекресток
 		#
 	var tyt_zadaem_zerno = 0
-	rng_seed.seed = -3984759562172433446  # фиксированный сид для воспроизводимости   6954484218641569678 # 12345
+	rng_seed.seed = -2797975839473596248  # фиксированный сид для воспроизводимости   6954484218641569678 # 12345
 	#rng.randomize() # или для случайного сида каждый раз
 	#rng_rand = rng_seed
 	
@@ -240,7 +240,7 @@ func gen_pos_rooms(grid: Array) -> Array:
 
 	return grid
 
-
+## @deprecated
 func create_tree_connectoins_prim(grid: Array) -> Array: 
 	var in_tree = []  # комнаты уже в дереве
 	var edges = []    # возможные соединения для добавления
@@ -296,6 +296,7 @@ func create_tree_connectoins_prim(grid: Array) -> Array:
 	return grid
 
 
+## @deprecated
 func create_tree_connectoins(grid: Array) -> Array: 
 	var in_tree = []  # комнаты уже в дереве
 	var edges = []    # возможные соединения для добавления
@@ -526,7 +527,7 @@ func instantiate_corridors(grid: Array) -> Array:
 			@warning_ignore("integer_division")
 			var offset_room_x = Vector2((SIZE_ROOM * SIZE_TILE) / 2, 0) # смещение от центра к верхнему/нижнему краю комнаты
 			
-			instantiate_exits_walls(cell, pos_room) # рисуем стены там где нет выходов
+			_instantiate_exits_walls(cell, pos_room) # рисуем стены там где нет выходов
 			
 			if i == 1 and j == 1:
 				pass # зачем тут это
@@ -540,14 +541,13 @@ func instantiate_corridors(grid: Array) -> Array:
 					var exit_inst = get_element(entrance_top, GameState.num_global_level).instantiate()
 					exit_inst.position = pos_room - offset_room_y
 					add_child(exit_inst)
+					
 					if connection.y == 0: # прямой вверх - логика урощена при опоре на варианты получения этого выхода из функции расчета выходов
-						# меняем знаки, тк связь на эту комнату, от второй комнаты в паре будет с противоположными знаками
-						var corridor_up_inst = get_element(corridor_vertical, GameState.num_global_level).instantiate()
-						corridor_up_inst.position = pos_room - offset_cell_y
-						add_child(corridor_up_inst)
+						_place_straight_run(pos_room, Vector2(0, -1), int(-connection.x), corridor_vertical, corridor_filler_vertical)
 					else: # буква г
 						# меняем знаки, тк связь на эту комнату, от второй комнаты в паре будет с противоположными знаками
-						instantiate_g_corridor(pos_room)
+						instantiate_g_corridor(pos_room, connection)
+				
 				# обычные проверки + проверяем что текущая связь к комнате справа
 				elif cell["exits"]["east"] and not exits_chek[1] and (connection.x == 0 and connection.y > 0):
 					exits_chek[1] = true
@@ -556,9 +556,8 @@ func instantiate_corridors(grid: Array) -> Array:
 					exit_inst.position = pos_room + offset_room_x
 					add_child(exit_inst)
 					# добавляем сам коридор. на восток может идти только прямой коридор
-					var corridor_right_inst = get_element(corridor_horizontal, GameState.num_global_level).instantiate()
-					corridor_right_inst.position = pos_room + offset_cell_x
-					add_child(corridor_right_inst)
+					_place_straight_run(pos_room, Vector2(1, 0), int(connection.y), corridor_horizontal, corridor_filler_horizontal)
+				
 				# обычные проверки + проверяем что текущая связь к комнате внизу или внизу справа
 				elif cell["exits"]["south"] and not exits_chek[2] and (connection.x > 0 and (connection.y == 0 or connection.y > 0)):
 					exits_chek[2] = true
@@ -566,11 +565,13 @@ func instantiate_corridors(grid: Array) -> Array:
 					var exit_inst = get_element(entrance_down, GameState.num_global_level).instantiate()
 					exit_inst.position = pos_room + offset_room_y
 					add_child(exit_inst)
+					
 					if connection.y == 0: # прямой вниз - логика урощена при опоре на варианты получения этого выхода из функции расчета выходов
 						continue # этот коридор уже нарисован - он же с севера вверх
 					else: # буква г
 						# меняем знаки, тк связь на эту комнату, от второй комнаты в паре будет с противоположными знаками
-						instantiate_invert_g_corridor(pos_room)
+						instantiate_invert_g_corridor(pos_room, connection)
+				
 				elif cell["exits"]["west"] and not exits_chek[3]:
 					exits_chek[3] = true
 					# добавляем к комнате выход
@@ -582,37 +583,35 @@ func instantiate_corridors(grid: Array) -> Array:
 	return grid
 
 
-func instantiate_g_corridor(pos_room: Vector2):
-	# создаем
-	var corridor_up_inst = get_element(corridor_vertical, GameState.num_global_level).instantiate()
-	var corridor_right_inst = get_element(corridor_horizontal, GameState.num_global_level).instantiate()
+func instantiate_g_corridor(pos_room: Vector2, connection: Vector2) -> void:
+	var n = int(-connection.x)  # шагов вверх
+	var m = int(connection.y)   # шагов вправо
+	
+	_place_straight_run(pos_room, Vector2(0, -1), n, corridor_vertical, corridor_filler_vertical)
+	
+	var corner_pos = pos_room + Vector2(0, -1) * SIZE_ZONE * n
 	var corridor_g_inst = get_element(corridor_g, GameState.num_global_level).instantiate()
-	# размещаем
-	corridor_up_inst.position = pos_room - Vector2(0, SIZE_ZONE.y / 2)
-	corridor_g_inst.position = pos_room - Vector2(0, SIZE_ZONE.y)
-	corridor_right_inst.position = pos_room - Vector2(0, SIZE_ZONE.y) + Vector2(SIZE_ZONE.x / 2, 0)
-	# добавляем
-	add_child(corridor_up_inst)
+	corridor_g_inst.position = corner_pos
 	add_child(corridor_g_inst)
-	add_child(corridor_right_inst)
+	
+	_place_straight_run(corner_pos, Vector2(1, 0), m, corridor_horizontal, corridor_filler_horizontal)
 
 
-func instantiate_invert_g_corridor(pos_room: Vector2):
-	# создаем
-	var corridor_up_inst = get_element(corridor_vertical, GameState.num_global_level).instantiate()
-	var corridor_right_inst = get_element(corridor_horizontal, GameState.num_global_level).instantiate()
+func instantiate_invert_g_corridor(pos_room: Vector2, connection: Vector2) -> void:
+	var n = int(connection.x)  # шагов вниз
+	var m = int(connection.y)  # шагов вправо
+	
+	_place_straight_run(pos_room, Vector2(0, 1), n, corridor_vertical, corridor_filler_vertical)
+	
+	var corner_pos = pos_room + Vector2(0, 1) * SIZE_ZONE * n
 	var corridor_g_inst = get_element(corridor_invert_g, GameState.num_global_level).instantiate()
-	# размещаем
-	corridor_up_inst.position = pos_room + Vector2(0, SIZE_ZONE.y / 2)
-	corridor_g_inst.position = pos_room + Vector2(0, SIZE_ZONE.y)
-	corridor_right_inst.position = pos_room + Vector2(0, SIZE_ZONE.y) + Vector2(SIZE_ZONE.x / 2, 0)
-	# добавляем
-	add_child(corridor_up_inst)
+	corridor_g_inst.position = corner_pos
 	add_child(corridor_g_inst)
-	add_child(corridor_right_inst)
+	
+	_place_straight_run(corner_pos, Vector2(1, 0), m, corridor_horizontal, corridor_filler_horizontal)
 
 
-func instantiate_exits_walls(cell, pos_room: Vector2):
+func _instantiate_exits_walls(cell, pos_room: Vector2):
 	if not cell["exits"]["north"]:
 		var exit_inst = get_element(wall_top, GameState.num_global_level).instantiate()
 		exit_inst.position = pos_room - Vector2(0, (SIZE_ROOM * SIZE_TILE) / 2)
@@ -631,6 +630,33 @@ func instantiate_exits_walls(cell, pos_room: Vector2):
 		exit_inst.position = pos_room - Vector2((SIZE_ROOM * SIZE_TILE) / 2, 0)
 		add_child(exit_inst)
 
+
+## Ставит прямой участок коридора длиной count ячеек, начиная от origin в направлении dir.
+## Для count=1 (соседние ячейки) ведёт себя ровно как раньше - один бордюр, ноль филлеров. [br]
+## [param origin] - Вектор с координатами в пикселях центра комнаты (и ячейки для углового коридора) [br]
+## [param dir] - Вектор (0; +/-1) или (+/-1; 0). Указывает направление коридора [br]
+## [param count] - Длина коридора (колличество переходов между ячейками). Удобно передавать нужную координату
+## из [connection] [br]
+## [param border_set] - Передаем нужный набор для отрисовки конкретного направления [br]
+## [param filler_set] - Передаем нужный набор для отрисовки конкретного направления [br]
+func _place_straight_run(origin: Vector2, dir: Vector2, count: int, border_set: Array, filler_set: Array) -> void:
+	# Должно быть всегда положительным. Не отвечает за направление, только кол-во ячеек
+	count = abs(count)
+	for k in range(1, count + 1):
+		var border_tile = get_element(border_set, GameState.num_global_level).instantiate()
+		
+		# По координатам ставится ровно на пересечении ячеек. dir обнуляет лишнюю координату SIZE_ZONE
+		border_tile.position = origin + dir * SIZE_ZONE * (k - 0.5)
+		add_child(border_tile)
+	
+	for k in range(1, count):
+		var filler_tile = get_element(filler_set, GameState.num_global_level).instantiate()
+		
+		# По координатам ставится ровно по центру ячеек. dir обнуляет лишнюю координату SIZE_ZONE
+		filler_tile.position = origin + dir * SIZE_ZONE * k
+		add_child(filler_tile)
+
+
 # процедурная генерация завершена
 
 
@@ -646,8 +672,8 @@ func instantiate_exits_walls(cell, pos_room: Vector2):
 #
 # Значение:
 #   0.0 -> дополнительные циклы никогда не добавляются.
-#   1.0 -> каждое подходящее оставшееся ребро добавляется
-#          (с учётом ограничений по диагональным углам).
+#   1.0 -> каждое подходящее оставшееся ребро добавляется,
+#          если оно также проходит все проверки занятости пути.
 #
 # Значение по умолчанию:
 #   0.5 -> вероятность добавления каждого оставшегося ребра
@@ -656,7 +682,7 @@ func instantiate_exits_walls(cell, pos_room: Vector2):
 # ВАЖНО:
 # loop_chance НЕ управляет построением основного дерева.
 # Основные необходимые связи строятся алгоритмом Kruskal независимо от этого параметра.
-@export var loop_chance: float = 0.5  # 0 = чистое дерево без циклов, 1 = максимум циклов
+@export var loop_chance: float = 0.5
 
 
 ## Строит связи между комнатами, находящимися в grid.
@@ -680,7 +706,7 @@ func build_dungeon_graph(grid: Array) -> Array:
 			# добавляем сам объект комнаты в all_cells.
 			if grid[i][j]:
 				all_cells.append(grid[i][j])
-	
+
 	# Логика выбора стартовой комнаты здесь не меняется.
 	if all_cells.size() > 0:
 		# Получаем первую найденную комнату.
@@ -700,11 +726,11 @@ func build_dungeon_graph(grid: Array) -> Array:
 	#     distance - расстояние между комнатами.
 	## candidates:
 	##     список всех допустимых потенциальных связей.
-	var candidates: Array = []  # [pos1, pos2, dist]
+	var candidates: Array = []
 	## seen_edges:
 	##     Dictionary, используемый для удаления дублей.
 	var seen_edges: Dictionary = {}
-	
+
 	# Перебираем все существующие комнаты.
 	for cell in all_cells:
 		## Получаем координаты текущей комнаты.
@@ -724,22 +750,10 @@ func build_dungeon_graph(grid: Array) -> Array:
 			# Запоминаем, что это ребро уже обработано.
 			seen_edges[key] = true
 
-			## Вычисляем разницу координат между комнатами.
-			var diff = npos - pos
-			# Если одновременно X и Y отличаются от нуля, комнаты расположены по диагонали.
-			# Значит, между комнатами потенциально идёт диагональный / Г-образный коридор.
-			if diff.x != 0 and diff.y != 0:
-
-				## Получаем клетку, через которую физически проходит такой диагональный коридор.
-				var corner = _diagonal_corner(pos, npos)
-
-				# Если в угловой клетке уже находится комната, диагональную связь создавать нельзя.
-				# Иначе коридор фактически проходил бы через существующую комнату.
-				if grid[corner.x][corner.y] != null:
-					continue  # там комната - Г-коридор через нее не проведёшь
-
-			# Добавляем допустимое ребро в список кандидатов
-			# Третье значение — физическое расстояние между двумя позициями.
+			# Добавляем потенциальную связь в список кандидатов.
+			# В отличие от старой версии, здесь больше нет отдельной проверки только
+			# диагонального угла: окончательная проверка физической проходимости
+			# выполняется позже через _straight_path_clear() / _diagonal_path_clear().
 			candidates.append([pos, npos, pos.distance_to(npos)])
 
 	# Сортируем все потенциальные связи по расстоянию.
@@ -754,20 +768,22 @@ func build_dungeon_graph(grid: Array) -> Array:
 	#   - если оно соединяет разные компоненты — добавить его;
 	#   - если компоненты уже соединены — не добавлять, потому что это создало бы цикл.
 	#
-	# Для быстрого определения того, находятся ли две комнаты уже в одной компоненте, 
+	# Для быстрого определения того, находятся ли две комнаты уже в одной компоненте,
 	# используется DSU (Disjoint Set Union / система непересекающихся множеств).
 
 	var parent: Dictionary = {}
 
 	# Изначально каждая комната является отдельной компонентой.
-
 	for cell in all_cells:
 		parent[cell["position"]] = cell["position"]
 
-	## Dictionary, содержащий угловые клетки, которые уже были спользованы другим диагональным коридором.
-	## Это отдельное ограничение именно для диагональных рёбер. Если один диагональный коридор уже 
-	## использовал конкретную угловую клетку, второй диагональный коридор через неё создавать нельзя.
-	var claimed_corners: Dictionary = {}
+	## Общий реестр занятости.
+	## В отличие от старого claimed_corners здесь хранятся сразу два типа ресурсов:
+	##   - Vector2 -> занятая угловая клетка диагонального коридора;
+	##   - String  -> занятый элементарный отрезок между соседними клетками.
+	## Это позволяет запрещать не только повторное использование диагонального угла,
+	## но и пересечение уже построенного коридора тем же сегментом.
+	var claimed: Dictionary = {}
 
 	## Здесь будут храниться рёбра, которые Kruskal не использовал,
 	## потому что их концы уже находились в одной компоненте.
@@ -777,20 +793,18 @@ func build_dungeon_graph(grid: Array) -> Array:
 	# Перебираем все рёбра в порядке увеличения расстояния.
 	for edge in candidates:
 		# Вычисляем разницу между координатами концов ребра.
-		var diff = edge[1] - edge[0] 
-		# По умолчанию угловая клетка отсутствует.
-		# Для прямого горизонтального или вертикального ребра corner останется null.
-		var corner = null
+		var diff = edge[1] - edge[0]
+		# Одновременное отличие X и Y означает, что связь диагональная.
+		var is_diagonal = diff.x != 0 and diff.y != 0
 
-		# Если X и Y одновременно отличаются, ребро является диагональным.
-		if diff.x != 0 and diff.y != 0:
-
-			# Определяем угловую клетку этого диагонального соединения.
-			corner = _diagonal_corner(edge[0], edge[1])
-
-			# Если этот угол уже использовался другим диагональным коридором, текущее ребро пропускается.
-			if claimed_corners.has(corner):
-				continue  # угол уже занят другим диагональным коридором
+		# Проверяем, можно ли физически проложить путь между комнатами.
+		# Для прямого ребра проверяется вся последовательность элементарных сегментов.
+		# Для диагонального сначала проверяется угловая клетка, а затем оба прямых "плеча" Г-образного пути.
+		# В обоих случаях учитываются уже занятые клетки/сегменты из общего claimed.
+		var path_clear = _diagonal_path_clear(grid, claimed, edge[0], edge[1]) if is_diagonal \
+			else _straight_path_clear(grid, claimed, edge[0], edge[1])
+		if not path_clear:
+			continue
 
 		# Находим корень компоненты первой комнаты.
 		## _uf_find() проходит по parent и определяет, к какой компоненте принадлежит позиция.
@@ -809,9 +823,12 @@ func build_dungeon_graph(grid: Array) -> Array:
 			# Эта функция записывает направление соединения одновременно в обе комнаты.
 			_apply_edge(grid, edge[0], edge[1])
 
-			# Если это диагональное ребро, помечаем его угол как занятый.
-			if corner != null:
-				claimed_corners[corner] = true
+			# Запоминаем все физические части созданного пути в claimed,
+			# чтобы последующие коридоры не использовали их повторно.
+			if is_diagonal:
+				_mark_diagonal_path(claimed, edge[0], edge[1])
+			else:
+				_mark_straight_run(claimed, edge[0], edge[1])
 
 		# Если root1 == root2, обе комнаты уже находятся в одной компоненте. Поэтому добавление
 		# такого ребра создало бы цикл. Пока мы его НЕ добавляем. Вместо этого откладываем его в leftover.
@@ -819,7 +836,7 @@ func build_dungeon_graph(grid: Array) -> Array:
 			leftover.append(edge)
 
 	# 3. ПРОВЕРКА СВЯЗНОСТИ
-	## После Kruskal ожидается, что все комнаты окажутся в одной компоненте. Если компонентов больше 
+	## После Kruskal ожидается, что все комнаты окажутся в одной компоненте. Если компонентов больше
 	## одной, значит некоторые комнаты или группы комнат не удалось соединить допустимыми рёбрами.
 	var roots: Dictionary = {}
 
@@ -827,57 +844,39 @@ func build_dungeon_graph(grid: Array) -> Array:
 	for cell in all_cells:
 		# Использование корня как ключа Dictionary позволяет получить множество уникальных компонент.
 		# Например:
-	#     A -> root X
-	#     B -> root X
-	#     C -> root Y
-	#
-	# roots станет:
-	#     X -> true
-	#     Y -> true
-	# То есть roots.size() == 2.
+		#     A -> root X
+		#     B -> root X
+		#     C -> root Y
+		#
+		# roots станет:
+		#     X -> true
+		#     Y -> true
+		# То есть roots.size() == 2.
 		roots[_uf_find(parent, cell["position"])] = true
 
-	# Выводим количество отдельных компонент в консоль.
-	print(roots.size())
 	# Если компонент больше одной, весь граф не является связным.
 	if roots.size() > 1:
-		# Выводим предупреждение с количеством изолированных групп и используемым seed генератора случайных чисел.
-		print("⚠ FloorGenerator: %d изолированных групп комнат вместо 1. Сид: %s" % [roots.size(), rng_seed.seed])
-		# Дополнительно отправляем предупреждение в Godot.
-		push_warning("FloorGenerator: %d изолированных групп комнат вместо 1. Сид: %s" % [roots.size(), rng_seed.seed])
+		print("FloorGenerator: %d изолированных групп, пробую связать доп. коридором. Сид: %s" % [roots.size(), rng_seed.seed])
 
-	# ========================================================
+	# Даже если после основного прохода осталась одна компонента,
+	# функция безопасно завершится сразу. Если компонентов несколько,
+	# она ищет ближайшее допустимое соединение между ними.
+	_connect_remaining_components(grid, parent, all_cells, claimed)
+
 	# 4. ДОБАВЛЕНИЕ ДОПОЛНИТЕЛЬНЫХ РЁБЕР / ЦИКЛОВ
-	# ========================================================
-	#
-	# leftover содержит рёбра, которые не понадобились
-	# для построения основного связного дерева.
-	#
-	# Такие рёбра потенциально могут создать циклы.
-	#
-	# Например:
-	#
-	#     A ---- B
-	#     |      |
-	#     C ---- D
-	#
-	# Если дерево уже содержит:
-	#
-	#     A ---- B
-	#     |
-	#     C ---- D
-	#
-	# то оставшаяся связь B-D может замкнуть цикл.
-	#
-	# Функция _adding_cycle_edges() с вероятностью loop_chance
-	# решает, какие из таких рёбер вернуть обратно.
-	_adding_cycle_edges(grid, leftover, claimed_corners)
+	# leftover содержит рёбра, которые не понадобились для построения основного связного дерева.
+	# Такие рёбра потенциально могут создать циклы. Функция _adding_cycle_edges()
+	# с вероятностью loop_chance решает, какие из таких рёбер вернуть обратно.
+	# Дополнительно перед добавлением повторно проверяется, свободен ли физический путь.
+	_adding_cycle_edges(grid, leftover, claimed)
 
-	# Возвращаем исходный grid, внутри которого уже изменены
-	# данные комнат и их connections.
+	# Возвращаем исходный grid, внутри которого уже изменены данные комнат и их connections.
 	return grid
 
-## Соединение двух комнат - добавление им свезей друг на друга
+
+## Соединение двух комнат - добавление им связей друг с другом.
+## Функция меняет только массивы connections у двух комнат:
+## для первой добавляется направление к второй, для второй — обратное направление.
 func _apply_edge(grid: Array, pos1: Vector2, pos2: Vector2) -> void:
 	var room1 = grid[pos1.x][pos1.y]
 	var room2 = grid[pos2.x][pos2.y]
@@ -892,6 +891,9 @@ func _apply_edge(grid: Array, pos1: Vector2, pos2: Vector2) -> void:
 ## Возвращаемое значение:
 ##   String
 ##       Уникальное строковое представление пары координат.
+##
+## Порядок координат нормализуется, поэтому пара A-B и пара B-A
+## получают один и тот же ключ. Это используется для удаления дублей кандидатов.
 func _edge_key(a: Vector2, b: Vector2) -> String:
 	if a.x < b.x or (a.x == b.x and a.y < b.y):
 		return "%s|%s" % [a, b]
@@ -924,7 +926,7 @@ func _uf_find(parent: Dictionary, pos: Vector2) -> Vector2:
 	while parent[root] != root:
 		# Переходим к родителю текущего элемента.
 		root = parent[root]
-	
+
 	# Теперь root содержит настоящий корень компоненты. Далее начинается path compression.
 	# Идея:
 	# Если было:
@@ -963,7 +965,7 @@ func _uf_find(parent: Dictionary, pos: Vector2) -> Vector2:
 ## Эта функция предполагает, что между двумя комнатами,
 ## расположенными по диагонали, коридор использует одну промежуточную угловую клетку.
 func _diagonal_corner(pos1: Vector2, pos2: Vector2) -> Vector2:
-	# именно этот угол физически использует instantiate_g_corridor/instantiate_invert_g_corridor
+	# именно этот угол физически используется Г-образным коридором.
 	# Выбираем точку с меньшим Y.
 	# Если pos1.y < pos2.y:
 	#     west_pos = pos1
@@ -974,7 +976,7 @@ func _diagonal_corner(pos1: Vector2, pos2: Vector2) -> Vector2:
 	# Названия west/east здесь являются внутренним обозначением и зависят от системы координат конкретного проекта.
 	var west_pos = pos1 if pos1.y < pos2.y else pos2
 	var east_pos = pos2 if pos1.y < pos2.y else pos1
-	
+
 	# Формируем координату угла:
 	# X берём от east_pos.
 	# Y берём от west_pos.
@@ -982,22 +984,110 @@ func _diagonal_corner(pos1: Vector2, pos2: Vector2) -> Vector2:
 	return Vector2(east_pos.x, west_pos.y)
 
 
+## Проверяет, что прямой путь (одна строка ИЛИ один столбец) свободен.
+##
+## Путь считается свободным, если:
+##   1. ни один внутренний элемент пути не содержит комнату;
+##   2. ни один элементарный отрезок между соседними клетками уже не занят в claimed.
+##
+## Эта проверка работает не только для соседних клеток, но и для связи любой длины.
+func _straight_path_clear(grid: Array, claimed: Dictionary, pos_a: Vector2, pos_b: Vector2) -> bool:
+	# Определяем, идут ли обе точки вдоль одной строки/оси X сетки.
+	var along_row := pos_a.x == pos_b.x
+
+	# Выделяем диапазон координат, по которому будем шагать.
+	# Если точки лежат на одной строке, меняется Y; иначе меняется X.
+	var lo: int = int(min(pos_a.y, pos_b.y)) if along_row else int(min(pos_a.x, pos_b.x))
+	var hi: int = int(max(pos_a.y, pos_b.y)) if along_row else int(max(pos_a.x, pos_b.x))
+
+	# Каждая итерация рассматривает один элементарный сегмент
+	# между двумя соседними клетками: cell_a -> cell_b.
+	for k in range(lo, hi):
+		var cell_a: Vector2 = Vector2(pos_a.x, k) if along_row else Vector2(k, pos_a.y)
+		var cell_b: Vector2 = Vector2(pos_a.x, k + 1) if along_row else Vector2(k + 1, pos_a.y)
+
+		# Если этот сегмент уже был использован другим коридором,
+		# прокладывать по нему новый путь нельзя.
+		if claimed.has(_edge_key(cell_a, cell_b)):
+			return false
+
+		# Конечные комнаты могут находиться на концах пути, поэтому
+		# проверять занятость самой первой клетки не нужно.
+		# Для k > lo проверяем внутреннюю клетку маршрута.
+		if k > lo and grid[cell_a.x][cell_a.y] != null:
+			return false
+
+	return true
+
+
+## Помечает все элементарные сегменты прямого коридора как занятые.
+## После этого другой путь, который пытается использовать хотя бы один
+## из этих сегментов, не пройдёт _straight_path_clear().
+func _mark_straight_run(claimed: Dictionary, pos_a: Vector2, pos_b: Vector2) -> void:
+	var along_row := pos_a.x == pos_b.x
+	var lo: int = int(min(pos_a.y, pos_b.y)) if along_row else int(min(pos_a.x, pos_b.x))
+	var hi: int = int(max(pos_a.y, pos_b.y)) if along_row else int(max(pos_a.x, pos_b.x))
+
+	for k in range(lo, hi):
+		var cell_a: Vector2 = Vector2(pos_a.x, k) if along_row else Vector2(k, pos_a.y)
+		var cell_b: Vector2 = Vector2(pos_a.x, k + 1) if along_row else Vector2(k + 1, pos_a.y)
+		claimed[_edge_key(cell_a, cell_b)] = true
+
+
+## Проверяет, можно ли провести Г-образный диагональный путь между двумя комнатами.
+##
+## Сначала определяется единственная промежуточная угловая клетка.
+## Она должна быть свободна от комнаты и не должна быть уже занята другим диагональным путём.
+## Затем оба прямых участка до угла проходят ту же проверку, что и обычный прямой коридор.
+func _diagonal_path_clear(grid: Array, claimed: Dictionary, pos_a: Vector2, pos_b: Vector2) -> bool:
+	# Находим промежуточную угловую клетку Г-образного пути.
+	var corner = _diagonal_corner(pos_a, pos_b)
+
+	# Угол нельзя использовать, если в нём уже есть комната
+	# или если этот угол уже занят другим диагональным коридором.
+	if grid[corner.x][corner.y] != null or claimed.has(corner):
+		return false
+
+	# Определяем две крайние точки относительно правила, используемого _diagonal_corner().
+	var west_pos = pos_a if pos_a.y < pos_b.y else pos_b
+	var east_pos = pos_b if pos_a.y < pos_b.y else pos_a
+
+	# Г-образный путь состоит из двух прямых плеч:
+	# west_pos -> corner и corner -> east_pos.
+	# Оба участка должны быть свободны от комнат и занятых сегментов.
+	return _straight_path_clear(grid, claimed, west_pos, corner) \
+		and _straight_path_clear(grid, claimed, corner, east_pos)
+
+
+## Помечает все ресурсы, которые занимает диагональный Г-образный путь:
+## сначала угловую клетку, затем два прямых плеча.
+func _mark_diagonal_path(claimed: Dictionary, pos_a: Vector2, pos_b: Vector2) -> void:
+	var corner = _diagonal_corner(pos_a, pos_b)
+	claimed[corner] = true
+
+	var west_pos = pos_a if pos_a.y < pos_b.y else pos_b
+	var east_pos = pos_b if pos_a.y < pos_b.y else pos_a
+
+	_mark_straight_run(claimed, west_pos, corner)
+	_mark_straight_run(claimed, corner, east_pos)
+
+
 # ДОБАВЛЕНИЕ ДОПОЛНИТЕЛЬНЫХ РЁБЕР / ЦИКЛОВ
 ## Обрабатывает рёбра, которые не понадобились алгоритму Kruskal для построения основного дерева. [br]
 ## Входные параметры: [br]
 ##   [param grid]: Array - Двумерная сетка комнат. [br]
-##   [param leftover]: Array  [br]
+##   [param leftover]: Array
 ##       Список рёбер, которые были отброшены Kruskal, потому что
 ##       их добавление соединяло бы комнаты, уже находящиеся в одной компоненте.
 ##       Каждый элемент имеет вид:
 ##           [pos1, pos2, distance] [br]
-##   [param claimed_corners]: Dictionary [br]
-##       Список угловых клеток, уже занятых диагональными коридорами.
-##       Используется для предотвращения пересечения
-##       диагональных коридоров через один и тот же угол. [br]
+##   [param claimed]: Dictionary
+##       Общий реестр занятых ресурсов коридоров:
+##       угловые клетки и элементарные сегменты прямых путей.
+##       Используется для предотвращения пересечений и повторного использования пути. [br]
 ## Возвращаемое значение: void [br]
 ## Функция изменяет grid непосредственно через _apply_edge().
-func _adding_cycle_edges(grid: Array, leftover: Array, claimed_corners: Dictionary) -> void:
+func _adding_cycle_edges(grid: Array, leftover: Array, claimed: Dictionary) -> void:
 	# Перебираем все рёбра, которые Kruskal не использовал.
 	for edge in leftover:
 		# Генерируем случайное число от 0.0 до 1.0.
@@ -1008,22 +1098,115 @@ func _adding_cycle_edges(grid: Array, leftover: Array, claimed_corners: Dictiona
 
 		# Определяем разницу координат концов ребра.
 		var diff = edge[1] - edge[0]
-		# По умолчанию ребро считается не имеющим угла.
-		var corner = null
-		
-		# Если одновременно изменились X и Y, это диагональное ребро.
-		if diff.x != 0 and diff.y != 0:
-			# Находим угловую клетку диагонального коридора.
-			corner = _diagonal_corner(edge[0], edge[1])
+		# По этим координатам определяем, будет ли путь прямым или диагональным.
+		var is_diagonal = diff.x != 0 and diff.y != 0
 
-		# Если угловая клетка уже была использована, этот диагональный коридор не создаём.
-		if claimed_corners.has(corner):
+		# Повторно проверяем физическую проходимость пути.
+		# Это необходимо, потому что за время обработки leftover уже могли появиться
+		# занятые сегменты/углы от других дополнительных рёбер.
+		var path_clear = _diagonal_path_clear(grid, claimed, edge[0], edge[1]) if is_diagonal \
+			else _straight_path_clear(grid, claimed, edge[0], edge[1])
+		if not path_clear:
 			continue
 
-		# Добавляем дополнительное соединение между комнатами.Поскольку это ребро уже было в 
-		# leftover, его комнаты уже находятся в одной компоненте. Поэтому это соединение создаёт цикл. 
+		# Добавляем дополнительное соединение между комнатами.
+		# Поскольку это ребро уже было в leftover, его комнаты уже находились
+		# в одной компоненте. Поэтому это соединение создаёт цикл.
 		_apply_edge(grid, edge[0], edge[1])
 
-		# Если ребро диагональное, помечаем его угол как занятый.
-		if corner != null:
-			claimed_corners[corner] = true
+		# После создания дополнительного пути отмечаем занятые ресурсы,
+		# чтобы следующие leftover-рёбра не пересекли этот путь.
+		if is_diagonal:
+			_mark_diagonal_path(claimed, edge[0], edge[1])
+		else:
+			_mark_straight_run(claimed, edge[0], edge[1])
+
+
+# БЛОК ФУНКЦИЙ ДЛЯ ИЗБАВЛЕНИЯ ОТ ИЗОЛИРОВАННЫХ КОМНАТ
+
+## Пытается соединить все оставшиеся разрозненные компоненты комнат.
+##
+## grid: двумерная сетка комнат, используемая для проверки и создания коридоров.
+## parent: Dictionary DSU, хранящий структуру связности всех комнат.
+## all_cells: массив всех существующих комнат.
+## claimed: Dictionary с угловыми клетками и сегментами коридоров,
+##          уже занятыми существующими путями.
+##
+## Функция работает до тех пор, пока все комнаты не окажутся в одной
+## компоненте связности. На каждой итерации она ищет ближайшую допустимую
+## пару комнат из разных компонентов и соединяет их.
+func _connect_remaining_components(grid: Array, parent: Dictionary, all_cells: Array, claimed: Dictionary) -> void:
+	while true:
+		# Каждый раз заново собираем компоненты через DSU.
+		# Ключ = корень компоненты, значение = все комнаты этой компоненты.
+		var components: Dictionary = {}
+		for cell in all_cells:
+			var root = _uf_find(parent, cell["position"])
+			if not components.has(root):
+				components[root] = []
+			components[root].append(cell)
+
+		# Если осталась одна компонента, все комнаты уже связаны.
+		if components.size() <= 1:
+			print("Все компоненты успешно связаны")
+			return
+
+		# Получаем корни всех существующих компонентов.
+		var roots = components.keys()
+
+		# Здесь будет храниться самая короткая допустимая связь,
+		# найденная среди всех пар разных компонентов.
+		var best_pair = null
+		var best_is_diagonal = false
+		var best_dist = INF
+
+		# Перебираем пары компонентов. range(a + 1, ...) не даёт проверять одну и ту же пару дважды:
+		#   A-B проверяется, а B-A уже не проверяется.
+		for a in range(roots.size()):
+			for b in range(a + 1, roots.size()):
+				# Внутри каждой пары компонентов перебираем все комнаты.
+				# Таким образом проверяется каждая возможная связь между комнатами двух разных компонентов.
+				for cell_a in components[roots[a]]:
+					for cell_b in components[roots[b]]:
+						var pos_a = cell_a["position"]
+						var pos_b = cell_b["position"]
+						var diff = pos_b - pos_a
+						var is_diagonal = diff.x != 0 and diff.y != 0
+
+						# Проверяем, можно ли физически провести коридор данного типа.
+						var path_clear = _diagonal_path_clear(grid, claimed, pos_a, pos_b) if is_diagonal \
+							else _straight_path_clear(grid, claimed, pos_a, pos_b)
+						if not path_clear:
+							continue
+
+						# Считаем расстояние между двумя комнатами.
+						# Из всех допустимых вариантов будет выбран самый короткий.
+						var dist = pos_a.distance_to(pos_b)
+
+						if dist < best_dist:
+							best_dist = dist
+							best_pair = [pos_a, pos_b]
+							best_is_diagonal = is_diagonal
+
+		# Если подходящей пары не нашлось, соединить оставшиеся компоненты с текущими правилами невозможно.
+		if best_pair == null:
+			push_warning("FloorGenerator: не удалось связать все комнаты (%d групп). Сид: %s" % [components.size(), rng_seed.seed])
+			print("FloorGenerator: не удалось связать все комнаты (%d групп). Сид: %s" % [components.size(), rng_seed.seed])
+			return
+
+		# Добавляем найденное лучшее соединение в граф.
+		_apply_edge(grid, best_pair[0], best_pair[1])
+
+		# Помечаем физические ресурсы выбранного пути как занятые.
+		# Благодаря этому следующая итерация не сможет проложить новый путь
+		# через тот же угол или сегмент.
+		if best_is_diagonal:
+			_mark_diagonal_path(claimed, best_pair[0], best_pair[1])
+		else:
+			_mark_straight_run(claimed, best_pair[0], best_pair[1])
+
+		# После физического создания связи необходимо обновить DSU:
+		# две ранее разные компоненты теперь становятся одной.
+		var root1 = _uf_find(parent, best_pair[0])
+		var root2 = _uf_find(parent, best_pair[1])
+		parent[root1] = root2

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="FloorElementSet" format=3 uid="uid://c3jrcxpyayq5b"]
+
+[ext_resource type="PackedScene" uid="uid://dwy38i1rle6kc" path="res://level_generation_elements/level_2/corridor_segments/CorridorVertical17.tscn" id="1_5qib2"]
+[ext_resource type="Script" uid="uid://dyym0cqjrivvk" path="res://some_resources/room_set.gd" id="2_5mtfd"]
+
+[resource]
+script = ExtResource("2_5mtfd")
+floor_index = 1
+elements = Array[PackedScene]([ExtResource("1_5qib2")])
+metadata/_custom_type_script = "uid://dyym0cqjrivvk"

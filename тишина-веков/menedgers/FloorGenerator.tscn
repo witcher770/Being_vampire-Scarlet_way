@@ -14,9 +14,13 @@
 [ext_resource type="Resource" uid="uid://c4gqsnkfs3tla" path="res://menedgers/sets_for_generator/floor_1_corridor_invert_g.tres" id="11_7of6j"]
 [ext_resource type="Resource" uid="uid://decsq4ts03sil" path="res://menedgers/sets_for_generator/floor_2_corridor_invert_g.tres" id="12_sqcuj"]
 [ext_resource type="Resource" uid="uid://5u30h1qbvhov" path="res://menedgers/sets_for_generator/floor_1_entrance_top.tres" id="13_dw68d"]
+[ext_resource type="Resource" uid="uid://bryp7yqws2q51" path="res://menedgers/sets_for_generator/floor_1_corridor_vertical_filler.tres" id="13_q0kh3"]
 [ext_resource type="Resource" uid="uid://csriarjllp6d" path="res://menedgers/sets_for_generator/floor_2_entrance_top.tres" id="14_g5mqk"]
+[ext_resource type="Resource" uid="uid://bhradxjbk2mk3" path="res://menedgers/sets_for_generator/floor_1_corridor_horizontal_filler.tres" id="14_prfdj"]
+[ext_resource type="Resource" uid="uid://c3jrcxpyayq5b" path="res://menedgers/sets_for_generator/floor_2_corridor_vertical_filler.tres" id="14_r088g"]
 [ext_resource type="Resource" uid="uid://b6ckk73mxo60q" path="res://menedgers/sets_for_generator/floor_1_entrance_right.tres" id="15_5j5e7"]
 [ext_resource type="Resource" uid="uid://mvl3lmuhux5l" path="res://menedgers/sets_for_generator/floor_2_entrance_right.tres" id="16_dwqvu"]
+[ext_resource type="Resource" uid="uid://b5lct2yoh2m0e" path="res://menedgers/sets_for_generator/floor_2_corridor_horizontal_filler.tres" id="16_l2wy8"]
 [ext_resource type="Resource" uid="uid://c2qnhjk81dtps" path="res://menedgers/sets_for_generator/floor_1_entrance_down.tres" id="17_5j5e7"]
 [ext_resource type="Resource" uid="uid://dip8efvuxjupt" path="res://menedgers/sets_for_generator/floor_2_entrance_down.tres" id="18_dwqvu"]
 [ext_resource type="Resource" uid="uid://dxi6n1sukrdpl" path="res://menedgers/sets_for_generator/floor_1_wall_top.tres" id="19_4ee7n"]
@@ -32,13 +36,15 @@
 
 [node name="FloorGenerator" type="Node2D" unique_id=1949922667]
 script = ExtResource("1_u7nwp")
-size_level = 4
-num_rooms = 10
+size_level = 5
+num_rooms = 3
 rooms = Array[ExtResource("4_kkwq1")]([ExtResource("3_0aewb"), ExtResource("4_7lfof")])
 corridor_vertical = Array[ExtResource("4_kkwq1")]([ExtResource("5_1nf4t"), ExtResource("6_0aewb")])
 corridor_horizontal = Array[ExtResource("4_kkwq1")]([ExtResource("7_n5fpb"), ExtResource("8_n4arp")])
 corridor_g = Array[ExtResource("4_kkwq1")]([ExtResource("9_n5fpb"), ExtResource("10_2wkgh")])
 corridor_invert_g = Array[ExtResource("4_kkwq1")]([ExtResource("11_7of6j"), ExtResource("12_sqcuj")])
+corridor_filler_vertical = Array[ExtResource("4_kkwq1")]([ExtResource("13_q0kh3"), ExtResource("14_r088g")])
+corridor_filler_horizontal = Array[ExtResource("4_kkwq1")]([ExtResource("14_prfdj"), ExtResource("16_l2wy8")])
 entrance_top = Array[ExtResource("4_kkwq1")]([ExtResource("13_dw68d"), ExtResource("14_g5mqk")])
 entrance_right = Array[ExtResource("4_kkwq1")]([ExtResource("15_5j5e7"), ExtResource("16_dwqvu")])
 entrance_down = Array[ExtResource("4_kkwq1")]([ExtResource("17_5j5e7"), ExtResource("18_dwqvu")])
