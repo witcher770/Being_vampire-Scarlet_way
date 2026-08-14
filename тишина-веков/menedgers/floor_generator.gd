@@ -7,33 +7,50 @@ extends Node2D
 #@deprecated — помечает функцию устаревшей.
 #@experimental — помечает функцию экспериментальной
 
-# сигналы
+## Испускается, когда игрок заходит в дверь-выход и уровень считается пройденным.
 signal level_finished
 
 # @export_group
 # задаем размер сетки и количество комнат
+## Размер игровой сетки уровня (size_level x size_level ячеек).
 @export var size_level = GameState.size_dungeon
+## Желаемое количество комнат на уровне. Если превышает вместимость сетки, обрезается в gen_pos_rooms().
 @export var num_rooms = GameState.count_rooms
 
+## Наборы сцен комнат по этажам (FloorElementSet), из которых get_element() выбирает случайный вариант.
 @export var rooms: Array[FloorElementSet]
 #@export_group ('Фрагменты коридоров')
+## Прямой вертикальный сегмент коридора - один "бордюрный" тайл-переход между соседними ячейками.
 @export var corridor_vertical: Array[FloorElementSet]
+## Прямой горизонтальный сегмент коридора - один "бордюрный" тайл-переход между соседними ячейками.
 @export var corridor_horizontal: Array[FloorElementSet]
+## Угловой фрагмент Г-образного коридора для связи "вверх + вправо" (см. instantiate_g_corridor()).
 @export var corridor_g: Array[FloorElementSet]
+## Угловой фрагмент Г-образного коридора для связи "вниз + вправо" (см. instantiate_invert_g_corridor()).
 @export var corridor_invert_g: Array[FloorElementSet]
+## Заполняющий сегмент вертикального коридора для полностью пустых промежуточных ячеек на длинных путях.
 @export var corridor_filler_vertical: Array[FloorElementSet]
+## Заполняющий сегмент горизонтального коридора для полностью пустых промежуточных ячеек на длинных путях.
 @export var corridor_filler_horizontal: Array[FloorElementSet]
 # Входы в комнаты
+## Декоративный вход в комнату с северной стороны.
 @export var entrance_top: Array[FloorElementSet]
+## Декоративный вход в комнату с восточной стороны (используется также зеркально для западной).
 @export var entrance_right: Array[FloorElementSet]
+## Декоративный вход в комнату с южной стороны.
 @export var entrance_down: Array[FloorElementSet]
 # Стены для закрытых проходов
+## Стена, закрывающая северную сторону комнаты при отсутствии выхода.
 @export var wall_top: Array[FloorElementSet]
+## Стена, закрывающая восточную сторону комнаты при отсутствии выхода (используется также зеркально для западной).
 @export var wall_right: Array[FloorElementSet]
+## Стена, закрывающая южную сторону комнаты при отсутствии выхода.
 @export var wall_down: Array[FloorElementSet]
 
+## Наборы сцен врагов по этажам, из которых instantiate_enemies() выбирает случайный вариант.
 @export var enemies: Array[FloorElementSet]
 
+## Наборы сцен двери-выхода из уровня по этажам.
 @export var door: Array[FloorElementSet]
 
 # Словарь для хранения всех загружаемых ресурсов
@@ -90,19 +107,39 @@ signal level_finished
 #}
 #]
 
+## Текущая логическая сетка уровня (после build_dungeon_graph()); используется, например,
+## spawn_exit_door() при поиске стартовой комнаты после того, как все враги убиты.
 var grid_with_rooms = []
 
+## Реально используемый генератор случайных чисел для всех шагов генерации
+## (расстановка комнат, врагов, дополнительных связей/циклов и т.д.).
 var rng_rand = RandomNumberGenerator.new()
+## Хранит выбранный фиксированный сид для отладки/воспроизведения (см. _ready()). Чтобы он реально
+## использовался, нужно скопировать его в rng_rand (rng_rand = rng_seed) - иначе rng_rand работает
+## со своим случайным состоянием по умолчанию.
 var rng_seed = RandomNumberGenerator.new()
 
+## Размер стороны одного тайла в пикселях.
 const SIZE_TILE: int = 16
+## Размер стороны одной логической ячейки сетки в тайлах.
 const SIZE_CELL: int = 25
+## Размер стороны комнаты в тайлах.
 const SIZE_ROOM: int = 15
+## Размер стороны одной ячейки сетки в пикселях (SIZE_TILE * SIZE_CELL) - физический "шаг"
+## между центрами соседних ячеек.
 const SIZE_ZONE: Vector2 = Vector2(SIZE_TILE * SIZE_CELL, SIZE_TILE * SIZE_CELL)  # размер зоны в пикселях
 
+## Максимальное число попыток генерации подряд, прежде чем generate_dungeon() сдастся
+## и оставит уровень как есть (см. push_error() в generate_dungeon()).
 @export var max_generation_attempts: int = 10
+## Флаг результата последней сборки графа: true, если build_dungeon_graph() смогла связать
+## все комнаты в одну компоненту (в т.ч. через _connect_remaining_components()).
+## Проверяется в generate_dungeon() для решения о повторной генерации.
 var _fully_connected: bool = true
 
+## Входная точка сцены уровня. Задаёт (при необходимости) фиксированный сид для отладки и запускает
+## полный цикл генерации подземелья через generate_dungeon(). [br]
+## Чтобы использовать фиксированный сид ниже, а не случайный - раскомментируй строку [code]rng_rand = rng_seed[/code].
 func _ready():
 	# ошибочные сиды
 		# -3984759562172433446 - угловой коридор через комнату
@@ -119,6 +156,10 @@ func _ready():
 	GameState.all_enemies_dead.connect(_on_all_enemies_dead)
 
 
+## Полный конвейер генерации одного уровня: сетка -> комнаты -> граф связей -> (при необходимости)
+## повтор с новым сидом -> стартовая точка -> расчёт выходов -> расстановка комнат и коридоров. [br]
+## Если build_dungeon_graph() не смогла связать все комнаты за max_generation_attempts попыток,
+## генерация всё равно завершается с тем, что получилось, и пишет push_error().
 func generate_dungeon() -> void:
 	var grid_with_connections: Array = []
 	var attempt := 0
@@ -145,6 +186,9 @@ func generate_dungeon() -> void:
 	instantiate_corridors(grid_with_connections)
 
 
+## Создаёт ноду SpawnPoint в стартовой комнате (room_type == "start_room") для последующего
+## размещения игрока. [br]
+## [param grid] - Готовая сетка уровня после build_dungeon_graph().
 func _spawn_start_point(grid: Array) -> void:
 	for row in grid:
 		for cell in row:
@@ -157,6 +201,10 @@ func _spawn_start_point(grid: Array) -> void:
 
 
 
+## Возвращает случайную сцену-фрагмент для заданного этажа из массива наборов FloorElementSet. [br]
+## [param sets] - Массив наборов вариантов (например [member rooms] или [member corridor_vertical]). [br]
+## [param floor] - Индекс этажа (GameState.num_global_level), под который нужно подобрать набор. [br]
+## Возвращает: PackedScene - случайно выбранная сцена нужного этажа, или null, если набор не найден.
 func get_element(
 	sets: Array[FloorElementSet],
 	floor: int
@@ -168,10 +216,13 @@ func get_element(
 	return null
 
 
+## Обработчик сигнала GameState.all_enemies_dead - вызывает появление двери-выхода из уровня.
 func _on_all_enemies_dead():
 	spawn_exit_door(grid_with_rooms)
 
 
+## Создаёт дверь-выход в верхней стене стартовой комнаты и подписывается на её сигнал door_entered. [br]
+## [param grid] - Сетка уровня, в которой ищется комната с room_type == "start_room".
 func spawn_exit_door(grid):
 	for i in range(size_level):
 			for j in range(size_level):
@@ -195,6 +246,10 @@ func spawn_exit_door(grid):
 					
 
 
+## Отладочная печать сетки построчно, выводя для каждой ячейки указанное поле cell-словаря
+## (или "null", если ячейка пуста). [br]
+## [param grid] - Сетка уровня для печати. [br]
+## [param param] - Ключ словаря ячейки, значение которого нужно вывести (по умолчанию "position").
 func print_grid(grid: Array, param: String = "position") -> void:
 	for i in range(size_level):
 		var line: String = ""
@@ -207,6 +262,9 @@ func print_grid(grid: Array, param: String = "position") -> void:
 		print(line)
 
 
+## Создаёт пустую квадратную сетку size x size, заполненную null. [br]
+## [param size] - Размер стороны сетки. [br]
+## Возвращает: Array - двумерный массив null-значений.
 func create_grid(size: int) -> Array:
 	var grid: Array = []
 	for i in range(size):
@@ -267,6 +325,9 @@ func gen_pos_rooms(grid: Array) -> Array:
 	return grid
 
 ## @deprecated
+## Ранний черновой вариант построения связей комнат по мотивам алгоритма Прима. [br]
+## Не гарантирует корректную связность (нет проверки границ путей/занятости) и заменён на
+## build_dungeon_graph(). Оставлен для истории, в текущем конвейере не вызывается.
 func create_tree_connectoins_prim(grid: Array) -> Array: 
 	var in_tree = []  # комнаты уже в дереве
 	var edges = []    # возможные соединения для добавления
@@ -323,6 +384,10 @@ func create_tree_connectoins_prim(grid: Array) -> Array:
 
 
 ## @deprecated
+## Исходная версия построения связей комнат (один проход по сетке, без гарантии связности). [br]
+## Содержала баги: могла оставлять комнаты без связи и создавать лишние соединения из-за
+## неполной очистки списка кандидатов. Заменена на build_dungeon_graph() (Kruskal + DSU).
+## Оставлена для истории, в текущем конвейере не вызывается.
 func create_tree_connectoins(grid: Array) -> Array: 
 	var in_tree = []  # комнаты уже в дереве
 	var edges = []    # возможные соединения для добавления
@@ -389,11 +454,20 @@ func create_tree_connectoins(grid: Array) -> Array:
 	return grid
 
 
+## Обработчик сигнала door_entered у двери-выхода - завершает уровень (испускает level_finished).
 func _on_door_entered():
 	level_finished.emit() # если игрок вошел в дверь, то посылаем сигнал, что он покинул комнату
 	print("Игрок прошёл уровень!")
 
 
+## Возвращает список комнат-соседей вокруг заданной позиции в пределах окна 3x3
+## (расстояние 1 клетка, включая диагонали). [br]
+## [param grid] - Сетка уровня. [br]
+## [param coords] - Позиция комнаты Vector2(row, col), для которой ищутся соседи. [br]
+## Возвращает: Array - список cell-словарей найденных соседних комнат. [br]
+## [b]Известное ограничение:[/b] глубина поиска (depth) никогда не увеличивается, поэтому комнаты без
+## соседей в радиусе ровно 1 клетки вернут пустой массив - это и есть источник "изолированных" комнат,
+## которые затем достраивает _connect_remaining_components().
 func get_neightbours(grid: Array, coords: Vector2) -> Array: # возвращает массив соседей - комнат
 	var edges = []
 	var size_matrix = 3 # изнчально матрица соседей 3 на 3, с переданным элементом в центре
@@ -435,6 +509,12 @@ func get_neightbours(grid: Array, coords: Vector2) -> Array: # возвраща�
 	return edges
 
 
+## Проставляет флаги exits (north/south/east/west) каждой комнаты на основе её connections. [br]
+## Для прямых соседей направление определяется однозначно; для диагональных соединений
+## (Г-образных коридоров) выход считается принадлежащим той стороне комнаты, в столбце которой
+## физически проходит угол коридора (см. _diagonal_corner()). [br]
+## [param grid] - Сетка уровня с уже построенными connections. [br]
+## Возвращает: Array - тот же grid с заполненными exits.
 func calculate_exits(grid: Array) -> Array:
 	for row in grid:
 		for cell in row:
@@ -484,6 +564,10 @@ func grid_to_world(grid_pos: Vector2) -> Vector2:
 	return Vector2(grid_pos.y * SIZE_ZONE.x, grid_pos.x * SIZE_ZONE.y)
 	#              ^ col -> мировой X          ^ row -> мировой Y
 
+## Создаёт и расставляет инстансы сцен комнат по сетке, попутно вызывая instantiate_enemies()
+## для каждой заполненной комнаты. [br]
+## [param grid] - Сетка уровня с уже построенными connections/exits. [br]
+## Возвращает: Array - тот же grid, с заполненным полем room_instance у каждой ячейки.
 func instantiate_rooms(grid: Array) -> Array: # возвращает массив с загруженными асетами комнат
 	for i in range(size_level):
 		for j in range(size_level):
@@ -502,6 +586,9 @@ func instantiate_rooms(grid: Array) -> Array: # возвращает масси�
 	
 	return grid
 
+## Случайно расставляет врагов внутри уже созданного инстанса комнаты и увеличивает
+## GameState._enemies_count на их количество. [br]
+## [param cell] - Cell-словарь комнаты с уже заполненным room_instance.
 func instantiate_enemies(cell: Dictionary) -> void:
 	var num_enemies = rng_rand.randi_range(GameState.enemies_in_room - 2, GameState.enemies_in_room)  # генерируем количество врагов
 	num_enemies = max(1, num_enemies)
@@ -527,6 +614,15 @@ func instantiate_enemies(cell: Dictionary) -> void:
 		var dorabotka1 = 0 # сделать функцию проверки колизий, коректного размещения
 
 
+## Основной проход отрисовки: для каждой комнаты рисует стены на закрытых сторонах
+## (_instantiate_exits_walls()) и, перебирая connections, декорации входов и сами коридоры
+## (прямые через _place_straight_run(), диагональные через instantiate_g_corridor()/
+## instantiate_invert_g_corridor()). [br]
+## Каждое направление (north/east/south/west) рисуется не более одного раза на комнату
+## (см. exits_chek); south и west переиспользуют коридор, уже нарисованный соседней
+## (north/east) комнатой. [br]
+## [param grid] - Сетка уровня с уже построенными connections/exits. [br]
+## Возвращает: Array - тот же grid (для единообразия с остальными шагами конвейера).
 func instantiate_corridors(grid: Array) -> Array:
 	for i in range(size_level):
 		for j in range(size_level):
@@ -601,6 +697,11 @@ func instantiate_corridors(grid: Array) -> Array:
 	return grid
 
 
+## Рисует Г-образный коридор к соседу, расположенному вверх+вправо (северо-восточная диагональ):
+## сначала N прямых вертикальных сегментов вверх, затем угловой фрагмент corridor_g, затем
+## M прямых горизонтальных сегментов вправо. [br]
+## [param pos_room] - Мировые координаты центра исходной комнаты. [br]
+## [param connection] - Относительное смещение до соседа в клетках сетки Vector2(row, col), например (-2, 3).
 func instantiate_g_corridor(pos_room: Vector2, connection: Vector2) -> void:
 	var n = int(-connection.x)  # шагов вверх
 	var m = int(connection.y)   # шагов вправо
@@ -615,6 +716,11 @@ func instantiate_g_corridor(pos_room: Vector2, connection: Vector2) -> void:
 	_place_straight_run(corner_pos, Vector2(1, 0), m, corridor_horizontal, corridor_filler_horizontal)
 
 
+## Рисует Г-образный коридор к соседу, расположенному вниз+вправо (юго-восточная диагональ):
+## сначала N прямых вертикальных сегментов вниз, затем угловой фрагмент corridor_invert_g, затем
+## M прямых горизонтальных сегментов вправо. [br]
+## [param pos_room] - Мировые координаты центра исходной комнаты. [br]
+## [param connection] - Относительное смещение до соседа в клетках сетки Vector2(row, col), например (2, 3).
 func instantiate_invert_g_corridor(pos_room: Vector2, connection: Vector2) -> void:
 	var n = int(connection.x)  # шагов вниз
 	var m = int(connection.y)  # шагов вправо
@@ -629,6 +735,9 @@ func instantiate_invert_g_corridor(pos_room: Vector2, connection: Vector2) -> vo
 	_place_straight_run(corner_pos, Vector2(1, 0), m, corridor_horizontal, corridor_filler_horizontal)
 
 
+## Ставит стену на каждой из 4 сторон комнаты, для которой соответствующий exits-флаг не установлен. [br]
+## [param cell] - Cell-словарь комнаты с уже заполненным exits. [br]
+## [param pos_room] - Мировые координаты центра комнаты.
 func _instantiate_exits_walls(cell, pos_room: Vector2):
 	if not cell["exits"]["north"]:
 		var exit_inst = get_element(wall_top, GameState.num_global_level).instantiate()
@@ -679,27 +788,13 @@ func _place_straight_run(origin: Vector2, dir: Vector2, count: int, border_set: 
 
 
 # ============================================================
-# ШАНС ДОБАВЛЕНИЯ ДОПОЛНИТЕЛЬНЫХ СВЯЗЕЙ / ЦИКЛОВ
+# ПОСТРОЕНИЕ ГРАФА СВЯЗЕЙ (KRUSKAL) И СОЕДИНЕНИЕ ИЗОЛИРОВАННЫХ КОМНАТ
 # ============================================================
-#
-# Определяет вероятность того, что после построения основного
-# связного дерева будут добавлены дополнительные рёбра.
-#
-# Тип:
-#   float
-#
-# Значение:
-#   0.0 -> дополнительные циклы никогда не добавляются.
-#   1.0 -> каждое подходящее оставшееся ребро добавляется,
-#          если оно также проходит все проверки занятости пути.
-#
-# Значение по умолчанию:
-#   0.5 -> вероятность добавления каждого оставшегося ребра
-#          составляет примерно 50%.
-#
-# ВАЖНО:
-# loop_chance НЕ управляет построением основного дерева.
-# Основные необходимые связи строятся алгоритмом Kruskal независимо от этого параметра.
+
+## Вероятность того, что каждое "лишнее" ребро (не понадобившееся Kruskal для основного дерева)
+## всё же будет добавлено как дополнительная связь/цикл в _adding_cycle_edges(). [br]
+## 0.0 - циклов не будет вообще (чистое дерево). 1.0 - добавляется каждое ребро, прошедшее проверку пути. [br]
+## Не влияет на построение основного связного дерева - оно строится Kruskal'ом независимо от этого значения.
 @export var loop_chance: float = 0.5
 
 
@@ -1225,3 +1320,6 @@ func _connect_remaining_components(grid: Array, parent: Dictionary, all_cells: A
 		var root1 = _uf_find(parent, best_pair[0])
 		var root2 = _uf_find(parent, best_pair[1])
 		parent[root1] = root2
+
+
+# Процедурная генерация заевршена
