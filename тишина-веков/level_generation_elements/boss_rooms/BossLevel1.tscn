@@ -1,10 +1,10 @@
-[gd_scene load_steps=6 format=4 uid="uid://bc8lrpxbg5e2p"]
+[gd_scene format=4 uid="uid://bc8lrpxbg5e2p"]
 
 [ext_resource type="Script" uid="uid://dpwdafrxqdt4t" path="res://level_generation_elements/boss_rooms/boss_level_1.gd" id="1_sutk2"]
 [ext_resource type="TileSet" uid="uid://dnbc3ip53d1ij" path="res://assets/sprites/map_resources/boss_skilet_lev1.tres" id="2_mf3hq"]
 [ext_resource type="TileSet" uid="uid://bmcc5qj7w6wcj" path="res://assets/sprites/map_resources/set_1/набор 1 - базовое подземелье.tres" id="3_4jjf2"]
 [ext_resource type="Texture2D" uid="uid://ctbp7quutca0" path="res://assets/sprites/map_resources/темно_серый_фон.png" id="4_5d1n0"]
-[ext_resource type="PackedScene" uid="uid://o1chy65nqa20" path="res://enemies/BossSkeleton.tscn" id="5_4drq0"]
+[ext_resource type="PackedScene" uid="uid://o1chy65nqa20" path="res://enemies/bosses/BossSkeleton.tscn" id="5_4drq0"]
 
 [node name="Комната_босса_1" type="Node2D"]
 script = ExtResource("1_sutk2")

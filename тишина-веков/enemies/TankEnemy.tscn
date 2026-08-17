@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://c73tqv53ds42k"]
+
+[ext_resource type="PackedScene" uid="uid://bpa3vo4mkck5r" path="res://enemies/Enemy.tscn" id="1_fx4gq"]
+[ext_resource type="Script" uid="uid://duamubggwpv7x" path="res://enemies/tank_enemy.gd" id="2_0d541"]
+[ext_resource type="Texture2D" uid="uid://7jitrv21iegb" path="res://assets/sprites/green_square.png" id="3_ydl4w"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yf5fn"]
+size = Vector2(38, 38)
+
+[node name="TankEnemy" unique_id=916818070 instance=ExtResource("1_fx4gq")]
+script = ExtResource("2_0d541")
+attack_range = 35.0
+attack_cooldown = 1.5
+windup_time = 0.4
+recovery_time = 0.5
+hitbox_active_time = 0.15
+
+[node name="Sprite2D" type="Sprite2D" parent="." index="1" unique_id=1441097823]
+scale = Vector2(0.48, 0.48)
+texture = ExtResource("3_ydl4w")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2" unique_id=1019886187]
+shape = SubResource("RectangleShape2D_g4v7s")
+
+[node name="AttackHitbox" type="Area2D" parent="." index="3" unique_id=907493505]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" index="0" unique_id=968035734]
+shape = SubResource("RectangleShape2D_yf5fn")

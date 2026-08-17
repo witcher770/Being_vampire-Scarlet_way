@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cu3qn307h0dca"]
+
+[ext_resource type="PackedScene" uid="uid://bpa3vo4mkck5r" path="res://enemies/Enemy.tscn" id="1_v1228"]
+[ext_resource type="Script" uid="uid://21ft4duntxjl" path="res://enemies/fast_enemy.gd" id="2_aepxk"]
+[ext_resource type="Texture2D" uid="uid://dxdxqavgv1byi" path="res://assets/sprites/Slime1_Idle_front.png" id="3_a38c3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(18, 15)
+
+[node name="Enemy" unique_id=916818070 instance=ExtResource("1_v1228")]
+script = ExtResource("2_aepxk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1" unique_id=3953279]
+position = Vector2(-1, 2.5)
+shape = SubResource("RectangleShape2D_g4v7s")
+
+[node name="Sprite2D" type="Sprite2D" parent="." index="2" unique_id=324085266]
+texture = ExtResource("3_a38c3")
