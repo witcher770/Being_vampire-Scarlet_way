@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://djask047jehdi" path="res://assets/sprites/empty_health_bar.png" id="4_g7vg6"]
 [ext_resource type="Texture2D" uid="uid://dxqttca05cpya" path="res://assets/sprites/health_bar.png" id="4_skqff"]
 
-[node name="враг" type="CharacterBody2D" unique_id=916818070 groups=["враги"]]
+[node name="враг" type="CharacterBody2D" unique_id=916818070 groups=["enemy"]]
 z_index = 3
 script = ExtResource("1_romfk")
 metadata/_edit_group_ = true

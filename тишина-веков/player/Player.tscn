@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://d1rb3vewl6egs"]
+[gd_scene format=3 uid="uid://d1rb3vewl6egs"]
 
 [ext_resource type="Script" uid="uid://dq3qoy67q5l0r" path="res://player/player.gd" id="1_vpk8t"]
 [ext_resource type="Texture2D" uid="uid://d2ya4muo74r33" path="res://assets/sprites/main_character/papin_idle_front.png" id="2_yghqf"]
@@ -457,48 +457,46 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5firq"]
 size = Vector2(14, 7)
 
-[node name="Игрок" type="CharacterBody2D" groups=["игрок"]]
+[node name="Игрок" type="CharacterBody2D" unique_id=221967779 groups=["player"]]
 z_index = 5
 script = ExtResource("1_vpk8t")
 combat_attack_damage_min = 10
 combat_attack_damage_max = 10
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=789632295]
 position = Vector2(0, -3.5)
 scale = Vector2(0.9, 0.9)
 shape = SubResource("RectangleShape2D_d51up")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2073028597]
 texture_filter = 3
 position = Vector2(1, -16)
 texture = ExtResource("2_yghqf")
 hframes = 8
 
-[node name="AttackSocket" type="Node2D" parent="."]
+[node name="AttackSocket" type="Node2D" parent="." unique_id=703170863]
 position = Vector2(0, -8)
 
-[node name="ОбластьАтаки" type="Area2D" parent="AttackSocket"]
+[node name="ОбластьАтаки" type="Area2D" parent="AttackSocket" unique_id=526727830]
 position = Vector2(-15, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackSocket/ОбластьАтаки"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackSocket/ОбластьАтаки" unique_id=1120776044]
 shape = SubResource("RectangleShape2D_acsuq")
 
-[node name="Sprite2D" type="Sprite2D" parent="AttackSocket/ОбластьАтаки"]
+[node name="Sprite2D" type="Sprite2D" parent="AttackSocket/ОбластьАтаки" unique_id=1097121017]
 visible = false
 texture_filter = 3
 position = Vector2(0.07355118, 0)
 scale = Vector2(0.6429421, 0.57069254)
 texture = ExtResource("3_nc33u")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1544776960]
 script = SubResource("GDScript_c2kwh")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_4f5mk")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1307835325]
+libraries/ = SubResource("AnimationLibrary_4f5mk")
 
-[node name="HealthBar" type="TextureProgressBar" parent="."]
+[node name="HealthBar" type="TextureProgressBar" parent="." unique_id=1461613237]
 offset_left = -8.0
 offset_top = -38.0
 offset_right = 8.0
@@ -508,14 +506,14 @@ texture_over = ExtResource("14_eftjn")
 texture_progress = ExtResource("15_8d5f0")
 script = ExtResource("16_fu4kx")
 
-[node name="ОбластьУронаКасанием" type="Area2D" parent="."]
+[node name="ОбластьУронаКасанием" type="Area2D" parent="." unique_id=1177225210]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ОбластьУронаКасанием"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ОбластьУронаКасанием" unique_id=609962663]
 visible = false
 position = Vector2(0, -3.5)
 shape = SubResource("RectangleShape2D_5firq")
 
-[node name="Sprite2D" type="Sprite2D" parent="ОбластьУронаКасанием/CollisionShape2D"]
+[node name="Sprite2D" type="Sprite2D" parent="ОбластьУронаКасанием/CollisionShape2D" unique_id=1241098745]
 position = Vector2(-7.4505806e-08, -4.172325e-07)
 scale = Vector2(0.34, 0.17)
 texture = ExtResource("3_nc33u")

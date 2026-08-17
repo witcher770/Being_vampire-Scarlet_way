@@ -6,7 +6,7 @@ func _ready():
 	# Убедимся что нод удалится если анимация не сработала
 	await get_tree().create_timer(2.0).timeout
 	if is_inside_tree():
-		queue_free()
+		get_parent().queue_free()
 
 func show_damage(amount, is_crit = false, is_player = false):
 	z_index = UI_LAYER
@@ -38,5 +38,6 @@ func show_damage(amount, is_crit = false, is_player = false):
 		tween.tween_property(self, "position:y", position.y - 50, 0.5)
 		tween.parallel().tween_property(self, "modulate:a", 0.0, 0.5)
 
+
 func _on_animation_finished(anim_name):
-	queue_free()
+	get_parent().queue_free()

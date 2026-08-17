@@ -8,12 +8,12 @@ func _ready():
 	super._ready()
 
 func _physics_process(delta):
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	if player:
-		if global_position.distance_to(player.global_position) < 70 or is_agr:
+		if global_position.distance_to(player.global_position) < 70 or is_aggro:
 			animSl3.play("бег_слищь_лавовый")
-			is_agr = true
+			is_aggro = true
 			var direction = (player.global_position - global_position).normalized()
 			velocity = direction * move_speed
 			move_and_slide()
-		if global_position.distance_to(player.global_position) > 150: is_agr = false
+		if global_position.distance_to(player.global_position) > 150: is_aggro = false

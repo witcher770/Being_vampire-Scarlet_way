@@ -17,7 +17,7 @@ enum State {
 
 var state : State = State.IDLE
 
-@export var aggro_range = 300.0 # дистанция на которой босс тебя замечает
+#@export var aggro_range = 300.0 # дистанция на которой босс тебя замечает
 @export var attack_range = 35.0 # дистанция на которой босс атакует
 @export var windup_time = 0.4 # время на подготовку атаки. типо чтобы игрок успел увернуться
 @export var recover_time = 1.5 # как часто атакует в секундах
@@ -33,8 +33,9 @@ var _last_position = Vector2.ZERO
 @export var block_exit_distance = 60.0
 
 
-#func _ready():
-	#super._ready() # вызываем родительский ready
+func _ready():
+	aggro_range = 300.0 # дистанция на которой босс тебя замечает
+	super._ready() # вызываем родительский ready
 
 
 func _physics_process(delta):
@@ -67,7 +68,7 @@ func _physics_process(delta):
 
 
 func state_idle(delta): # работает
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
 	
@@ -82,7 +83,7 @@ func state_idle(delta): # работает
 func update_idle_animation():
 	animBossSprite.play("покой")
 
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
 
@@ -96,7 +97,7 @@ func update_idle_animation():
 var _windup_timer = 0.0
 
 func state_chase(delta):
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
 
@@ -148,7 +149,7 @@ func enter_attack():
 	#face_player()
 	animBossSprite.play("атака")
 	
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	# Этот вызов возвращает первый узел, который состоит в группе "игрок" и проверяет пересекается ли он с хитбоксом
 	await get_tree().create_timer(0.5).timeout
 	var dorobotka = 0 # вместо таймера наносить урон на конкретный кадр
@@ -196,7 +197,7 @@ func state_recover(delta):
 	if _recover_timer > 0:
 		return # если время ожидания не кончилось, ничего не делаем
 
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
 	
@@ -211,7 +212,7 @@ func state_recover(delta):
 
 
 func state_reposition(delta):
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
 		
@@ -259,7 +260,7 @@ func enter_block():
 
 
 func state_block(delta):
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
 

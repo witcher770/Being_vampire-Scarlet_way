@@ -10,7 +10,7 @@ var player_ref = null
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group("игрок"):
+	if body.is_in_group("player"):
 		is_player_near = true
 		player_ref = body
 		print("Игрок рядом с дверью")

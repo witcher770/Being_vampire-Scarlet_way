@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://ccr41fybs0lv3"]
+[gd_scene format=3 uid="uid://ccr41fybs0lv3"]
 
 [ext_resource type="Script" uid="uid://bfgwtq23m0ta0" path="res://interface/damage_amount.gd" id="1_my7a3"]
 
@@ -146,7 +146,7 @@ _data = {
 &"damage_old": SubResource("Animation_xi7ap")
 }
 
-[node name="DamageNumber" type="Control"]
+[node name="DamageNumber" type="Control" unique_id=643524080]
 texture_filter = 3
 layout_mode = 3
 anchors_preset = 0
@@ -154,7 +154,7 @@ offset_right = 15.0
 offset_bottom = 23.0
 metadata/_edit_group_ = true
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=407231795]
 texture_filter = 1
 layout_mode = 0
 offset_top = -20.0
@@ -164,8 +164,6 @@ scale = Vector2(0.5, 0.5)
 text = "-1"
 script = ExtResource("1_my7a3")
 
-[node name="AnimationNumber" type="AnimationPlayer" parent="Label"]
+[node name="AnimationNumber" type="AnimationPlayer" parent="Label" unique_id=251318004]
 root_node = NodePath("../..")
-libraries = {
-&"": SubResource("AnimationLibrary_vf3xv")
-}
+libraries/ = SubResource("AnimationLibrary_vf3xv")

@@ -15,7 +15,7 @@ extends CharacterBody2D
 
 
 # === СИГНАЛЫ ===
-signal took_damage(position, amount, is_crit) # сигнал о получении урона 
+signal took_damage(position: Vector2, amount: int, is_crit: bool, is_player: bool) # сигнал о получении урона 
 signal player_died # сигнал о смерти игрока
 
 
@@ -113,7 +113,6 @@ func process_move(delta):
 	velocity = input_vector * speed # Применяем движение
 	# Смещаем область атаки в направлении движения
 	
-	attack_area.position = facing_direction * 15
 	move_and_slide() # Встроенная функция Godot для перемещения с коллизиями
 	update_move_animation()
 
@@ -153,7 +152,8 @@ func enter_attack():
 	state = PlayerState.ATTACK   # ← ВОТ ЭТО КЛЮЧЕВО
 	print("перешел в состояние attack")
 	velocity = Vector2.ZERO
-
+	attack_area.position = facing_direction * 15
+	
 	play_attack_animation()
 	print("запустил анимацию атаки")
 
@@ -168,8 +168,9 @@ func _attack_sequence() -> void:
 	print("дождался конца анимации атаки")
 
 	attack_area.monitoring = false
-	state = PlayerState.IDLE
-	print("меняю состояние на idle")
+	if state == PlayerState.ATTACK:
+		state = PlayerState.IDLE
+		print("меняю состояние на idle")
 
 
 func play_attack_animation():
@@ -205,8 +206,8 @@ func enter_knockback(from_position: Vector2):
 
 	await tween.finished
 
-	state = PlayerState.IDLE
-
+	if state == PlayerState.KNOCKBACK:
+		state = PlayerState.IDLE
 
 
 
@@ -215,7 +216,7 @@ func enter_knockback(from_position: Vector2):
 
 func _ready():
 	randomize()  # Инициализация генератора случайных чисел для критических ударов
-	add_to_group("игрок") # я так то добавил группу в инспекторе но пусть и тут будет
+	add_to_group("player") # я так то добавил группу в инспекторе но пусть и тут будет
 
 	# Настройка области атаки
 	attack_area.monitoring = false  # Отключаем коллизии атаки до момента удара
@@ -262,7 +263,7 @@ func take_damage(amount: int):
 
 func _on_damage_area_touch_body_entered(body):
 	# Проверяем: это враг И игрок не неуязвим
-	if body.is_in_group("враги") and not is_invincible:
+	if body.is_in_group("enemy") and not is_invincible:
 		var enemy_pos = body.global_position
 		var damage = body.deal_contact_damage()
 		take_damage(damage)
@@ -312,7 +313,7 @@ func _on_attack_hit(body):
 	Вызывается когда атака попадает в тело (body)
 	body - объект который вошел в область атаки (Area2D)
 	"""
-	if body.is_in_group("враги"):
+	if body.is_in_group("enemy"):
 		# Генерируем случайный урон от 1 до 3
 		var damage = randi_range(combat_attack_damage_min, combat_attack_damage_max)
 		var is_crit = randf() < combat_crit_chance  # Шанс крита

@@ -11,8 +11,8 @@ class_name Enemy
 @export var move_speed: float = 25.0
 
 @export_category("Damage")
-@export var contact_damage: float = 2.0
-@export var attack_damage: float = 2.0
+@export var contact_damage: int = 2
+@export var attack_damage: int = 2
 
 # AI
 # =========================
@@ -41,8 +41,11 @@ enum EnemyRole {
 # хз надо ли и как использовать в дочерних классах
 
 func _ready():
+	add_to_group("enemy")
+	
 	# дробная часть усиления будет отбрасываться
 	health = max_health * GameState.enemy_power
+	@warning_ignore("narrowing_conversion")
 	contact_damage *= GameState.enemy_power
 	attack_damage *= GameState.enemy_power
 	
@@ -52,7 +55,7 @@ func _ready():
 	# Подключаем сигнал к менеджеру
 	took_damage.connect(DamageNumbersManager.show_damage)
 
-	player = get_tree().get_first_node_in_group("игрок")
+	player = get_tree().get_first_node_in_group("player")
 
 
 func _physics_process(delta):

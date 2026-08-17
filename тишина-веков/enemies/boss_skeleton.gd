@@ -14,7 +14,7 @@ enum State {
 
 var state : State = State.IDLE
 
-@export var aggro_range = 300.0 # дистанция на которой босс тебя замечает
+#@export var aggro_range = 300.0 # дистанция на которой босс тебя замечает
 @export var attack_range = 25.0 # дистанция на которой босс атакует
 @export var windup_time = 0.4 # время на подготовку атаки. типо чтобы игрок успел увернуться
 @export var recover_time = 1.5 # как часто атакует в секундах
@@ -22,6 +22,7 @@ var state : State = State.IDLE
 @export var optimal_range = 100.0 # дистанция переключения с отступления на нападение
 
 func _ready():
+	aggro_range = 300.0 # дистанция на которой босс тебя замечает
 	move_speed = 140.0
 	super._ready() # вызываем родительский ready
 
@@ -53,7 +54,7 @@ func _physics_process(delta):
 
 
 func state_idle(delta): # работает
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
 	
@@ -68,7 +69,7 @@ func state_idle(delta): # работает
 func update_idle_animation():
 	animSkelet.play("покой")
 
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
 
@@ -82,7 +83,7 @@ func update_idle_animation():
 var _windup_timer = 0.0
 
 func state_chase(delta):
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
 
@@ -133,7 +134,7 @@ func enter_attack():
 	#face_player()
 	animSkelet.play("атака_скелета")
 	
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	# Этот вызов возвращает первый узел, который состоит в группе "игрок" и проверяет пересекается ли он с хитбоксом
 	if not _damage_applied and $"ОбластьАтаки".overlaps_body(player): 
 		await get_tree().create_timer(0.2).timeout
@@ -172,7 +173,7 @@ func state_recover(delta):
 	if _recover_timer > 0:
 		return # если время ожидания не кончилось, ничего не делаем
 
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
 	
@@ -187,7 +188,7 @@ func state_recover(delta):
 
 
 func state_reposition(delta):
-	var player = get_tree().get_first_node_in_group("игрок")
+	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
 	update_move_animation()
