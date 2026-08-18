@@ -125,13 +125,16 @@ tile_set = ExtResource("2_cc0f1")
 
 [node name="слизь" parent="." unique_id=1696603064 instance=ExtResource("3_awqth")]
 position = Vector2(489, 235)
+hit_flash_time = 0.15
 
 [node name="слизь2" parent="." unique_id=554518577 instance=ExtResource("3_awqth")]
 position = Vector2(518, 257)
+hit_flash_time = 0.15
 
 [node name="слизь3" parent="." unique_id=1734035539 instance=ExtResource("3_awqth")]
 position = Vector2(436, 267)
 scale = Vector2(1, 0.87004745)
+hit_flash_time = 0.15
 
 [node name="Игрок" parent="." unique_id=1245207505 instance=ExtResource("4_2s1ip")]
 position = Vector2(-182, 102)
@@ -154,9 +157,12 @@ tile_set = SubResource("TileSet_hd1ar")
 
 [node name="RangedEnemy" parent="." unique_id=916818070 instance=ExtResource("7_toog1")]
 position = Vector2(259, 46)
+hit_flash_time = 0.15
 
 [node name="TankEnemy" parent="." unique_id=1799298184 instance=ExtResource("7_xbw8i")]
 position = Vector2(40, 53)
+hit_flash_time = 0.15
 
 [node name="Enemy" parent="." unique_id=758060826 instance=ExtResource("8_xbw8i")]
 position = Vector2(142, 144)
+hit_flash_time = 0.15

@@ -56,3 +56,38 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 		_damaged_this_swing.append(body)
 		if body.has_method("take_damage"):
 			body.take_damage(attack_damage)
+
+
+func _on_attack_windup_start(windup_time: float) -> void:
+	super._on_attack_windup_start(windup_time)
+	_show_range_indicator(windup_time)
+
+
+func _show_range_indicator(duration: float) -> void:
+	var pale_circle = _make_circle_polygon(attack_range, Color(1.0, 0.5, 0.5, 0.25))
+	pale_circle.z_index = -2
+	add_child(pale_circle)
+
+	var dark_circle = _make_circle_polygon(attack_range, Color(0.5, 0.0, 0.0, 0.6))
+	dark_circle.scale = Vector2.ZERO
+	dark_circle.z_index = -1  # рисуется поверх бледного, оба - под спрайтами
+	add_child(dark_circle)
+
+	var tween = create_tween()
+	tween.tween_property(dark_circle, "scale", Vector2.ONE, duration)
+	tween.tween_callback(func():
+		pale_circle.queue_free()
+		dark_circle.queue_free()
+	)
+
+
+func _make_circle_polygon(radius: float, color: Color) -> Polygon2D:
+	var circle = Polygon2D.new()
+	var points := PackedVector2Array()
+	var segments := 32
+	for i in range(segments):
+		var angle = TAU * i / segments
+		points.append(Vector2(cos(angle), sin(angle)) * radius)
+	circle.polygon = points
+	circle.color = color
+	return circle

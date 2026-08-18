@@ -7,8 +7,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(18, 15)
 
-[node name="Enemy" unique_id=916818070 instance=ExtResource("1_v1228")]
+[node name="FastEnemy" unique_id=916818070 instance=ExtResource("1_v1228")]
 script = ExtResource("2_aepxk")
+role = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1" unique_id=3953279]
 position = Vector2(-1, 2.5)

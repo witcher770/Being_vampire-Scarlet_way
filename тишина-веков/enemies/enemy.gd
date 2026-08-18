@@ -120,6 +120,7 @@ func take_damage(amount: int = 1, is_crit: bool = false):
 	health_bar.value = health  # обновляем полоску
 	
 	took_damage.emit(calculate_damage_position(), amount, is_crit)
+	_play_hit_flash()
 	
 	print("Осталось HP: ", health)
 	if health <= 0:
@@ -146,6 +147,55 @@ func calculate_damage_position() -> Vector2:
 func die():
 	GameState.enemy_died()
 	queue_free()
+
+
+# HIT REACTION
+# =========================
+
+## Возвращает видимый узел врага независимо от того, Sprite2D он или AnimatedSprite2D.
+func _get_visual_node() -> CanvasItem:
+	if has_node("AnimatedSprite2D"):
+		return $AnimatedSprite2D
+	elif has_node("Sprite2D"):
+		return $Sprite2D
+	return null
+
+
+@export_category("Hit Reaction")
+@export var hit_flash_color: Color = Color(1, 0.4, 0.4, 1.0)
+@export var hit_flash_time: float = 0.15
+
+var _flash_tween: Tween = null
+
+## Короткое мигание спрайта при получении урона. Работает и для Sprite2D, и для
+## AnimatedSprite2D - сама разбирается, какой узел реально используется у конкретного врага.
+func _play_hit_flash() -> void:
+	var visual = _get_visual_node()
+	if not visual:
+		return
+	if _flash_tween:
+		_flash_tween.kill()
+	visual.modulate = Color.WHITE
+	_flash_tween = create_tween()
+	_flash_tween.tween_property(visual, "modulate", hit_flash_color, hit_flash_time * 0.5)
+	_flash_tween.tween_property(visual, "modulate", Color.WHITE, hit_flash_time * 0.5)
+
+
+@export_category("Attack Telegraph")
+@export var telegraph_color: Color = Color(1.0, 0.85, 0.2, 1.0)
+
+## Держит спрайт в telegraph_color всю длительность замаха, а не короткий блик -
+## у игрока должно быть время это заметить.
+func _play_telegraph_flash(duration: float) -> void:
+	var visual = _get_visual_node()
+	if not visual:
+		return
+	if _flash_tween:
+		_flash_tween.kill()
+	visual.modulate = Color.WHITE
+	_flash_tween = create_tween()
+	_flash_tween.tween_property(visual, "modulate", telegraph_color, duration * 0.3)
+	_flash_tween.tween_property(visual, "modulate", Color.WHITE, duration * 0.3).set_delay(duration * 0.4)
 
 
 # ATTACK
@@ -175,7 +225,7 @@ func start_attack(windup_time: float, recovery_time: float) -> void:
 	
 	attack_phase = AttackPhase.WINDUP
 	stop_moving()
-	_on_attack_windup_start()
+	_on_attack_windup_start(windup_time)
 	
 	await get_tree().create_timer(windup_time).timeout
 	if not is_instance_valid(self):
@@ -202,8 +252,8 @@ func _on_attack_execute() -> void:
 
 
 ## Вызывается в момент начала замаха. Переопределяется по желанию (анимация подготовки, подсветка).
-func _on_attack_windup_start() -> void:
-	pass
+func _on_attack_windup_start(windup_time: float) -> void:
+	_play_telegraph_flash(windup_time)
 
 
 ## Вызывается в момент начала отката после атаки. Переопределяется по желанию.

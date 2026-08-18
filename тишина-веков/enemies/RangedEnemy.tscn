@@ -14,7 +14,7 @@ attack_cooldown = 2.0
 windup_time = 0.35
 recovery_time = 0.4
 projectile_scene = ExtResource("2_wfq8h")
-projectile_speed = 220.0
+projectile_speed = 300.0
 role = 3
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="1" unique_id=1095586837]
