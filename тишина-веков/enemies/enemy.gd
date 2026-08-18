@@ -23,6 +23,7 @@ class_name Enemy
 var health: float
 var player: Node2D = null
 var is_aggro: bool = false
+var is_dying: bool = false
 
 # SIGNALS
 # =========================
@@ -141,14 +142,6 @@ func calculate_damage_position() -> Vector2:
 		return global_position - Vector2(0, 50)  # fallback
 
 
-# DEATH
-# =========================
-
-func die():
-	GameState.enemy_died()
-	queue_free()
-
-
 # HIT REACTION
 # =========================
 
@@ -211,7 +204,7 @@ var attack_phase: AttackPhase = AttackPhase.NONE
 
 ## Можно ли начать новую атаку прямо сейчас (враг не занят другой атакой).
 func can_attack() -> bool:
-	return attack_phase == AttackPhase.NONE
+	return attack_phase == AttackPhase.NONE and not is_dying
 
 
 ## Стандартная последовательность атаки: замах (враг стоит на месте) -> исполнение
@@ -228,18 +221,18 @@ func start_attack(windup_time: float, recovery_time: float) -> void:
 	_on_attack_windup_start(windup_time)
 	
 	await get_tree().create_timer(windup_time).timeout
-	if not is_instance_valid(self):
+	if not is_instance_valid(self) or is_dying:
 		return
 	
 	await _on_attack_execute()
-	if not is_instance_valid(self):
+	if not is_instance_valid(self) or is_dying:
 		return
 	
 	attack_phase = AttackPhase.RECOVER
 	_on_attack_recovery_start()
 	
 	await get_tree().create_timer(recovery_time).timeout
-	if not is_instance_valid(self):
+	if not is_instance_valid(self) or is_dying:
 		return
 	
 	attack_phase = AttackPhase.NONE
@@ -259,3 +252,31 @@ func _on_attack_windup_start(windup_time: float) -> void:
 ## Вызывается в момент начала отката после атаки. Переопределяется по желанию.
 func _on_attack_recovery_start() -> void:
 	pass
+
+
+# DEATH
+# =========================
+
+func die():
+	if is_dying:
+		return
+	is_dying = true
+	GameState.enemy_died()
+	_play_death_effect()
+
+
+func _play_death_effect() -> void:
+	set_physics_process(false)
+	if has_node("CollisionShape2D"):
+		$CollisionShape2D.set_deferred("disabled", true)
+
+	var visual = _get_visual_node()
+	if not visual:
+		queue_free()
+		return
+
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(visual, "scale", visual.scale * 0.2, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tween.tween_property(visual, "modulate:a", 0.0, 0.25)
+	tween.chain().tween_callback(queue_free)

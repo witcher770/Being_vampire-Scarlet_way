@@ -6,8 +6,8 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_yf5fn"]
-size = Vector2(38, 38)
+[sub_resource type="CircleShape2D" id="CircleShape2D_0d541"]
+radius = 35.0
 
 [node name="TankEnemy" unique_id=916818070 instance=ExtResource("1_fx4gq")]
 script = ExtResource("2_0d541")
@@ -27,4 +27,4 @@ shape = SubResource("RectangleShape2D_g4v7s")
 [node name="AttackHitbox" type="Area2D" parent="." index="3" unique_id=907493505]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" index="0" unique_id=968035734]
-shape = SubResource("RectangleShape2D_yf5fn")
+shape = SubResource("CircleShape2D_0d541")
