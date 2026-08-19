@@ -459,18 +459,19 @@ size = Vector2(14, 7)
 
 [node name="Игрок" type="CharacterBody2D" unique_id=221967779 groups=["player"]]
 z_index = 5
+motion_mode = 1
 script = ExtResource("1_vpk8t")
 combat_attack_damage_min = 10
 combat_attack_damage_max = 10
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=789632295]
-position = Vector2(0, -3.5)
-scale = Vector2(0.9, 0.9)
+position = Vector2(-1, 0)
 shape = SubResource("RectangleShape2D_d51up")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2073028597]
+modulate = Color(1, 1, 1, 0.19215687)
 texture_filter = 3
-position = Vector2(1, -16)
+position = Vector2(0, -12)
 texture = ExtResource("2_yghqf")
 hframes = 8
 
@@ -478,6 +479,7 @@ hframes = 8
 position = Vector2(0, -8)
 
 [node name="ОбластьАтаки" type="Area2D" parent="AttackSocket" unique_id=526727830]
+visible = false
 position = Vector2(-15, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackSocket/ОбластьАтаки" unique_id=1120776044]
@@ -507,13 +509,14 @@ texture_progress = ExtResource("15_8d5f0")
 script = ExtResource("16_fu4kx")
 
 [node name="ОбластьУронаКасанием" type="Area2D" parent="." unique_id=1177225210]
+position = Vector2(-1, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ОбластьУронаКасанием" unique_id=609962663]
-visible = false
-position = Vector2(0, -3.5)
+scale = Vector2(1.05, 1.1)
 shape = SubResource("RectangleShape2D_5firq")
 
 [node name="Sprite2D" type="Sprite2D" parent="ОбластьУронаКасанием/CollisionShape2D" unique_id=1241098745]
+visible = false
 position = Vector2(-7.4505806e-08, -4.172325e-07)
 scale = Vector2(0.34, 0.17)
 texture = ExtResource("3_nc33u")

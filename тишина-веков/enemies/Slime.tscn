@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cyp32d7cupxc4"]
+[gd_scene format=3 uid="uid://cyp32d7cupxc4"]
 
 [ext_resource type="PackedScene" uid="uid://bpa3vo4mkck5r" path="res://enemies/Enemy.tscn" id="1_1h1di"]
 [ext_resource type="Script" uid="uid://bcum4vva22ng7" path="res://enemies/slime.gd" id="2_21mat"]
@@ -64,7 +64,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vd7ig")
 }],
-"loop": false,
+"loop": 0,
 "name": &"бег_слищь_скелет",
 "speed": 8.0
 }]
@@ -72,22 +72,22 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_21mat"]
 size = Vector2(16, 15)
 
-[node name="слизь" instance=ExtResource("1_1h1di")]
+[node name="слизь" unique_id=700089083 instance=ExtResource("1_1h1di")]
 script = ExtResource("2_21mat")
 contact_damage = 3
+stop_distance = 8.0
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." index="1"]
-position = Vector2(-2.3841858e-07, 2.0861626e-07)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." index="1" unique_id=343472536]
+position = Vector2(0, -1.5)
 sprite_frames = SubResource("SpriteFrames_3451f")
 animation = &"бег_слищь_скелет"
 frame = 7
 frame_progress = 1.0
 
-[node name="Sprite2D" type="Sprite2D" parent="." index="2"]
+[node name="Sprite2D" type="Sprite2D" parent="." index="2" unique_id=706607077]
 visible = false
 position = Vector2(-2.3841858e-07, 2.0861626e-07)
 texture = ExtResource("2_mcdsn")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="3"]
-position = Vector2(0, 1.5)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="3" unique_id=165000415]
 shape = SubResource("RectangleShape2D_21mat")

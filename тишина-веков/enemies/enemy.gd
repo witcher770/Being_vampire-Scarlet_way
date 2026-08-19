@@ -98,6 +98,9 @@ func _process_idle(delta):
 # MOVEMENT
 # =========================
 
+@export_category("Melee Movement")
+@export var stop_distance: float = 0.0
+
 func move_towards_player():
 	var direction = global_position.direction_to(player.global_position)
 	
